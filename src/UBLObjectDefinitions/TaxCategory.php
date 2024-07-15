@@ -2,7 +2,6 @@
 
 namespace EdituraEDU\UBLRenderer\UBLObjectDefinitions;
 
-use EdituraEDU\Admin\InvoiceGen\UBL\Renderer\XMLReaderProvider;
 use Exception;
 
 class TaxCategory extends UBLDeserializable
