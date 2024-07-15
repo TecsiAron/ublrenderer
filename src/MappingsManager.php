@@ -7,10 +7,11 @@ use Exception;
 class MappingsManager
 {
     private static MappingsManager|null $Instance = null;
-
+    public static bool $Initialized = false;
     public static function Init(?string $json=null): void
     {
         self::$Instance = new MappingsManager($json);
+        self::$Initialized = true;
     }
 
     public static function GetInstance(): MappingsManager

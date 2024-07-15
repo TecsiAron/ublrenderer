@@ -11,6 +11,10 @@ class UBLRenderer
 
     public function __construct(string $ublContent, bool $useDefaultTemplates = true)
     {
+        if(!MappingsManager::$Initialized)
+        {
+            MappingsManager::Init();
+        }
         $reader = XMLReaderProvider::CreateReader();
         $reader->xml($ublContent);
         $this->invoice=ParsedUBLInvoice::XMLDeserialize($reader);
