@@ -14,8 +14,8 @@ class ParseTest extends TestCase
             $testFunction=[$classes[$i], "TestParse"];
             $reason="";
             $testResult= $testFunction($reason);
-            $this->assertTrue($testResult, "{$classes[$i]}::TestParse failed: $reason");
-            echo "{$classes[$i]}::TestParse passed\n";
+            $this->assertTrue($testResult, "$classes[$i]::TestParse failed: $reason");
+            echo "$classes[$i]::TestParse passed\n";
         }
     }
 }

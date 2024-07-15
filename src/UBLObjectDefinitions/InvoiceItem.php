@@ -2,6 +2,10 @@
 
 namespace EdituraEDU\UBLRenderer\UBLObjectDefinitions;
 
+use Exception;
+use Sabre\Xml\Reader;
+use XMLReader;
+
 class InvoiceItem extends UBLDeserializable
 {
     public ?string $description = null;
@@ -14,15 +18,15 @@ class InvoiceItem extends UBLDeserializable
     public ?string $commodityClassificationListID = null;
     public ?ClassifiedTaxCategory $classifiedTaxCategory = null;
 
-    public static function XMLDeserialize(\Sabre\Xml\Reader $reader): self
+    public static function XMLDeserialize(Reader $reader): self
     {
         $instance = new self();
         $depth = $reader->depth;
         $reader->read(); // Move one child down
 
-        while ($reader->nodeType != \XMLReader::END_ELEMENT || $reader->depth > $depth)
+        while ($reader->nodeType != XMLReader::END_ELEMENT || $reader->depth > $depth)
         {
-            if ($reader->nodeType == \XMLReader::ELEMENT)
+            if ($reader->nodeType == XMLReader::ELEMENT)
             {
                 switch ($reader->localName)
                 {
@@ -67,7 +71,7 @@ class InvoiceItem extends UBLDeserializable
 
             if (!$reader->read())
             {
-                throw new \Exception("Invalid XML format");
+                throw new Exception("Invalid XML format");
             }
         }
         return $instance;

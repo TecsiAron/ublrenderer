@@ -4,6 +4,7 @@ namespace EdituraEDU\UBLRenderer\UBLObjectDefinitions;
 
 use Exception;
 use Sabre\Xml\Reader;
+use XMLReader;
 
 class ClassifiedTaxCategory extends  TaxCategory
 {
@@ -16,8 +17,8 @@ class ClassifiedTaxCategory extends  TaxCategory
         $depth = $reader->depth;
         $reader->read(); // Move one child down
 
-        while ($reader->nodeType != \XMLReader::END_ELEMENT || $reader->depth > $depth) {
-            if ($reader->nodeType == \XMLReader::ELEMENT) {
+        while ($reader->nodeType != XMLReader::END_ELEMENT || $reader->depth > $depth) {
+            if ($reader->nodeType == XMLReader::ELEMENT) {
                 switch ($reader->localName) {
                     case "ID":
                         $instance->id = $reader->readString();

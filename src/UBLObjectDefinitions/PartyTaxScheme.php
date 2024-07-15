@@ -2,9 +2,9 @@
 
 namespace EdituraEDU\UBLRenderer\UBLObjectDefinitions;
 
-use EdituraEDU\Admin\InvoiceGen\UBL\Renderer\XMLReaderProvider;
 use Exception;
 use Sabre\Xml\Reader;
+use XMLReader;
 
 class PartyTaxScheme extends UBLDeserializable
 {
@@ -17,9 +17,9 @@ class PartyTaxScheme extends UBLDeserializable
         $instance = new self();
         $depth = $reader->depth;
         $reader->read(); // Move one child down
-        while ($reader->nodeType != \XMLReader::END_ELEMENT || $reader->depth > $depth)
+        while ($reader->nodeType != XMLReader::END_ELEMENT || $reader->depth > $depth)
         {
-            if ($reader->nodeType == \XMLReader::ELEMENT)
+            if ($reader->nodeType == XMLReader::ELEMENT)
             {
                 switch ($reader->localName)
                 {

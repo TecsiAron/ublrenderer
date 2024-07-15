@@ -2,6 +2,10 @@
 
 namespace EdituraEDU\UBLRenderer\UBLObjectDefinitions;
 
+use Exception;
+use Sabre\Xml\Reader;
+use XMLReader;
+
 class PaymentTerms extends UBLDeserializable
 {
     public ?string $note = null;
@@ -10,14 +14,14 @@ class PaymentTerms extends UBLDeserializable
     public ?string $amountCurrencyID;
     public ?SettlementPeriod $settlementPeriod;
 
-    public static function XMLDeserialize(\Sabre\Xml\Reader $reader): UBLDeserializable
+    public static function XMLDeserialize(Reader $reader): UBLDeserializable
     {
         $instance = new self();
         $depth = $reader->depth;
         $reader->read(); // Move one child down
 
-        while ($reader->nodeType != \XMLReader::END_ELEMENT || $reader->depth > $depth) {
-            if ($reader->nodeType == \XMLReader::ELEMENT) {
+        while ($reader->nodeType != XMLReader::END_ELEMENT || $reader->depth > $depth) {
+            if ($reader->nodeType == XMLReader::ELEMENT) {
                 switch ($reader->localName) {
                     case "Note":
                         $instance->note = $reader->readString();
@@ -43,7 +47,7 @@ class PaymentTerms extends UBLDeserializable
             }
 
             if (!$reader->read()) {
-                throw new \Exception("Invalid XML format");
+                throw new Exception("Invalid XML format");
             }
         }
         return $instance;

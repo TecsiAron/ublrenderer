@@ -2,6 +2,7 @@
 
 namespace EdituraEDU\UBLRenderer\UBLObjectDefinitions;
 
+use Exception;
 use Sabre\Xml\Reader;
 
 class PostalAddress extends Address
@@ -16,7 +17,7 @@ class PostalAddress extends Address
     {
         if($instance!=null)
         {
-            throw new \Exception("PostalAddress cannot be deserialized into an existing instance.");
+            throw new Exception("PostalAddress cannot be deserialized into an existing instance.");
         }
         /** @noinspection PhpIncompatibleReturnTypeInspection */
         return Address::XMLDeserialize($reader, new PostalAddress());

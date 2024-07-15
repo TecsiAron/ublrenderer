@@ -2,6 +2,10 @@
 
 namespace EdituraEDU\UBLRenderer\UBLObjectDefinitions;
 
+use Exception;
+use Sabre\Xml\Reader;
+use XMLReader;
+
 class LegalMonetaryTotal extends UBLDeserializable
 {
     public ?string $lineExtensionAmount = null;
@@ -17,15 +21,15 @@ class LegalMonetaryTotal extends UBLDeserializable
     public ?string $payableAmount = null;
     public ?string $payableCurrency = null;
 
-    public static function XMLDeserialize(\Sabre\Xml\Reader $reader): self
+    public static function XMLDeserialize(Reader $reader): self
     {
         $instance = new self();
         $depth = $reader->depth;
         $reader->read(); // Move one child down
 
-        while ($reader->nodeType != \XMLReader::END_ELEMENT || $reader->depth > $depth)
+        while ($reader->nodeType != XMLReader::END_ELEMENT || $reader->depth > $depth)
         {
-            if ($reader->nodeType == \XMLReader::ELEMENT)
+            if ($reader->nodeType == XMLReader::ELEMENT)
             {
                 switch ($reader->localName)
                 {
@@ -82,7 +86,7 @@ class LegalMonetaryTotal extends UBLDeserializable
 
             if (!$reader->read())
             {
-                throw new \Exception("Invalid XML format");
+                throw new Exception("Invalid XML format");
             }
         }
         return $instance;

@@ -2,6 +2,10 @@
 
 namespace EdituraEDU\UBLRenderer\UBLObjectDefinitions;
 
+use Exception;
+use Sabre\Xml\Reader;
+use XMLReader;
+
 class LegalEntity extends UBLDeserializable
 {
     public ?string $registrationName = null;
@@ -10,14 +14,14 @@ class LegalEntity extends UBLDeserializable
 
     public ?string $companyLegalForm = null;
 
-    public static function XMLDeserialize(\Sabre\Xml\Reader $reader): self
+    public static function XMLDeserialize(Reader $reader): self
     {
         $instance = new self();
         $depth = $reader->depth;
         $reader->read(); // Move one child down
 
-        while ($reader->nodeType != \XMLReader::END_ELEMENT || $reader->depth > $depth) {
-            if ($reader->nodeType == \XMLReader::ELEMENT) {
+        while ($reader->nodeType != XMLReader::END_ELEMENT || $reader->depth > $depth) {
+            if ($reader->nodeType == XMLReader::ELEMENT) {
                 switch ($reader->localName) {
                     case "RegistrationName":
                         $instance->registrationName = $reader->readString();
@@ -36,7 +40,7 @@ class LegalEntity extends UBLDeserializable
             }
 
             if (!$reader->read()) {
-                throw new \Exception("Invalid XML format");
+                throw new Exception("Invalid XML format");
             }
         }
         return $instance;

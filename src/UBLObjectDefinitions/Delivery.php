@@ -3,7 +3,9 @@
 namespace EdituraEDU\UBLRenderer\UBLObjectDefinitions;
 
 use DateTime;
+use Exception;
 use Sabre\Xml\Reader;
+use XMLReader;
 
 class Delivery extends UBLDeserializable
 {
@@ -18,8 +20,8 @@ class Delivery extends UBLDeserializable
         $depth = $reader->depth;
         $reader->read(); // Move one child down
 
-        while ($reader->nodeType != \XMLReader::END_ELEMENT || $reader->depth > $depth) {
-            if ($reader->nodeType == \XMLReader::ELEMENT) {
+        while ($reader->nodeType != XMLReader::END_ELEMENT || $reader->depth > $depth) {
+            if ($reader->nodeType == XMLReader::ELEMENT) {
                 switch ($reader->localName) {
                     case "ActualDeliveryDate":
                         $instance->actualDeliveryDate = DateTime::createFromFormat("Y-m-d", $reader->readString());
@@ -39,7 +41,7 @@ class Delivery extends UBLDeserializable
             }
 
             if (!$reader->read()) {
-                throw new \Exception("Invalid XML format");
+                throw new Exception("Invalid XML format");
             }
         }
         return $instance;

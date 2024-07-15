@@ -2,6 +2,10 @@
 
 namespace EdituraEDU\UBLRenderer\UBLObjectDefinitions;
 
+use Exception;
+use Sabre\Xml\Reader;
+use XMLReader;
+
 class Party extends UBLDeserializable
 {
     public ?string $name = null;
@@ -16,16 +20,16 @@ class Party extends UBLDeserializable
     public ?string $endpointID = null;
     public ?string $endpointID_schemeID = null;
 
-    public static function XMLDeserialize(\Sabre\Xml\Reader $reader): self
+    public static function XMLDeserialize(Reader $reader): self
     {
         $instance = new self();
         $depth = $reader->depth;
         $reader->read(); // Move one child down
 
         //todo check for entrypointID_schemeID?
-        while ($reader->nodeType != \XMLReader::END_ELEMENT || $reader->depth > $depth)
+        while ($reader->nodeType != XMLReader::END_ELEMENT || $reader->depth > $depth)
         {
-            if ($reader->nodeType == \XMLReader::ELEMENT)
+            if ($reader->nodeType == XMLReader::ELEMENT)
             {
                 switch ($reader->localName)
                 {
@@ -62,7 +66,7 @@ class Party extends UBLDeserializable
             }
             if (!$reader->read())
             {
-                throw new \Exception("Unexpected end of XML file while reading Party.");
+                throw new Exception("Unexpected end of XML file while reading Party.");
             }
         }
 

@@ -4,6 +4,7 @@ namespace EdituraEDU\UBLRenderer\UBLObjectDefinitions;
 
 use Exception;
 use Sabre\Xml\Reader;
+use XMLReader;
 
 class AllowanceCharge extends UBLDeserializable
 {
@@ -24,9 +25,9 @@ class AllowanceCharge extends UBLDeserializable
         $depth = $reader->depth;
         $reader->read(); // Move one child down
 
-        while ($reader->nodeType != \XMLReader::END_ELEMENT || $reader->depth > $depth)
+        while ($reader->nodeType != XMLReader::END_ELEMENT || $reader->depth > $depth)
         {
-            if ($reader->nodeType == \XMLReader::ELEMENT)
+            if ($reader->nodeType == XMLReader::ELEMENT)
             {
                 switch ($reader->localName)
                 {

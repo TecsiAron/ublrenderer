@@ -2,7 +2,9 @@
 
 namespace EdituraEDU\UBLRenderer\UBLObjectDefinitions;
 
+use Exception;
 use Sabre\Xml\Reader;
+use XMLReader;
 
 class InvoiceLine extends UBLDeserializable
 {
@@ -35,9 +37,9 @@ class InvoiceLine extends UBLDeserializable
         $depth = $reader->depth;
         $reader->read(); // Move one child down
 
-        while ($reader->nodeType != \XMLReader::END_ELEMENT || $reader->depth > $depth)
+        while ($reader->nodeType != XMLReader::END_ELEMENT || $reader->depth > $depth)
         {
-            if ($reader->nodeType == \XMLReader::ELEMENT)
+            if ($reader->nodeType == XMLReader::ELEMENT)
             {
                 switch ($reader->localName)
                 {
@@ -66,17 +68,17 @@ class InvoiceLine extends UBLDeserializable
                         $instance->taxTotal = $reader->parseCurrentElement()["value"];
                         break;
                     case "InvoicePeriod":
-                        $instance->invoicePeriod = $reader->parseCurrentElement()["value"];;
+                        $instance->invoicePeriod = $reader->parseCurrentElement()["value"];
                         break;
                     case "Note":
                         $instance->note = $reader->readString();
                         $reader->next();
                         break;
                     case "Item":
-                        $instance->item = $reader->parseCurrentElement()["value"];;
+                        $instance->item = $reader->parseCurrentElement()["value"];
                         break;
                     case "Price":
-                        $instance->price = $reader->parseCurrentElement()["value"];;
+                        $instance->price = $reader->parseCurrentElement()["value"];
                         break;
                     case "AccountingCostCode":
                         $instance->accountingCostCode = $reader->readString();
@@ -98,7 +100,7 @@ class InvoiceLine extends UBLDeserializable
 
             if (!$reader->read())
             {
-                throw new \Exception("Invalid XML format");
+                throw new Exception("Invalid XML format");
             }
         }
         $instance->DeserializeComplete();

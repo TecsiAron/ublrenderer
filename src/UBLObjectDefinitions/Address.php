@@ -2,6 +2,10 @@
 
 namespace EdituraEDU\UBLRenderer\UBLObjectDefinitions;
 
+use Exception;
+use Sabre\Xml\Reader;
+use XMLReader;
+
 class Address extends UBLDeserializable
 {
     public ?string $streetName = null;
@@ -12,7 +16,7 @@ class Address extends UBLDeserializable
     public ?string $countrySubentity = null;
     public ?Country $country = null;
 
-    public static function XMLDeserialize(\Sabre\Xml\Reader $reader, ?Address $instance=null): self
+    public static function XMLDeserialize(Reader $reader, ?Address $instance=null): self
     {
         if($instance==null)
         {
@@ -21,8 +25,8 @@ class Address extends UBLDeserializable
         $depth = $reader->depth;
         $reader->read(); // Move one child down
 
-        while ($reader->nodeType != \XMLReader::END_ELEMENT || $reader->depth > $depth) {
-            if ($reader->nodeType == \XMLReader::ELEMENT) {
+        while ($reader->nodeType != XMLReader::END_ELEMENT || $reader->depth > $depth) {
+            if ($reader->nodeType == XMLReader::ELEMENT) {
                 switch ($reader->localName) {
                     case "StreetName":
                         $instance->streetName = $reader->readString();
@@ -56,7 +60,7 @@ class Address extends UBLDeserializable
             }
 
             if (!$reader->read()) {
-                throw new \Exception("Invalid XML format");
+                throw new Exception("Invalid XML format");
             }
         }
         return $instance;

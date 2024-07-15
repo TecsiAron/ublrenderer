@@ -3,6 +3,8 @@
 namespace EdituraEDU\UBLRenderer\UBLObjectDefinitions;
 
 use Exception;
+use Sabre\Xml\Reader;
+use XMLReader;
 
 class TaxTotal extends UBLDeserializable
 {
@@ -12,7 +14,7 @@ class TaxTotal extends UBLDeserializable
      */
     public array $taxSubtotals = [];
 
-    public static function XMLDeserialize(\Sabre\Xml\Reader $reader): self
+    public static function XMLDeserialize(Reader $reader): self
     {
         $instance = new TaxTotal();
         $depth = $reader->depth;
@@ -20,9 +22,9 @@ class TaxTotal extends UBLDeserializable
         $cLark = $reader->getClark();
         $reader->read(); // Move one child down
         //TODO check if currencyID is needed
-        while ($reader->nodeType != \XMLReader::END_ELEMENT || $reader->depth > $depth)
+        while ($reader->nodeType != XMLReader::END_ELEMENT || $reader->depth > $depth)
         {
-            if ($reader->nodeType == \XMLReader::ELEMENT)
+            if ($reader->nodeType == XMLReader::ELEMENT)
             {
                 switch ($reader->localName)
                 {
