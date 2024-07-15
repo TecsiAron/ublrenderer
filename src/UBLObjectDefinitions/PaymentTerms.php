@@ -5,8 +5,8 @@ namespace EdituraEDU\UBLRenderer\UBLObjectDefinitions;
 class PaymentTerms extends UBLDeserializable
 {
     public ?string $note = null;
-    public ?float $settlementDiscountPercent = null;
-    public ?float $amount = null;
+    public ?string $settlementDiscountPercent = null;
+    public ?string $amount = null;
     public ?string $amountCurrencyID;
     public ?SettlementPeriod $settlementPeriod;
 
@@ -25,11 +25,11 @@ class PaymentTerms extends UBLDeserializable
                         break;
                     case "SettlementDiscountPercent":
                         $string = trim($reader->readString(), "%");
-                        $instance->settlementDiscountPercent = floatval($string);
+                        $instance->settlementDiscountPercent = $string;
                         $reader->next();
                         break;
                     case "Amount":
-                        $instance->amount = floatval($reader->readString());
+                        $instance->amount = $reader->readString();
                         if($reader->hasAttributes)
                         {
                             $instance->amountCurrencyID = $reader->getAttribute("currencyID");
@@ -81,12 +81,12 @@ class PaymentTerms extends UBLDeserializable
             $reason = "Note is not Payment terms";
             return false;
         }
-        if($instance->settlementDiscountPercent != 10)
+        if($instance->settlementDiscountPercent !== "10")
         {
             $reason = "SettlementDiscountPercent is not 10";
             return false;
         }
-        if($instance->amount != 100)
+        if($instance->amount !== "100")
         {
             $reason = "Amount is not 100";
             return false;

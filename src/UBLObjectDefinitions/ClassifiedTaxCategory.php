@@ -28,7 +28,7 @@ class ClassifiedTaxCategory extends  TaxCategory
                         $reader->next();
                         break;
                     case "Percent":
-                        $instance->percent = (float)$reader->readString();
+                        $instance->percent = $reader->readString();
                         $reader->next();
                         break;
                     case "TaxScheme":
@@ -92,7 +92,7 @@ class ClassifiedTaxCategory extends  TaxCategory
             $reason="Failed to parse ClassifiedTaxCategory, wrong instance type";
             return false;
         }
-        if($instance->id != "1")
+        if($instance->id !== "1")
         {
             $reason="Failed to parse ID";
             return false;
@@ -102,7 +102,7 @@ class ClassifiedTaxCategory extends  TaxCategory
             $reason="Failed to parse Name";
             return false;
         }
-        if($instance->percent != 19)
+        if($instance->percent !== "19")
         {
             $reason="Failed to parse Percent";
             return false;
@@ -117,12 +117,12 @@ class ClassifiedTaxCategory extends  TaxCategory
             $reason="Failed to parse TaxExemptionReasonCode";
             return false;
         }
-        if($instance->schemeID != "1")
+        if($instance->schemeID !== "1")
         {
             $reason="Failed to parse SchemeID";
             return false;
         }
-        if($instance->schemeName != "VAT")
+        if($instance->schemeName !== "VAT")
         {
             $reason="Failed to parse SchemeName";
             return false;

@@ -7,9 +7,9 @@ use Sabre\Xml\Reader;
 class InvoiceLine extends UBLDeserializable
 {
     public ?string $id = null;
-    public ?float $invoicedQuantity = null;
+    public ?string $invoicedQuantity = null;
 
-    public ?float $lineExtensionAmount = null;
+    public ?string $lineExtensionAmount = null;
     public ?string $lineExtensionAmountCurrencyID = null;
     public ?UnitCode $unitCode = null;
     /**
@@ -27,7 +27,7 @@ class InvoiceLine extends UBLDeserializable
     public ?InvoiceItem $item = null;
     public ?ItemPrice $price = null;
     public ?string $accountingCostCode = null;
-    public ?float $accountingCost = null;
+    public ?string $accountingCost = null;
 
     public static function XMLDeserialize(Reader $reader): UBLDeserializable
     {
@@ -47,7 +47,7 @@ class InvoiceLine extends UBLDeserializable
                         break;
                     case "InvoicedQuantity":
                         $parsed = $reader->parseCurrentElement();
-                        $instance->invoicedQuantity = floatval($parsed["value"]);
+                        $instance->invoicedQuantity = $parsed["value"];
                         $instance->unitCode = UnitCode::tryFrom($parsed["attributes"]["unitCode"]) ?? UnitCode::INVALID;
                         if(isset($parsed["attributes"]["unitCodeListID"]))
                         {
@@ -56,7 +56,7 @@ class InvoiceLine extends UBLDeserializable
                         break;
                     case "LineExtensionAmount":
                         $parsed = $reader->parseCurrentElement();
-                        $instance->lineExtensionAmount = floatval($parsed["value"]);
+                        $instance->lineExtensionAmount = $parsed["value"];
                         if (isset($parsed["attributes"]["currencyID"]))
                         {
                             $instance->lineExtensionAmountCurrencyID = $parsed["attributes"]["currencyID"];
@@ -83,7 +83,8 @@ class InvoiceLine extends UBLDeserializable
                         $reader->next();
                         break;
                     case "AccountingCost":
-                        $instance->accountingCost = floatval($reader->readString());
+                        $instance->accountingCost = $reader->readString();
+                        $reader->next();
                         break;
                     case "AllowanceCharge":
                         if (!isset($instance->allowanceCharge))
@@ -140,12 +141,12 @@ class InvoiceLine extends UBLDeserializable
             $reason = "ID is not 1";
             return false;
         }
-        if ($instance->invoicedQuantity != 1)
+        if ($instance->invoicedQuantity != "1")
         {
             $reason = "InvoicedQuantity is not 1";
             return false;
         }
-        if ($instance->lineExtensionAmount != 100)
+        if ($instance->lineExtensionAmount != "100")
         {
             $reason = "LineExtensionAmount is not 100";
             return false;
@@ -195,7 +196,7 @@ class InvoiceLine extends UBLDeserializable
             $reason = "AccountingCostCode is not 123";
             return false;
         }
-        if ($instance->accountingCost != 100)
+        if ($instance->accountingCost !== "100")
         {
             $reason = "AccountingCost is not 100";
             return false;

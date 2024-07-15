@@ -3,21 +3,22 @@
 namespace EdituraEDU\UBLRenderer\UBLObjectDefinitions;
 
 use Exception;
+use Sabre\Xml\Reader;
 
 class AllowanceCharge extends UBLDeserializable
 {
     public bool $chargeIndicator = false;
     public ?string $allowanceChargeReasonCode = null;
     public ?string $allowanceChargeReason = null;
-    public ?float $multiplierFactorNumeric = null;
-    public ?float $baseAmount = null;
-    public ?float $amount = null;
+    public ?string $multiplierFactorNumeric = null;
+    public ?string $baseAmount = null;
+    public ?string $amount = null;
     public ?string $amountCurrency;
     public ?string $baseAmountCurrency;
     public ?TaxTotal $taxTotal = null;
     public ?TaxCategory $taxCategory = null;
 
-    public static function XMLDeserialize(\Sabre\Xml\Reader $reader): self
+    public static function XMLDeserialize(Reader $reader): self
     {
         $instance = new self();
         $depth = $reader->depth;
@@ -42,12 +43,12 @@ class AllowanceCharge extends UBLDeserializable
                         $reader->next();
                         break;
                     case "MultiplierFactorNumeric":
-                        $instance->multiplierFactorNumeric = (float)$reader->readString();
+                        $instance->multiplierFactorNumeric = $reader->readString();
                         $reader->next();
                         break;
                     case "BaseAmount":
                         $parsed = $reader->parseCurrentElement();
-                        $instance->baseAmount = (float)$parsed["value"];
+                        $instance->baseAmount = $parsed["value"];
                         if (isset($parsed["attributes"]["currencyID"]))
                         {
                             $instance->baseAmountCurrency = $parsed["attributes"]["currencyID"];
@@ -55,7 +56,7 @@ class AllowanceCharge extends UBLDeserializable
                         break;
                     case "Amount":
                         $parsed = $reader->parseCurrentElement();
-                        $instance->amount = (float)$parsed["value"];
+                        $instance->amount = $parsed["value"];
                         if (isset($parsed["attributes"]["currencyID"]))
                         {
                             $instance->amountCurrency = $parsed["attributes"]["currencyID"];
@@ -126,17 +127,17 @@ class AllowanceCharge extends UBLDeserializable
             $reason = "AllowanceChargeReason is not 'string'";
             return false;
         }
-        if ($instance->multiplierFactorNumeric !== 0.00)
+        if ($instance->multiplierFactorNumeric !== "0.00")
         {
             $reason = "MultiplierFactorNumeric is not 0.00";
             return false;
         }
-        if ($instance->baseAmount !== 0.00)
+        if ($instance->baseAmount !== "0.00")
         {
             $reason = "BaseAmount is not 0.00";
             return false;
         }
-        if ($instance->amount !== 0.00)
+        if ($instance->amount !== "0.00")
         {
             $reason = "Amount is not 0.00";
             return false;

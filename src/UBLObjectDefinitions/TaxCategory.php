@@ -9,7 +9,7 @@ class TaxCategory extends UBLDeserializable
 {
     public ?string $id = null;
     public ?string $name = null;
-    public ?float $percent = null;
+    public ?string $percent = null;
     public ?TaxScheme $taxScheme = null;
     public ?string $taxExemptionReason = null;
     public ?string $taxExemptionReasonCode = null;
@@ -32,7 +32,7 @@ class TaxCategory extends UBLDeserializable
                         $reader->next();
                         break;
                     case "Percent":
-                        $instance->percent = (float)$reader->readString();
+                        $instance->percent = $reader->readString();
                         $reader->next();
                         break;
                     case "TaxScheme":
@@ -96,7 +96,7 @@ class TaxCategory extends UBLDeserializable
             $reason="Failed to parse Name";
             return false;
         }
-        if($instance->percent != 0.00)
+        if($instance->percent != "0.00")
         {
             $reason="Failed to parse Percent";
             return false;

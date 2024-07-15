@@ -3,6 +3,7 @@ namespace EdituraEDU\UBLRenderer\UBLObjectDefinitions;
 use DateTime;
 use Exception;
 use Sabre\Xml\Reader;
+use XMLReader;
 
 
 class ParsedUBLInvoice extends UBLDeserializable
@@ -44,8 +45,8 @@ class ParsedUBLInvoice extends UBLDeserializable
         $depth = $reader->depth;
         $reader->read(); // Move one child down
 
-        while ($reader->nodeType != \XMLReader::END_ELEMENT || $reader->depth > $depth) {
-            if ($reader->nodeType == \XMLReader::ELEMENT) {
+        while ($reader->nodeType != XMLReader::END_ELEMENT || $reader->depth > $depth) {
+            if ($reader->nodeType == XMLReader::ELEMENT) {
                 switch ($reader->localName) {
                     case "UBLVersionID":
                         $instance->UBLVersionID = $reader->readString();
@@ -581,18 +582,18 @@ class ParsedUBLInvoice extends UBLDeserializable
             $reason = "TaxTotal taxAmount is not 6598592.6";
             return false;
         }
-        if($instance->getTaxTotal()->taxSubtotals[0]->taxableAmount!=696.12)
+        if($instance->getTaxTotal()->taxSubtotals[0]->taxableAmount!=="696.12")
         {
             $reason = "TaxTotal taxSubtotals[0] taxableAmount is not 696.12 (".$instance->getTaxTotal()->taxSubtotals[0]->taxableAmount.")";
             echo json_encode($instance->getTaxTotal());
             return false;
         }
-        if($instance->getTaxTotal()->taxSubtotals[0]->taxAmount!=34.79)
+        if($instance->getTaxTotal()->taxSubtotals[0]->taxAmount!=="34.79")
         {
             $reason = "TaxTotal taxSubtotals[0] taxAmount is not 34.79";
             return false;
         }
-        if($instance->getTaxTotal()->taxSubtotals[0]->taxableAmount!=696.12)
+        if($instance->getTaxTotal()->taxSubtotals[0]->taxableAmount!== "696.12")
         {
             $reason = "TaxTotal taxSubtotals[0] taxableAmount is not 696.12";
             return false;
@@ -602,7 +603,7 @@ class ParsedUBLInvoice extends UBLDeserializable
             $reason = "TaxTotal taxSubtotals[0] taxCategory id is not S";
             return false;
         }
-        if($instance->getTaxTotal()->taxSubtotals[0]->taxCategory->percent!=5.00)
+        if($instance->getTaxTotal()->taxSubtotals[0]->taxCategory->percent!=="5.00")
         {
             $reason = "TaxTotal taxSubtotals[0] taxCategory percent is not 5.00";
             return false;
@@ -612,22 +613,22 @@ class ParsedUBLInvoice extends UBLDeserializable
             $reason = "TaxTotal taxSubtotals[0] taxCategory taxScheme id is not VAT";
             return false;
         }
-        if($instance->getLegalMonetaryTotal()->lineExtensionAmount!=34741984.11)
+        if($instance->getLegalMonetaryTotal()->lineExtensionAmount!=="34741984.11")
         {
             $reason = "LegalMonetaryTotal lineExtensionAmount is not 34741984.11";
             return false;
         }
-        if($instance->getLegalMonetaryTotal()->taxExclusiveAmount!=34741984.11)
+        if($instance->getLegalMonetaryTotal()->taxExclusiveAmount!=="34741984.11")
         {
             $reason = "LegalMonetaryTotal taxExclusiveAmount is not 34741984.11";
             return false;
         }
-        if($instance->getLegalMonetaryTotal()->taxInclusiveAmount!=41340576.71)
+        if($instance->getLegalMonetaryTotal()->taxInclusiveAmount!=="41340576.71")
         {
             $reason = "LegalMonetaryTotal taxInclusiveAmount is not 41340576.71";
             return false;
         }
-        if($instance->getLegalMonetaryTotal()->payableAmount!=41340576.71)
+        if($instance->getLegalMonetaryTotal()->payableAmount!=="41340576.71")
         {
             $reason = "LegalMonetaryTotal payableAmount is not 41340576.71";
             return false;
@@ -669,7 +670,7 @@ class ParsedUBLInvoice extends UBLDeserializable
             $reason = "InvoiceLines[0] id is not 1";
             return false;
         }
-        if($line->invoicedQuantity!=46396.67)
+        if($line->invoicedQuantity!=="46396.67")
         {
             $reason = "InvoiceLines[0] invoicedQuantity is not 46396.67";
             return false;
@@ -679,7 +680,7 @@ class ParsedUBLInvoice extends UBLDeserializable
             $reason = "InvoiceLines[0] unitCode is not C62";
             return false;
         }
-        if($line->lineExtensionAmount!=334641.38)
+        if($line->lineExtensionAmount!="334641.38")
         {
             $reason = "InvoiceLines[0] lineExtensionAmount is not 334641.38";
             return false;
@@ -704,7 +705,7 @@ class ParsedUBLInvoice extends UBLDeserializable
             $reason = "InvoiceLines[0] allowanceCharges[0] chargeIndicator is not false";
             return false;
         }
-        if($line->allAllowanceCharges[0]->amount!=801.98)
+        if($line->allAllowanceCharges[0]->amount!=="801.98")
         {
             $reason = "InvoiceLines[0] allowanceCharges[0] amount is not 801.98";
             return false;
@@ -719,12 +720,12 @@ class ParsedUBLInvoice extends UBLDeserializable
             $reason = "InvoiceLines[0] allowanceCharges[1] baseAmountCurrencyID is not RON";
             return false;
         }
-        if($line->allAllowanceCharges[1]->baseAmount!=354715.84)
+        if($line->allAllowanceCharges[1]->baseAmount!=="354715.84")
         {
             $reason = "InvoiceLines[0] allowanceCharges[1] baseAmount is not 354715.84";
             return false;
         }
-        if($line->allAllowanceCharges[0]->allowanceChargeReasonCode!=95)
+        if($line->allAllowanceCharges[0]->allowanceChargeReasonCode!=="95")
         {
             $reason = "InvoiceLines[0] allowanceCharges[0] allowanceChargeReasonCode is not 95";
             return false;
@@ -769,7 +770,7 @@ class ParsedUBLInvoice extends UBLDeserializable
             $reason = "InvoiceLines[0] classifiedTaxCategory id is not S";
             return false;
         }
-        if($line->item->classifiedTaxCategory->percent!=19.00)
+        if($line->item->classifiedTaxCategory->percent!=="19.00")
         {
             $reason = "InvoiceLines[0] classifiedTaxCategory percent is not 5.00";
             return false;
@@ -784,7 +785,7 @@ class ParsedUBLInvoice extends UBLDeserializable
             $reason = "InvoiceLines[0] price is null";
             return false;
         }
-        if($line->price->priceAmount!=7.6453)
+        if($line->price->priceAmount!=="7.6453")
         {
             $reason = "InvoiceLines[0] price priceAmount is not 46396.67";
             return false;

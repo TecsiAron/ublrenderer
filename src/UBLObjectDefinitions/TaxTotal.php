@@ -6,7 +6,7 @@ use Exception;
 
 class TaxTotal extends UBLDeserializable
 {
-    public ?float $taxAmount = null;
+    public ?string $taxAmount = null;
     /**
      * @var TaxSubTotal[] $taxSubTotals
      */
@@ -27,7 +27,7 @@ class TaxTotal extends UBLDeserializable
                 switch ($reader->localName)
                 {
                     case "TaxAmount":
-                        $instance->taxAmount = (float)$reader->readString();
+                        $instance->taxAmount = $reader->readString();
                         $reader->next();
                         break;
                     case "TaxSubtotal":
@@ -71,7 +71,7 @@ class TaxTotal extends UBLDeserializable
             $reason = "Instance is not of type TaxTotal";
             return false;
         }
-        if ($instance->taxAmount != 0.00)
+        if ($instance->taxAmount != "0.00")
         {
             $reason = "TaxAmount is not 0.00 it is: " . $instance->taxAmount;
             return false;

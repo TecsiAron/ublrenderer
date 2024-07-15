@@ -5,9 +5,9 @@ namespace EdituraEDU\UBLRenderer\UBLObjectDefinitions;
 
 class ItemPrice extends UBLDeserializable
 {
-    public ?float $priceAmount = null;
+    public ?string $priceAmount = null;
     public ?string $priceCurrencyID = null;
-    public ?float $baseQuantity = null;
+    public ?string $baseQuantity = null;
     public UnitCode $unitCode = UnitCode::UNIT;
     public ?string $unitCodeListId = null;
     /**
@@ -25,7 +25,7 @@ class ItemPrice extends UBLDeserializable
                 switch ($reader->localName) {
                     case "PriceAmount":
                         $parsed = $reader->parseCurrentElement();
-                        $instance->priceAmount = floatval($parsed["value"]);
+                        $instance->priceAmount = $parsed["value"];
                         if(isset($parsed["attributes"]["currencyID"]))
                         {
                             $instance->priceCurrencyID = $parsed["attributes"]["currencyID"];
@@ -82,7 +82,7 @@ class ItemPrice extends UBLDeserializable
             $reason = "Instance is not ItemPrice";
             return false;
         }
-        if($instance->priceAmount != 100)
+        if($instance->priceAmount !== "100")
         {
             $reason = "PriceAmount is not 100";
             return false;
@@ -92,7 +92,7 @@ class ItemPrice extends UBLDeserializable
             $reason = "PriceCurrencyID is not RON";
             return false;
         }
-        if($instance->baseQuantity != 1)
+        if($instance->baseQuantity !== "1")
         {
             $reason = "BaseQuantity is not 1";
             return false;
@@ -102,7 +102,7 @@ class ItemPrice extends UBLDeserializable
             $reason = "UnitCode is not C62(unit)";
             return false;
         }
-        if(count($instance->allowanceCharge) !== 2)
+        if(count($instance->allowanceCharge) != 2)
         {
             $reason = "AllowanceCharge count is not 2";
             return false;
