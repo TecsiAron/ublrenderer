@@ -1,0 +1,5 @@
+<phpunit bootstrap="bootstrap.php">
+    <php>
+        <env name="RUNNING_UNDER_PHPUNIT" value="1"/>
+    </php>
+</phpunit>
