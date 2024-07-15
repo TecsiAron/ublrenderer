@@ -2,6 +2,7 @@
 
 namespace EdituraEDU\UBLRenderer\UBLObjectDefinitions;
 
+use EdituraEDU\UBLRenderer\CountyMap;
 use Exception;
 use Sabre\Xml\Reader;
 use XMLReader;
@@ -137,5 +138,14 @@ class Address extends UBLDeserializable
             return false;
         }
         return true;
+    }
+
+    public function getCountyName():?string
+    {
+        if(!isset($this->countrySubentity))
+        {
+            return null;
+        }
+        return CountyMap::GetCounty($this->countrySubentity);
     }
 }

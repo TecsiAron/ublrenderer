@@ -41,7 +41,7 @@ class ParsedUBLInvoice extends UBLDeserializable
     protected ?OrderReference $orderReference = null;
     protected ?ContractDocumentReference $contractDocumentReference = null;
 
-    public static function XMLDeserialize(Reader $reader): UBLDeserializable
+    public static function XMLDeserialize(Reader $reader): self
     {
         $instance = new self();
         $depth = $reader->depth;
@@ -190,6 +190,16 @@ class ParsedUBLInvoice extends UBLDeserializable
     public function setCustomizationID(string $customizationID): void
     {
         $this->customizationID = $customizationID;
+    }
+
+    public function getId(): ?string
+    {
+        return $this->id;
+    }
+
+    public function setId(?string $id): void
+    {
+        $this->id = $id;
     }
 
     public function getIssueDate(): ?DateTime
@@ -414,6 +424,27 @@ class ParsedUBLInvoice extends UBLDeserializable
         $this->invoiceLines = $invoiceLines;
     }
 
+    public function hasSupplierAccountInfo():bool
+    {
+        return isset($this->paymentMeans->payeeFinancialAccount);
+    }
+
+    public function hasAnyItemIDs():bool
+    {
+        if(empty($this->invoiceLines))
+        {
+            return false;
+        }
+        $count=count($this->invoiceLines);
+        for($i=0;$i<$count;$i++)
+        {
+            if(isset($this->invoiceLines[$i]->item->sellersItemIdentification) || isset($this->invoiceLines[$i]->item->buyersItemIdentification))
+            {
+                return true;
+            }
+        }
+        return false;
+    }
 
     public static function GetTestXML(): string
     {
@@ -817,5 +848,4 @@ class ParsedUBLInvoice extends UBLDeserializable
         }
         return true;
     }
-
 }

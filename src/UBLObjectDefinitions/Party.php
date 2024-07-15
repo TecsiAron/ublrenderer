@@ -137,4 +137,40 @@ class Party extends UBLDeserializable
         }
         return true;
     }
+
+    public function getCIF():?string
+    {
+        if(isset($this->partyIdentificationId))
+        {
+            return $this->partyIdentificationId;
+        }
+        if(isset($this->partyTaxScheme->companyId))
+        {
+            return $this->partyTaxScheme->companyId;
+        }
+        return null;
+    }
+
+    public function getRegistrationNumber():?string
+    {
+        if(isset($this->legalEntity->companyId) && $this->IsValidRegNumber($this->legalEntity->companyId))
+        {
+            return $this->legalEntity->companyId;
+        }
+        if(isset($this->legalEntity->companyLegalForm) && $this->IsValidRegNumber($this->legalEntity->companyLegalForm))
+        {
+            return $this->legalEntity->companyLegalForm;
+        }
+        return null;
+    }
+
+    private function IsValidRegNumber(?string $regNumber): bool
+    {
+        if($regNumber == null)
+        {
+            return false;
+        }
+        $regex="/[J|C|F][0-9][0-9]\/[0-9]*\/[0-9]*/i";
+        return preg_match($regex, $regNumber) === 1;
+    }
 }
