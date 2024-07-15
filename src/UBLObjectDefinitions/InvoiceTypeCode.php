@@ -11,5 +11,5 @@ enum InvoiceTypeCode: string
     case ADVANCE_INVOICE = "386";
     case SELF_BILLING_INVOICE = "389";
 
-    case INVALID="FAILED_TO_PARSE";
+    case INVALID = "FAILED_TO_PARSE";
 }

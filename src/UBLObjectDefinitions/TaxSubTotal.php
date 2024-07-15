@@ -18,9 +18,12 @@ class TaxSubTotal extends UBLDeserializable
         $instance = new TaxSubTotal();
         $depth = $reader->depth;
         $reader->read(); // Move one child down
-        while ($reader->nodeType != XMLReader::END_ELEMENT || $reader->depth > $depth) {
-            if ($reader->nodeType == XMLReader::ELEMENT) {
-                switch ($reader->localName) {
+        while ($reader->nodeType != XMLReader::END_ELEMENT || $reader->depth > $depth)
+        {
+            if ($reader->nodeType == XMLReader::ELEMENT)
+            {
+                switch ($reader->localName)
+                {
                     case "TaxableAmount":
                         $instance->taxableAmount = $reader->readString();
                         $reader->next(); // Move past the current text node
@@ -39,7 +42,8 @@ class TaxSubTotal extends UBLDeserializable
                         break;
                 }
             }
-            if (!$reader->read()) {
+            if (!$reader->read())
+            {
                 throw new Exception("Unexpected end of XML file while reading TaxSubTotal.");
             }
         }
@@ -49,41 +53,47 @@ class TaxSubTotal extends UBLDeserializable
 
     public static function GetNamespace(): string
     {
-        return self::CAC_SCHEMA."TaxSubtotal";
+        return self::CAC_SCHEMA . "TaxSubtotal";
     }
 
     public static function GetTestXML(): string
     {
-        return '<cac:TaxSubtotal '.self::NS_DEFINTIONS.'>
+        return '<cac:TaxSubtotal ' . self::NS_DEFINTIONS . '>
                     <cbc:TaxableAmount currencyID="USD">5.00</cbc:TaxableAmount>
                     <cbc:TaxAmount currencyID="USD">6.00</cbc:TaxAmount>
-                    '.TaxCategory::GetTestXML().'
+                    ' . TaxCategory::GetTestXML() . '
                     <cbc:Percent>0.00</cbc:Percent>
                 </cac:TaxSubtotal>';
     }
 
     public static function TestDefaultValues(?UBLDeserializable $instance, string &$reason): bool
     {
-        if ($instance == null) {
+        if ($instance == null)
+        {
             $reason = "Failed to parse TaxSubTotal";
             return false;
         }
-        if (!($instance instanceof TaxSubTotal)) {
+        if (!($instance instanceof TaxSubTotal))
+        {
             $reason = "Failed to parse TaxSubTotal, wrong instance type";
             return false;
         }
-        if ($instance->taxableAmount !== "5.00") {
+        if ($instance->taxableAmount !== "5.00")
+        {
             $reason = "Failed to parse TaxSubTotal, taxableAmount is not 5.00";
             return false;
         }
-        if ($instance->taxAmount !== "6.00") {
+        if ($instance->taxAmount !== "6.00")
+        {
             $reason = "Failed to parse TaxSubTotal, taxAmount is not 6.00";
             return false;
         }
-        if (!TaxCategory::TestDefaultValues($instance->taxCategory, $reason)) {
+        if (!TaxCategory::TestDefaultValues($instance->taxCategory, $reason))
+        {
             return false;
         }
-        if ($instance->percent != "0.00") {
+        if ($instance->percent != "0.00")
+        {
             $reason = "Failed to parse TaxSubTotal, percent is not 0.00";
             return false;
         }

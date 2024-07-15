@@ -35,7 +35,8 @@ class SettlementPeriod extends UBLDeserializable
                 }
             }
 
-            if (!$reader->read()) {
+            if (!$reader->read())
+            {
                 throw new Exception("Invalid XML format");
             }
         }
@@ -44,12 +45,12 @@ class SettlementPeriod extends UBLDeserializable
 
     public static function GetNamespace(): string
     {
-        return self::CAC_SCHEMA."SettlementPeriod";
+        return self::CAC_SCHEMA . "SettlementPeriod";
     }
 
     public static function GetTestXML(): string
     {
-        return '<cac:SettlementPeriod '.self::NS_DEFINTIONS.'>
+        return '<cac:SettlementPeriod ' . self::NS_DEFINTIONS . '>
                     <cbc:StartDate>2021-01-01</cbc:StartDate>
                     <cbc:EndDate>2021-01-01</cbc:EndDate>
                 </cac:SettlementPeriod>';
@@ -57,25 +58,25 @@ class SettlementPeriod extends UBLDeserializable
 
     public static function TestDefaultValues(?UBLDeserializable $instance, string &$reason): bool
     {
-        if($instance == null)
+        if ($instance == null)
         {
             $reason = "Instance is null";
             return false;
         }
 
-        if(!($instance instanceof SettlementPeriod))
+        if (!($instance instanceof SettlementPeriod))
         {
             $reason = "Instance is not SettlementPeriod";
             return false;
         }
 
-        if($instance->startDate->format("Y-m-d") != "2021-01-01")
+        if ($instance->startDate->format("Y-m-d") != "2021-01-01")
         {
             $reason = "Start date is not 2021-01-01";
             return false;
         }
 
-        if($instance->endDate->format("Y-m-d") != "2021-01-01")
+        if ($instance->endDate->format("Y-m-d") != "2021-01-01")
         {
             $reason = "End date is not 2021-01-01";
             return false;

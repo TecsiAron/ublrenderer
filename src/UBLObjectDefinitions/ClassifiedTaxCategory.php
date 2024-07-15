@@ -6,7 +6,7 @@ use Exception;
 use Sabre\Xml\Reader;
 use XMLReader;
 
-class ClassifiedTaxCategory extends  TaxCategory
+class ClassifiedTaxCategory extends TaxCategory
 {
     public ?string $schemeID = null;
     public ?string $schemeName = null;
@@ -17,9 +17,12 @@ class ClassifiedTaxCategory extends  TaxCategory
         $depth = $reader->depth;
         $reader->read(); // Move one child down
 
-        while ($reader->nodeType != XMLReader::END_ELEMENT || $reader->depth > $depth) {
-            if ($reader->nodeType == XMLReader::ELEMENT) {
-                switch ($reader->localName) {
+        while ($reader->nodeType != XMLReader::END_ELEMENT || $reader->depth > $depth)
+        {
+            if ($reader->nodeType == XMLReader::ELEMENT)
+            {
+                switch ($reader->localName)
+                {
                     case "ID":
                         $instance->id = $reader->readString();
                         $reader->next(); // Move past the current text node
@@ -54,7 +57,8 @@ class ClassifiedTaxCategory extends  TaxCategory
                         break;
                 }
             }
-            if (!$reader->read()) {
+            if (!$reader->read())
+            {
                 throw new Exception("Unexpected end of XML file while reading TaxCategory.");
             }
         }
@@ -64,16 +68,16 @@ class ClassifiedTaxCategory extends  TaxCategory
 
     public static function GetNamespace(): string
     {
-        return self::CAC_SCHEMA."ClassifiedTaxCategory";
+        return self::CAC_SCHEMA . "ClassifiedTaxCategory";
     }
 
     public static function GetTestXML(): string
     {
-        return '<cac:ClassifiedTaxCategory '.self::NS_DEFINTIONS.'>
+        return '<cac:ClassifiedTaxCategory ' . self::NS_DEFINTIONS . '>
                     <cbc:ID>1</cbc:ID>
                     <cbc:Name>VAT</cbc:Name>
                     <cbc:Percent>19</cbc:Percent>
-                    '.TaxScheme::GetTestXML().'
+                    ' . TaxScheme::GetTestXML() . '
                     <cbc:TaxExemptionReason>Reason</cbc:TaxExemptionReason>
                     <cbc:TaxExemptionReasonCode>Code</cbc:TaxExemptionReasonCode>
                     <cbc:SchemeID>1</cbc:SchemeID>
@@ -83,52 +87,52 @@ class ClassifiedTaxCategory extends  TaxCategory
 
     public static function TestDefaultValues(?UBLDeserializable $instance, string &$reason): bool
     {
-        if($instance==null)
+        if ($instance == null)
         {
-            $reason="Failed to parse ClassifiedTaxCategory";
+            $reason = "Failed to parse ClassifiedTaxCategory";
             return false;
         }
-        if(!($instance instanceof ClassifiedTaxCategory))
+        if (!($instance instanceof ClassifiedTaxCategory))
         {
-            $reason="Failed to parse ClassifiedTaxCategory, wrong instance type";
+            $reason = "Failed to parse ClassifiedTaxCategory, wrong instance type";
             return false;
         }
-        if($instance->id !== "1")
+        if ($instance->id !== "1")
         {
-            $reason="Failed to parse ID";
+            $reason = "Failed to parse ID";
             return false;
         }
-        if($instance->name != "VAT")
+        if ($instance->name != "VAT")
         {
-            $reason="Failed to parse Name";
+            $reason = "Failed to parse Name";
             return false;
         }
-        if($instance->percent !== "19")
+        if ($instance->percent !== "19")
         {
-            $reason="Failed to parse Percent";
+            $reason = "Failed to parse Percent";
             return false;
         }
-        if($instance->taxExemptionReason != "Reason")
+        if ($instance->taxExemptionReason != "Reason")
         {
-            $reason="Failed to parse TaxExemptionReason";
+            $reason = "Failed to parse TaxExemptionReason";
             return false;
         }
-        if($instance->taxExemptionReasonCode != "Code")
+        if ($instance->taxExemptionReasonCode != "Code")
         {
-            $reason="Failed to parse TaxExemptionReasonCode";
+            $reason = "Failed to parse TaxExemptionReasonCode";
             return false;
         }
-        if($instance->schemeID !== "1")
+        if ($instance->schemeID !== "1")
         {
-            $reason="Failed to parse SchemeID";
+            $reason = "Failed to parse SchemeID";
             return false;
         }
-        if($instance->schemeName !== "VAT")
+        if ($instance->schemeName !== "VAT")
         {
-            $reason="Failed to parse SchemeName";
+            $reason = "Failed to parse SchemeName";
             return false;
         }
-        if(!TaxScheme::TestDefaultValues($instance->taxScheme, $reason))
+        if (!TaxScheme::TestDefaultValues($instance->taxScheme, $reason))
         {
             return false;
         }

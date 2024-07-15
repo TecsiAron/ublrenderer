@@ -21,9 +21,12 @@ class TaxCategory extends UBLDeserializable
         $depth = $reader->depth;
         $reader->read(); // Move one child down
 
-        while ($reader->nodeType != XMLReader::END_ELEMENT || $reader->depth > $depth) {
-            if ($reader->nodeType == XMLReader::ELEMENT) {
-                switch ($reader->localName) {
+        while ($reader->nodeType != XMLReader::END_ELEMENT || $reader->depth > $depth)
+        {
+            if ($reader->nodeType == XMLReader::ELEMENT)
+            {
+                switch ($reader->localName)
+                {
                     case "ID":
                         $instance->id = $reader->readString();
                         $reader->next(); // Move past the current text node
@@ -50,7 +53,8 @@ class TaxCategory extends UBLDeserializable
                         break;
                 }
             }
-            if (!$reader->read()) {
+            if (!$reader->read())
+            {
                 throw new Exception("Unexpected end of XML file while reading TaxCategory.");
             }
         }
@@ -60,59 +64,59 @@ class TaxCategory extends UBLDeserializable
 
     public static function GetNamespace(): string
     {
-        return self::CAC_SCHEMA."TaxCategory";
+        return self::CAC_SCHEMA . "TaxCategory";
     }
 
     public static function GetTestXML(): string
     {
-        return '<cac:TaxCategory '.self::NS_DEFINTIONS.'>
+        return '<cac:TaxCategory ' . self::NS_DEFINTIONS . '>
                     <cbc:ID xmlns:cbc="urn:oasis:names:specification:ubl:schema:xsd:CommonBasicComponents-2">US</cbc:ID>
                     <cbc:Name xmlns:cbc="urn:oasis:names:specification:ubl:schema:xsd:CommonBasicComponents-2">United States</cbc:Name>
                     <cbc:Percent xmlns:cbc="urn:oasis:names:specification:ubl:schema:xsd:CommonBasicComponents-2">0.00</cbc:Percent>
                     <cbc:TaxExemptionReason>Exempt</cbc:TaxExemptionReason>
                     <cbc:TaxExemptionReasonCode>EX</cbc:TaxExemptionReasonCode>
-                    '.TaxScheme::GetTestXML().'
+                    ' . TaxScheme::GetTestXML() . '
                 </cac:TaxCategory>';
     }
 
     public static function TestDefaultValues(?UBLDeserializable $instance, string &$reason): bool
     {
-        if($instance==null)
+        if ($instance == null)
         {
-            $reason="Failed to parse TaxCategory";
+            $reason = "Failed to parse TaxCategory";
             return false;
         }
-        if(!($instance instanceof TaxCategory))
+        if (!($instance instanceof TaxCategory))
         {
-            $reason="Failed to parse TaxCategory, wrong instance type";
+            $reason = "Failed to parse TaxCategory, wrong instance type";
             return false;
         }
-        if($instance->id != "US")
+        if ($instance->id != "US")
         {
-            $reason="Failed to parse ID";
+            $reason = "Failed to parse ID";
             return false;
         }
-        if($instance->name != "United States")
+        if ($instance->name != "United States")
         {
-            $reason="Failed to parse Name";
+            $reason = "Failed to parse Name";
             return false;
         }
-        if($instance->percent != "0.00")
+        if ($instance->percent != "0.00")
         {
-            $reason="Failed to parse Percent";
+            $reason = "Failed to parse Percent";
             return false;
         }
-        if($instance->taxExemptionReason != "Exempt")
+        if ($instance->taxExemptionReason != "Exempt")
         {
-            $reason="Failed to parse TaxExemptionReason";
+            $reason = "Failed to parse TaxExemptionReason";
             return false;
         }
-        if($instance->taxExemptionReasonCode != "EX")
+        if ($instance->taxExemptionReasonCode != "EX")
         {
-            $reason="Failed to parse TaxExemptionReasonCode";
+            $reason = "Failed to parse TaxExemptionReasonCode";
             return false;
         }
-        if(!TaxScheme::TestDefaultValues($instance->taxScheme, $reason))
+        if (!TaxScheme::TestDefaultValues($instance->taxScheme, $reason))
         {
             return false;
         }

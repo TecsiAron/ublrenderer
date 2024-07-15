@@ -16,18 +16,21 @@ class Address extends UBLDeserializable
     public ?string $countrySubentity = null;
     public ?Country $country = null;
 
-    public static function XMLDeserialize(Reader $reader, ?Address $instance=null): self
+    public static function XMLDeserialize(Reader $reader, ?Address $instance = null): self
     {
-        if($instance==null)
+        if ($instance == null)
         {
             $instance = new self();
         }
         $depth = $reader->depth;
         $reader->read(); // Move one child down
 
-        while ($reader->nodeType != XMLReader::END_ELEMENT || $reader->depth > $depth) {
-            if ($reader->nodeType == XMLReader::ELEMENT) {
-                switch ($reader->localName) {
+        while ($reader->nodeType != XMLReader::END_ELEMENT || $reader->depth > $depth)
+        {
+            if ($reader->nodeType == XMLReader::ELEMENT)
+            {
+                switch ($reader->localName)
+                {
                     case "StreetName":
                         $instance->streetName = $reader->readString();
                         $reader->next();
@@ -59,7 +62,8 @@ class Address extends UBLDeserializable
                 }
             }
 
-            if (!$reader->read()) {
+            if (!$reader->read())
+            {
                 throw new Exception("Invalid XML format");
             }
         }
@@ -68,12 +72,12 @@ class Address extends UBLDeserializable
 
     public static function GetNamespace(): string
     {
-        return self::CAC_SCHEMA."Address";
+        return self::CAC_SCHEMA . "Address";
     }
 
     public static function GetTestXML(): string
     {
-        return '<cac:Address '.self::NS_DEFINTIONS.'>
+        return '<cac:Address ' . self::NS_DEFINTIONS . '>
                     <cbc:StreetName>Strada</cbc:StreetName>
                     <cbc:AdditionalStreetName>Strada2</cbc:AdditionalStreetName>
                     <cbc:BuildingNumber>1</cbc:BuildingNumber>
@@ -88,47 +92,47 @@ class Address extends UBLDeserializable
 
     public static function TestDefaultValues(?UBLDeserializable $instance, string &$reason): bool
     {
-        if($instance == null)
+        if ($instance == null)
         {
             $reason = "Instance is null";
             return false;
         }
-        if(!($instance instanceof Address))
+        if (!($instance instanceof Address))
         {
             $reason = "Instance is not Address";
             return false;
         }
-        if($instance->streetName !== "Strada")
+        if ($instance->streetName !== "Strada")
         {
             $reason = "StreetName is not Strada";
             return false;
         }
-        if($instance->additionalStreetName !== "Strada2")
+        if ($instance->additionalStreetName !== "Strada2")
         {
             $reason = "AdditionalStreetName is not Strada2";
             return false;
         }
-        if($instance->buildingNumber !== "1")
+        if ($instance->buildingNumber !== "1")
         {
             $reason = "BuildingNumber is not 1";
             return false;
         }
-        if($instance->cityName !== "Oras")
+        if ($instance->cityName !== "Oras")
         {
             $reason = "CityName is not Oras";
             return false;
         }
-        if($instance->postalZone !== "123456")
+        if ($instance->postalZone !== "123456")
         {
             $reason = "PostalZone is not 123456";
             return false;
         }
-        if($instance->countrySubentity !== "Judet")
+        if ($instance->countrySubentity !== "Judet")
         {
             $reason = "CountrySubentity is not Judet";
             return false;
         }
-        if(!Country::TestDefaultValues($instance->country, $reason))
+        if (!Country::TestDefaultValues($instance->country, $reason))
         {
             return false;
         }

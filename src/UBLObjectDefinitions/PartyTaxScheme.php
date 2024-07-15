@@ -32,7 +32,7 @@ class PartyTaxScheme extends UBLDeserializable
                         $reader->next();
                         break;
                     case "TaxScheme":
-                        $parsed= $reader->parseCurrentElement();
+                        $parsed = $reader->parseCurrentElement();
                         $instance->taxScheme = $parsed["value"];
                         break;
                 }
@@ -52,10 +52,10 @@ class PartyTaxScheme extends UBLDeserializable
 
     public static function GetTestXML(): string
     {
-        return '<cac:PartyTaxScheme '.self::NS_DEFINTIONS.'>
+        return '<cac:PartyTaxScheme ' . self::NS_DEFINTIONS . '>
                 <cbc:RegistrationName>United States</cbc:RegistrationName>
                 <cbc:CompanyID>US</cbc:CompanyID>
-                '.TaxScheme::GetTestXML().'
+                ' . TaxScheme::GetTestXML() . '
             </cac:PartyTaxScheme>';
     }
 

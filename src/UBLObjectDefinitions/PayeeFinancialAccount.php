@@ -9,7 +9,7 @@ use XMLReader;
 class PayeeFinancialAccount extends UBLDeserializable
 {
     public ?string $id = null;
-    public ?string$name = null;
+    public ?string $name = null;
     public ?string $financialInstitutionBranchID = null;
 
     public static function XMLDeserialize(Reader $reader): self
@@ -18,9 +18,12 @@ class PayeeFinancialAccount extends UBLDeserializable
         $depth = $reader->depth;
         $reader->read(); // Move one child down
 
-        while ($reader->nodeType != XMLReader::END_ELEMENT || $reader->depth > $depth) {
-            if ($reader->nodeType == XMLReader::ELEMENT) {
-                switch ($reader->localName) {
+        while ($reader->nodeType != XMLReader::END_ELEMENT || $reader->depth > $depth)
+        {
+            if ($reader->nodeType == XMLReader::ELEMENT)
+            {
+                switch ($reader->localName)
+                {
                     case "ID":
                         $instance->id = $reader->readString();
                         $reader->next();
@@ -36,7 +39,8 @@ class PayeeFinancialAccount extends UBLDeserializable
                 }
             }
 
-            if (!$reader->read()) {
+            if (!$reader->read())
+            {
                 throw new Exception("Invalid XML format");
             }
         }
@@ -45,12 +49,12 @@ class PayeeFinancialAccount extends UBLDeserializable
 
     public static function GetNamespace(): string
     {
-        return self::CAC_SCHEMA."PayeeFinancialAccount";
+        return self::CAC_SCHEMA . "PayeeFinancialAccount";
     }
 
     public static function GetTestXML(): string
     {
-        return '<cac:PayeeFinancialAccount '.self::NS_DEFINTIONS.'>
+        return '<cac:PayeeFinancialAccount ' . self::NS_DEFINTIONS . '>
                     <cbc:ID>1</cbc:ID>
                     <cbc:Name>John Doe</cbc:Name>
                     <cac:FinancialInstitutionBranch>
@@ -61,27 +65,27 @@ class PayeeFinancialAccount extends UBLDeserializable
 
     public static function TestDefaultValues(?UBLDeserializable $instance, string &$reason): bool
     {
-        if($instance == null)
+        if ($instance == null)
         {
             $reason = "Instance is null";
             return false;
         }
-        if(!($instance instanceof PayeeFinancialAccount))
+        if (!($instance instanceof PayeeFinancialAccount))
         {
             $reason = "Instance is not of type PayeeFinancialAccount";
             return false;
         }
-        if($instance->id !== "1")
+        if ($instance->id !== "1")
         {
             $reason = "ID is not 1";
             return false;
         }
-        if($instance->name !== "John Doe")
+        if ($instance->name !== "John Doe")
         {
             $reason = "Name is not John Doe";
             return false;
         }
-        if($instance->financialInstitutionBranchID !== "2")
+        if ($instance->financialInstitutionBranchID !== "2")
         {
             $reason = "FinancialInstitutionBranch ID is not 2";
             return false;

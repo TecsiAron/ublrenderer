@@ -8,6 +8,7 @@ use EdituraEDU\UBLRenderer\UBLObjectDefinitions\ParsedUBLInvoice;
 class UBLRenderer
 {
     private ParsedUBLInvoice $invoice;
+
     public function __construct(string $ublContent, bool $useDefaultTemplates = true)
     {
 

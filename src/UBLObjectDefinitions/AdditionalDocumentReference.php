@@ -20,9 +20,12 @@ class AdditionalDocumentReference extends UBLDeserializable
         $depth = $reader->depth;
         $reader->read(); // Move one child down
 
-        while ($reader->nodeType != XMLReader::END_ELEMENT || $reader->depth > $depth) {
-            if ($reader->nodeType == XMLReader::ELEMENT) {
-                switch ($reader->localName) {
+        while ($reader->nodeType != XMLReader::END_ELEMENT || $reader->depth > $depth)
+        {
+            if ($reader->nodeType == XMLReader::ELEMENT)
+            {
+                switch ($reader->localName)
+                {
                     case "ID":
                         $instance->id = $reader->readString();
                         $reader->next();
@@ -46,7 +49,8 @@ class AdditionalDocumentReference extends UBLDeserializable
                 }
             }
 
-            if (!$reader->read()) {
+            if (!$reader->read())
+            {
                 throw new Exception("Invalid XML format");
             }
         }
@@ -55,53 +59,53 @@ class AdditionalDocumentReference extends UBLDeserializable
 
     public static function GetNamespace(): string
     {
-        return self::CAC_SCHEMA."AdditionalDocumentReference";
+        return self::CAC_SCHEMA . "AdditionalDocumentReference";
     }
 
     public static function GetTestXML(): string
     {
-        return '<cac:AdditionalDocumentReference '.self::NS_DEFINTIONS.'>
+        return '<cac:AdditionalDocumentReference ' . self::NS_DEFINTIONS . '>
                     <cbc:ID>1</cbc:ID>
                     <cbc:DocumentType>Invoice</cbc:DocumentType>
                     <cbc:DocumentTypeCode>380</cbc:DocumentTypeCode>
                     <cbc:DocumentDescription>Invoice</cbc:DocumentDescription>
-                    '.AttachedFile::GetTestXML().'
+                    ' . AttachedFile::GetTestXML() . '
                 </cac:AdditionalDocumentReference>';
     }
 
     public static function TestDefaultValues(?UBLDeserializable $instance, string &$reason): bool
     {
-        if($instance==null)
+        if ($instance == null)
         {
-            $reason="Instance is null";
+            $reason = "Instance is null";
             return false;
         }
-        if(!($instance instanceof AdditionalDocumentReference))
+        if (!($instance instanceof AdditionalDocumentReference))
         {
-            $reason="Instance is not of type AdditionalDocumentReference";
+            $reason = "Instance is not of type AdditionalDocumentReference";
             return false;
         }
-        if($instance->id!="1")
+        if ($instance->id != "1")
         {
-            $reason="ID is not 1";
+            $reason = "ID is not 1";
             return false;
         }
-        if($instance->documentType!="Invoice")
+        if ($instance->documentType != "Invoice")
         {
-            $reason="DocumentType is not Invoice";
+            $reason = "DocumentType is not Invoice";
             return false;
         }
-        if($instance->documentTypeCode!="380")
+        if ($instance->documentTypeCode != "380")
         {
-            $reason="DocumentTypeCode is not 380";
+            $reason = "DocumentTypeCode is not 380";
             return false;
         }
-        if($instance->documentDescription!="Invoice")
+        if ($instance->documentDescription != "Invoice")
         {
-            $reason="DocumentDescription is not Invoice";
+            $reason = "DocumentDescription is not Invoice";
             return false;
         }
-        if(!AttachedFile::TestDefaultValues($instance->attachment, $reason))
+        if (!AttachedFile::TestDefaultValues($instance->attachment, $reason))
         {
             return false;
         }

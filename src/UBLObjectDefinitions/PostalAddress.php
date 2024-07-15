@@ -10,12 +10,12 @@ class PostalAddress extends Address
 
     public static function GetNamespace(): string
     {
-        return self::CAC_SCHEMA."PostalAddress";
+        return self::CAC_SCHEMA . "PostalAddress";
     }
 
-    public static function XMLDeserialize(Reader $reader, ?Address $instance=null): PostalAddress
+    public static function XMLDeserialize(Reader $reader, ?Address $instance = null): PostalAddress
     {
-        if($instance!=null)
+        if ($instance != null)
         {
             throw new Exception("PostalAddress cannot be deserialized into an existing instance.");
         }
@@ -26,7 +26,7 @@ class PostalAddress extends Address
 
     public static function GetTestXML(): string
     {
-        return '<cac:PostalAddress '.self::NS_DEFINTIONS.'>
+        return '<cac:PostalAddress ' . self::NS_DEFINTIONS . '>
                     <cbc:StreetName>Strada</cbc:StreetName>
                     <cbc:AdditionalStreetName>Strada2</cbc:AdditionalStreetName>
                     <cbc:BuildingNumber>1</cbc:BuildingNumber>

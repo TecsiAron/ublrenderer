@@ -10,7 +10,7 @@ use XMLReader;
 class OrderReference extends UBLDeserializable
 {
     public ?string $id = null;
-    public ?string$salesOrderId = null;
+    public ?string $salesOrderId = null;
     public ?DateTime $issueDate = null;
 
     public static function XMLDeserialize(Reader $reader): self
@@ -19,9 +19,12 @@ class OrderReference extends UBLDeserializable
         $depth = $reader->depth;
         $reader->read(); // Move one child down
 
-        while ($reader->nodeType != XMLReader::END_ELEMENT || $reader->depth > $depth) {
-            if ($reader->nodeType == XMLReader::ELEMENT) {
-                switch ($reader->localName) {
+        while ($reader->nodeType != XMLReader::END_ELEMENT || $reader->depth > $depth)
+        {
+            if ($reader->nodeType == XMLReader::ELEMENT)
+            {
+                switch ($reader->localName)
+                {
                     case "ID":
                         $instance->id = $reader->readString();
                         $reader->next();
@@ -37,7 +40,8 @@ class OrderReference extends UBLDeserializable
                 }
             }
 
-            if (!$reader->read()) {
+            if (!$reader->read())
+            {
                 throw new Exception("Invalid XML format");
             }
         }
@@ -46,12 +50,12 @@ class OrderReference extends UBLDeserializable
 
     public static function GetNamespace(): string
     {
-        return self::CAC_SCHEMA."OrderReference";
+        return self::CAC_SCHEMA . "OrderReference";
     }
 
     public static function GetTestXML(): string
     {
-        return '<cac:OrderReference '.self::NS_DEFINTIONS.'>
+        return '<cac:OrderReference ' . self::NS_DEFINTIONS . '>
                     <cbc:ID>1</cbc:ID>
                     <cbc:SalesOrderID>1</cbc:SalesOrderID>
                     <cbc:IssueDate>2021-01-01</cbc:IssueDate>
@@ -60,27 +64,27 @@ class OrderReference extends UBLDeserializable
 
     public static function TestDefaultValues(?UBLDeserializable $instance, string &$reason): bool
     {
-        if($instance == null)
+        if ($instance == null)
         {
             $reason = "Instance is null";
             return false;
         }
-        if(!($instance instanceof OrderReference))
+        if (!($instance instanceof OrderReference))
         {
             $reason = "Instance is not of type OrderReference";
             return false;
         }
-        if($instance->id !== "1")
+        if ($instance->id !== "1")
         {
             $reason = "ID is not 1";
             return false;
         }
-        if($instance->salesOrderId !== "1")
+        if ($instance->salesOrderId !== "1")
         {
             $reason = "SalesOrderID is not 1";
             return false;
         }
-        if($instance->issueDate->format("Y-m-d") != "2021-01-01")
+        if ($instance->issueDate->format("Y-m-d") != "2021-01-01")
         {
             $reason = "IssueDate is not 2021-01-01";
         }

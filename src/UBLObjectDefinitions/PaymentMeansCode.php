@@ -2,7 +2,7 @@
 
 namespace EdituraEDU\UBLRenderer\UBLObjectDefinitions;
 
-enum PaymentMeansCode:string
+enum PaymentMeansCode: string
 {
     case InstrumentNotDefined = '1';
     case AutomatedClearingHouseCredit = '2';

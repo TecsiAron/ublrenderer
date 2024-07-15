@@ -17,9 +17,12 @@ class Country extends UBLDeserializable
         $depth = $reader->depth;
         $reader->read(); // Move one child down
 
-        while ($reader->nodeType != XMLReader::END_ELEMENT || $reader->depth > $depth) {
-            if ($reader->nodeType == XMLReader::ELEMENT) {
-                switch ($reader->localName) {
+        while ($reader->nodeType != XMLReader::END_ELEMENT || $reader->depth > $depth)
+        {
+            if ($reader->nodeType == XMLReader::ELEMENT)
+            {
+                switch ($reader->localName)
+                {
                     case "IdentificationCode":
                         $instance->identificationCode = $reader->readString();
                         $reader->next();
@@ -27,7 +30,8 @@ class Country extends UBLDeserializable
                 }
             }
 
-            if (!$reader->read()) {
+            if (!$reader->read())
+            {
                 throw new Exception("Invalid XML format");
             }
         }
@@ -36,30 +40,30 @@ class Country extends UBLDeserializable
 
     public static function GetNamespace(): string
     {
-        return self::CAC_SCHEMA."Country";
+        return self::CAC_SCHEMA . "Country";
     }
 
     public static function GetTestXML(): string
     {
         //todo check for listId?
-        return '<cac:Country '.self::NS_DEFINTIONS.'>
+        return '<cac:Country ' . self::NS_DEFINTIONS . '>
                     <cbc:IdentificationCode>RO</cbc:IdentificationCode>
                 </cac:Country>';
     }
 
     public static function TestDefaultValues(?UBLDeserializable $instance, string &$reason): bool
     {
-        if($instance == null)
+        if ($instance == null)
         {
             $reason = "Instance is null";
             return false;
         }
-        if(!($instance instanceof Country))
+        if (!($instance instanceof Country))
         {
             $reason = "Instance is not Country";
             return false;
         }
-        if($instance->identificationCode !== "RO")
+        if ($instance->identificationCode !== "RO")
         {
             $reason = "IdentificationCode is not RO";
             return false;

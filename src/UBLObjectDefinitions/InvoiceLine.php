@@ -51,7 +51,7 @@ class InvoiceLine extends UBLDeserializable
                         $parsed = $reader->parseCurrentElement();
                         $instance->invoicedQuantity = $parsed["value"];
                         $instance->unitCode = UnitCode::tryFrom($parsed["attributes"]["unitCode"]) ?? UnitCode::INVALID;
-                        if(isset($parsed["attributes"]["unitCodeListID"]))
+                        if (isset($parsed["attributes"]["unitCodeListID"]))
                         {
                             $instance->unitCodeListId = $parsed["attributes"]["unitCodeListID"];
                         }
@@ -208,8 +208,8 @@ class InvoiceLine extends UBLDeserializable
 
     protected function DeserializeComplete(): void
     {
-        $nestedAllowanceCharges = $this->price->allowanceCharge??[];
-        $lineCharge = $this->allowanceCharge??[];
+        $nestedAllowanceCharges = $this->price->allowanceCharge ?? [];
+        $lineCharge = $this->allowanceCharge ?? [];
         $this->allAllowanceCharges = array_merge($lineCharge, $nestedAllowanceCharges);
     }
 }

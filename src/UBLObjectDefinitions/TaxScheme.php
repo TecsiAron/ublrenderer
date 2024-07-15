@@ -9,7 +9,7 @@ use XMLReader;
 class TaxScheme extends UBLDeserializable
 {
     public ?string $id = null;
-    public ?string$name = null;
+    public ?string $name = null;
     public ?string $taxTypeCode = null;
     public ?string $currencyCode = null;
 
@@ -18,10 +18,12 @@ class TaxScheme extends UBLDeserializable
         $instance = new TaxScheme();
         $depth = $reader->depth;
         $reader->read();//move one child down
-        while($reader->nodeType != XMLReader::END_ELEMENT || $reader->depth > $depth){
-            if($reader->nodeType == XMLReader::ELEMENT)
+        while ($reader->nodeType != XMLReader::END_ELEMENT || $reader->depth > $depth)
+        {
+            if ($reader->nodeType == XMLReader::ELEMENT)
             {
-                switch($reader->localName){
+                switch ($reader->localName)
+                {
                     case "ID":
                         $instance->id = $reader->readString();
                         $reader->next();
@@ -41,7 +43,7 @@ class TaxScheme extends UBLDeserializable
                 }
             }
 
-            if(!$reader->read())
+            if (!$reader->read())
             {
                 throw new Exception("Invalid XML format");
             }
@@ -51,34 +53,34 @@ class TaxScheme extends UBLDeserializable
 
     public static function TestDefaultValues(?UBLDeserializable $instance, string &$reason): bool
     {
-        if($instance==null)
+        if ($instance == null)
         {
-            $reason="Failed to parse TaxScheme";
+            $reason = "Failed to parse TaxScheme";
             return false;
         }
-        if(!($instance instanceof TaxScheme))
+        if (!($instance instanceof TaxScheme))
         {
-            $reason="Failed to parse TaxScheme, wrong instance type";
+            $reason = "Failed to parse TaxScheme, wrong instance type";
             return false;
         }
-        if($instance->id != "US")
+        if ($instance->id != "US")
         {
-            $reason="Failed to parse ID";
+            $reason = "Failed to parse ID";
             return false;
         }
-        if($instance->name != "United States")
+        if ($instance->name != "United States")
         {
-            $reason="Failed to parse Name";
+            $reason = "Failed to parse Name";
             return false;
         }
-        if($instance->taxTypeCode != "VAT")
+        if ($instance->taxTypeCode != "VAT")
         {
-            $reason="Failed to parse TaxTypeCode";
+            $reason = "Failed to parse TaxTypeCode";
             return false;
         }
-        if($instance->currencyCode != "USD")
+        if ($instance->currencyCode != "USD")
         {
-            $reason="Failed to parse CurrencyCode";
+            $reason = "Failed to parse CurrencyCode";
             return false;
         }
         return true;
@@ -87,12 +89,12 @@ class TaxScheme extends UBLDeserializable
 
     public static function GetNamespace(): string
     {
-        return self::CAC_SCHEMA."TaxScheme";
+        return self::CAC_SCHEMA . "TaxScheme";
     }
 
     public static function GetTestXML(): string
     {
-        return  '<cac:TaxScheme '.self::NS_DEFINTIONS.'>
+        return '<cac:TaxScheme ' . self::NS_DEFINTIONS . '>
                     <cbc:ID>US</cbc:ID>
                     <cbc:Name>United States</cbc:Name>
                     <cbc:TaxTypeCode>VAT</cbc:TaxTypeCode>

@@ -2,9 +2,9 @@
 
 namespace EdituraEDU\UBLRenderer\UBLObjectDefinitions;
 
-enum UnitCode : string
+enum UnitCode: string
 {
-    case INVALID="COULD_NOT_PARSE";
+    case INVALID = "COULD_NOT_PARSE";
     case UNIT = 'C62';
     case PIECE = 'H87';
 
