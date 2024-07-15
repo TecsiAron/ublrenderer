@@ -2,6 +2,7 @@
 
 namespace EdituraEDU\UBLRenderer\UBLObjectDefinitions;
 
+use EdituraEDU\UBLRenderer\MappingsManager;
 use Exception;
 use Sabre\Xml\Reader;
 use XMLReader;
@@ -206,6 +207,41 @@ class InvoiceLine extends UBLDeserializable
         return true;
     }
 
+    public function HasShortMappedUnitCode():bool
+    {
+        if(empty($this->unitCode))
+        {
+            return true;// this will cause "BUC" to be used
+        }
+        if(!MappingsManager::GetInstance()->UnitCodeHasMapping($this->unitCode))
+        {
+            return  false;
+        }
+        return MappingsManager::GetInstance()->UnitCodeHasShortMapping($this->unitCode);
+    }
+
+    public function GetShortMappedUnitCode(): string
+    {
+        if(empty($this->unitCode))
+        {
+            return "BUC";
+        }
+        return MappingsManager::GetInstance()->GetUnitCodeMapping($this->unitCode);
+    }
+
+    public function HasMappedUnitCode():bool
+    {
+        if(empty($this->unitCode))
+        {
+            return false;
+        }
+        return MappingsManager::GetInstance()->UnitCodeHasMapping($this->unitCode);
+    }
+    public function getMappedQuantityCode(): string
+    {
+        //todo implement support for configurable mappings
+        return $this->unitCode->value;
+    }
     protected function DeserializeComplete(): void
     {
         $nestedAllowanceCharges = $this->price->allowanceCharge ?? [];
