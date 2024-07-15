@@ -1,0 +1,3 @@
+<component name="DependencyValidationManager">
+  <scope name="My-Code" pattern="file[ublrenderer]:src//*||file[ublrenderer]:tests//*" />
+</component>
