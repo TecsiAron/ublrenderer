@@ -13,7 +13,7 @@ class InvoiceLine extends UBLDeserializable
 
     public ?string $lineExtensionAmount = null;
     public ?string $lineExtensionAmountCurrencyID = null;
-    public ?UnitCode $unitCode = null;
+    public ?string $unitCode = null;
     /**
      * @var AllowanceCharge[] $allowanceCharge
      */
@@ -50,7 +50,7 @@ class InvoiceLine extends UBLDeserializable
                     case "InvoicedQuantity":
                         $parsed = $reader->parseCurrentElement();
                         $instance->invoicedQuantity = $parsed["value"];
-                        $instance->unitCode = UnitCode::tryFrom($parsed["attributes"]["unitCode"]) ?? UnitCode::INVALID;
+                        $instance->unitCode = $parsed["attributes"]["unitCode"];
                         if (isset($parsed["attributes"]["unitCodeListID"]))
                         {
                             $instance->unitCodeListId = $parsed["attributes"]["unitCodeListID"];
