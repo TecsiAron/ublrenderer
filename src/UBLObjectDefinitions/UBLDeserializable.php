@@ -2,7 +2,7 @@
 
 namespace EdituraEDU\UBLRenderer\UBLObjectDefinitions;
 
-use EdituraEDU\UBLRenderer\XML;
+use EdituraEDU\UBLRenderer\XMLReaderProvider;
 use Sabre\Xml\Reader;
 
 abstract class UBLDeserializable
