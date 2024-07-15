@@ -446,6 +446,46 @@ class ParsedUBLInvoice extends UBLDeserializable
         return false;
     }
 
+    public function AllItemsHaveShortUnitCodeMapped():bool
+    {
+        if(empty($this->invoiceLines))
+        {
+            return false;
+        }
+        $count=count($this->invoiceLines);
+        for($i=0;$i<$count;$i++)
+        {
+            if(!$this->invoiceLines[$i]->HasShortMappedUnitCode())
+            {
+                return false;
+            }
+        }
+        return false;
+    }
+
+    public function CanShowUnitCodeDetails():bool
+    {
+        if(empty($this->invoiceLines))
+        {
+            return false;
+        }
+        if($this->AllItemsHaveShortUnitCodeMapped())
+        {
+            return false;
+        }
+        $count=count($this->invoiceLines);
+        $foundSomeDetails=false;
+        for($i=0;$i<$count;$i++)
+        {
+            if($this->invoiceLines[$i]->HasMappedUnitCode())
+            {
+               $foundSomeDetails=true;
+               break;
+            }
+        }
+        return $foundSomeDetails;
+    }
+
     public static function GetTestXML(): string
     {
         return file_get_contents(dirname(__FILE__) . "/../efactura_sample_invoice.xml");
