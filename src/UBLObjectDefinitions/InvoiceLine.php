@@ -121,11 +121,6 @@ class InvoiceLine extends UBLDeserializable
         return $instance;
     }
 
-    public function SetTaxSubtotal(TaxSubTotal $TaxSubTotal): void
-    {
-        $this->TaxSubTotal = $TaxSubTotal;
-    }
-
     public static function GetNamespace(): string
     {
         return self::CAC_SCHEMA . "InvoiceLine";
