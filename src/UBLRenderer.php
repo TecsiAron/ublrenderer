@@ -45,7 +45,9 @@ class UBLRenderer
         $invoice=ParsedUBLInvoice::XMLDeserialize($reader);
         self::$CurrentInvoice = $invoice;
         $loader = new \Twig\Loader\FilesystemLoader(dirname(__FILE__) . '/Template');
-        $twig = new \Twig\Environment($loader);
+        $twig = new \Twig\Environment($loader, [
+            "strict_variables" => true,
+        ]);
         $twig->load("default.html.twig");
         $rendered = $twig->render('default.html.twig', ['invoice' => $invoice]);
         self::$CurrentInvoice = null;

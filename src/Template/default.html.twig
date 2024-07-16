@@ -103,7 +103,7 @@
             <div class="header-line header-info-line">Factură:</div>
             <div class="header-line header-info-line">Nr. {{ invoice.ID }}</div>
             <div class="header-line header-info-line">din</div>
-            <div class="header-line header-info-line">{{ invoice.issueDate.format("Y-m-d") }}</div>
+            <div class="header-line header-info-line">{{ invoice.IssueDate.format("Y-m-d") }}</div>
         </td>
         <td class="header-party header-buyer">
             <!-- buyer -->
@@ -115,7 +115,7 @@
             <div class="header-line header-buyer-line">Județul: {{ invoice.AccountingCustomerParty.PostalAddress.GetCountyName() }}</div>
             <div class="header-line header-buyer-line">Localitatea: {{ invoice.AccountingCustomerParty.PostalAddress.CityName }}</div>
             {% if invoice.AccountingCustomerParty.PostalAddress.PostalZone is defined
-                and invoice.AccountingCustomerParty.PostalAddress.postalZone is not empty %}
+                and invoice.AccountingCustomerParty.PostalAddress.PostalZone is not empty %}
                 <div class="header-line header-buyer-line">Cod poștal: {{ invoice.AccountingCustomerParty.PostalAddress.PostalZone }}</div>
             {% endif %}
             <div class="header-line header-buyer-line">Adresa: {{ invoice.AccountingCustomerParty.PostalAddress.StreetName }}</div>
