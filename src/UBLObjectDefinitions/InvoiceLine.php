@@ -267,26 +267,26 @@ class InvoiceLine extends UBLDeserializable
         $ids=[];
         if(!empty($this->Item->SellersItemIdentification))
         {
-            $ids[]="Vânz: $this->Item->sellersItemIdentification";
+            $ids[]="Vânz: ".$this->Item->SellersItemIdentification;
         }
         if(!empty($this->Item->BuyersItemIdentification))
         {
-            $ids[]="Cump: $this->Item->buyersItemIdentification";
+            $ids[]="Cump: ".$this->Item->BuyersItemIdentification;
         }
         return implode($lineBreak, $ids);
     }
 
-    public function GetVATRate():string
+    public function GetVATRate(bool $includePercent=true):string
     {
         if(!isset($this->Item->ClassifiedTaxCategory->Percent))
         {
-            return "0%";
+            return "0".($includePercent?"%":"");
         }
         if(empty($this->Item->ClassifiedTaxCategory->Percent))
         {
-            return "0%";
+            return "0".($includePercent?"%":"");
         }
-        return $this->Item->ClassifiedTaxCategory->Percent."%";
+        return $this->Item->ClassifiedTaxCategory->Percent.($includePercent?"%":"");
     }
 
     public function GetNoVATValue():?string
@@ -295,7 +295,7 @@ class InvoiceLine extends UBLDeserializable
         {
             return null;
         }
-        return $this->LineExtensionAmount;
+        return $this->LineExtensionAmount." ". $this->GetCurrency($this->LineExtensionAmountCurrencyID);
     }
 
     public function GetNoVATUnitValue():?string
@@ -304,12 +304,28 @@ class InvoiceLine extends UBLDeserializable
         {
             return null;
         }
-        return $this->Price->PriceAmount;
+        return $this->Price->PriceAmount . " " . $this->GetCurrency($this->Price->PriceCurrencyID);
     }
 
     public function HasAllowanceCharges():bool
     {
         return sizeof($this->AllAllowanceCharges)!=0;
+    }
+
+    public function GetVATValue():?string
+    {
+        $vatRate=$this->GetVATRate(false);
+        if($vatRate==0)
+        {
+            return "0";
+        }
+        if(!isset($this->LineExtensionAmount) || empty($this->LineExtensionAmount))
+        {
+            return null;
+        }
+        $vatMultiplier=bcdiv($vatRate,100,2);
+        $vatValue=bcmul($this->LineExtensionAmount,$vatMultiplier,2);
+        return $vatValue." ".$this->GetCurrency($this->LineExtensionAmountCurrencyID);
     }
 
     public function CanRender():bool
