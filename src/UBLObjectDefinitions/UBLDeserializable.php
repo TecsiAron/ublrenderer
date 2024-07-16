@@ -51,6 +51,20 @@ abstract class UBLDeserializable
         return static::TestDefaultValues($parsedClass, $reason);
     }
 
+    protected function ContainsNull(array $params):bool
+    {
+        foreach ($params as $param)
+        {
+            if ($param == null)
+            {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    //todo define mandatory non static method CanRender():bool
+
     protected function DeserializeComplete(): void {}
 
     public static abstract function GetTestXML(): string;
