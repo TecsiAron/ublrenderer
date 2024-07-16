@@ -68,7 +68,7 @@ class UBLRenderer
      * @param IInvoiceWriter[] $writer
      * @return void
      */
-    public function WriteToFiles(array $writer)
+    public function WriteFiles(array $writer)
     {
         $invoice = $this->ParseUBL();
         $html = $this->CreateHTML($invoice);

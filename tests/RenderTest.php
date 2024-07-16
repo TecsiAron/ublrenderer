@@ -18,8 +18,9 @@
 use EdituraEDU\UBLRenderer\HTMLFileWriter;
 use EdituraEDU\UBLRenderer\UBLObjectDefinitions\ParsedUBLInvoice;
 use EdituraEDU\UBLRenderer\UBLRenderer;
+use PHPUnit\Framework\Attributes\CoversMethod;
 use PHPUnit\Framework\TestCase;
-
+#[CoversMethod(UBLRenderer::class, "WriteFiles")]
 class RenderTest extends TestCase
 {
     public function testRender()
@@ -33,7 +34,7 @@ class RenderTest extends TestCase
         $renderer = new UBLRenderer($content);
         try
         {
-            $renderer->WriteToFiles([new HTMLFileWriter("test_render.html")]);
+            $renderer->WriteFiles([new HTMLFileWriter("test_render.html")]);
         }
         catch (Exception $e)
         {
