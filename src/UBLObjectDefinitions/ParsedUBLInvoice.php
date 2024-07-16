@@ -48,7 +48,7 @@ class ParsedUBLInvoice extends UBLDeserializable
     protected ?array $allowanceCharges = null;
     /** @var AdditionalDocumentReference[] $additionalDocumentReference */
     protected array $additionalDocumentReferences = [];
-    protected string $documentCurrencyCode = 'EUR';
+    protected ?string $documentCurrencyCode = null;
     protected ?string $buyerReference = null;
     protected ?string $accountingCostCode = null;
     protected ?InvoicePeriod $invoicePeriod = null;
@@ -317,7 +317,7 @@ class ParsedUBLInvoice extends UBLDeserializable
         $this->additionalDocumentReferences = $additionalDocumentReferences;
     }
 
-    public function GetDocumentCurrencyCode(): string
+    public function GetDocumentCurrencyCode(): ?string
     {
         return $this->documentCurrencyCode;
     }
