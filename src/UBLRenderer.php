@@ -18,11 +18,14 @@ class UBLRenderer
         $reader = XMLReaderProvider::CreateReader();
         $reader->xml($ublContent);
         $this->invoice=ParsedUBLInvoice::XMLDeserialize($reader);
+    }
+
+    public function CreateHTML():string
+    {
         $loader = new \Twig\Loader\FilesystemLoader(dirname(__FILE__) . '/Template');
         $twig = new \Twig\Environment($loader);
         $twig->load("default.html.twig");
-        $output = $twig->render('default.html.twig', ['invoice' => $this->invoice]);
-        file_put_contents("test.html", $output);
+        return $twig->render('default.html.twig', ['invoice' => $this->invoice]);
     }
 
 }
