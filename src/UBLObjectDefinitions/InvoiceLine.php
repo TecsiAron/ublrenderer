@@ -24,8 +24,6 @@ class InvoiceLine extends UBLDeserializable
      */
     public ?array $allAllowanceCharges = null;
     public ?string $unitCodeListId = null;
-    public ?TaxTotal $taxTotal = null;
-    public ?InvoicePeriod $invoicePeriod = null;
     public ?string $note = null;
     public ?InvoiceItem $item = null;
     public ?ItemPrice $price = null;
@@ -64,12 +62,6 @@ class InvoiceLine extends UBLDeserializable
                         {
                             $instance->lineExtensionAmountCurrencyID = $parsed["attributes"]["currencyID"];
                         }
-                        break;
-                    case "TaxTotal":
-                        $instance->taxTotal = $reader->parseCurrentElement()["value"];
-                        break;
-                    case "InvoicePeriod":
-                        $instance->invoicePeriod = $reader->parseCurrentElement()["value"];
                         break;
                     case "Note":
                         $instance->note = $reader->readString();
@@ -119,7 +111,7 @@ class InvoiceLine extends UBLDeserializable
                     <cbc:ID>1</cbc:ID>
                     <cbc:InvoicedQuantity unitCode="C62" unitCodeListID="UN/ECE rec 20" unitCodeListAgencyID="6">1</cbc:InvoicedQuantity>
                     <cbc:LineExtensionAmount currencyID="RON">100</cbc:LineExtensionAmount>
-                    ' . TaxTotal::GetTestXML() . InvoicePeriod::GetTestXML() . AllowanceCharge::GetTestXML() . AllowanceCharge::GetTestXML() . '
+                    '. AllowanceCharge::GetTestXML() . AllowanceCharge::GetTestXML() . '
                     <cbc:Note>Test note</cbc:Note>
                     ' . InvoiceItem::GetTestXML() . ItemPrice::GetTestXML() . '                    
                     <cbc:AccountingCostCode>123</cbc:AccountingCostCode>
@@ -167,16 +159,6 @@ class InvoiceLine extends UBLDeserializable
         if ($instance->unitCodeListId !== "UN/ECE rec 20")
         {
             $reason = "UnitCodeListID is not UN/ECE rec 20";
-            return false;
-        }
-        if ($instance->taxTotal === null)
-        {
-            $reason = "TaxTotal is null";
-            return false;
-        }
-        if ($instance->invoicePeriod === null)
-        {
-            $reason = "InvoicePeriod is null";
             return false;
         }
         if ($instance->note !== "Test note")
