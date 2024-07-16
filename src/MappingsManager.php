@@ -38,6 +38,7 @@ class MappingsManager
         return self::$Instance;
     }
     private array $UnitCodes=[];
+    private array $AllowanceChargeReasonCodes=[];
 
     private function __construct(?string $json)
     {
@@ -50,6 +51,24 @@ class MappingsManager
         {
             $this->UnitCodes = $mappings["UnitCodes"];
         }
+        if(isset($mappings["AllowanceChargeReasonCodes"]))
+        {
+            $this->AllowanceChargeReasonCodes = $mappings["AllowanceChargeReasonCodes"];
+        }
+    }
+
+    public function AllowanceChargeReasonCodeHasMapping(string $reasonCode): bool
+    {
+        return isset($this->AllowanceChargeReasonCodes[$reasonCode]);
+    }
+
+    public function GetAllowanceChargeReasonCodeMapping(string $reasonCode): string
+    {
+        if(!$this->AllowanceChargeReasonCodeHasMapping($reasonCode))
+        {
+            throw new Exception("Reason code $reasonCode has no mapping");
+        }
+        return $this->AllowanceChargeReasonCodes[$reasonCode];
     }
 
     public function UnitCodeHasMapping(string $unitCode): bool
