@@ -304,6 +304,14 @@ class InvoiceLine extends UBLDeserializable
     {
         return sizeof($this->allAllowanceCharges)!=0;
     }
+
+    public function CanRender():bool
+    {
+        return !$this->ContainsNull([
+            $this->getNoVATValue(),
+            $this->getNoVATUnitValue(),
+        ]);
+    }
     protected function DeserializeComplete(): void
     {
         $nestedAllowanceCharges = $this->price->allowanceCharge ?? [];
