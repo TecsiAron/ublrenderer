@@ -19,28 +19,46 @@ namespace EdituraEDU\UBLRenderer;
 
 
 use EdituraEDU\UBLRenderer\UBLObjectDefinitions\ParsedUBLInvoice;
+use Exception;
 
 class UBLRenderer
 {
-    private ParsedUBLInvoice $invoice;
-
+    private string $UBLContent;
+    private static ?ParsedUBLInvoice $CurrentInvoice = null;
     public function __construct(string $ublContent, bool $useDefaultTemplates = true)
     {
         if(!MappingsManager::$Initialized)
         {
             MappingsManager::Init();
         }
-        $reader = XMLReaderProvider::CreateReader();
-        $reader->xml($ublContent);
-        $this->invoice=ParsedUBLInvoice::XMLDeserialize($reader);
+        $this->UBLContent = $ublContent;
     }
 
     public function CreateHTML():string
     {
+        $reader = XMLReaderProvider::CreateReader();
+        $reader->xml($this->UBLContent);
+        /**
+         * @var ParsedUBLInvoice $invoice
+         * @noinspection PhpRedundantVariableDocTypeInspection
+         */
+        $invoice=ParsedUBLInvoice::XMLDeserialize($reader);
+        self::$CurrentInvoice = $invoice;
         $loader = new \Twig\Loader\FilesystemLoader(dirname(__FILE__) . '/Template');
         $twig = new \Twig\Environment($loader);
         $twig->load("default.html.twig");
-        return $twig->render('default.html.twig', ['invoice' => $this->invoice]);
+        $rendered = $twig->render('default.html.twig', ['invoice' => $invoice]);
+        self::$CurrentInvoice = null;
+        return $rendered;
+    }
+
+    public static function GetCurrentInvoice(): ParsedUBLInvoice
+    {
+        if(self::$CurrentInvoice == null)
+        {
+            throw new Exception("Bad execution order, no invoice is currently being processed.");
+        }
+        return self::$CurrentInvoice;
     }
 
 }
