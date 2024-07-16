@@ -398,7 +398,7 @@ class ParsedUBLInvoice extends UBLDeserializable
 
     public static function GetTestXML(): string
     {
-        return file_get_contents(dirname(__FILE__) . "/../efactura_sample_invoice.xml");
+        return file_get_contents(dirname(__FILE__) . "/../../tests/efactura_sample_invoice.xml");
     }
 
     public static function TestDefaultValues(?UBLDeserializable $instance, string &$reason): bool

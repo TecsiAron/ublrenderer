@@ -15,6 +15,7 @@
  *     limitations under the License.
  */
 
+use EdituraEDU\UBLRenderer\HTMLFileWriter;
 use EdituraEDU\UBLRenderer\UBLObjectDefinitions\ParsedUBLInvoice;
 use EdituraEDU\UBLRenderer\UBLRenderer;
 use PHPUnit\Framework\TestCase;
@@ -32,20 +33,11 @@ class RenderTest extends TestCase
         $renderer = new UBLRenderer($content);
         try
         {
-            $html = $renderer->CreateHTML();
+            $renderer->WriteToFiles([new HTMLFileWriter("test_render.html")]);
         }
         catch (Exception $e)
         {
             $this->fail($e->getMessage()."\n".$e->getTraceAsString());
-        }
-        $this->assertNotEmpty($html);
-        try
-        {
-            file_put_contents("test_render.html", $html);
-        }
-        catch (Exception $e)
-        {
-            $this->fail($e->getMessage());
         }
         $this->assertFileExists("test_render.html");
     }

@@ -34,15 +34,12 @@ class UBLRenderer
         $this->UBLContent = $ublContent;
     }
 
-    public function CreateHTML():string
+    public function CreateHTML(ParsedUBLInvoice $invoice):string
     {
-        $reader = XMLReaderProvider::CreateReader();
-        $reader->xml($this->UBLContent);
         /**
          * @var ParsedUBLInvoice $invoice
          * @noinspection PhpRedundantVariableDocTypeInspection
          */
-        $invoice=ParsedUBLInvoice::XMLDeserialize($reader);
         self::$CurrentInvoice = $invoice;
         $loader = new \Twig\Loader\FilesystemLoader(dirname(__FILE__) . '/Template');
         $twig = new \Twig\Environment($loader, [
@@ -54,6 +51,40 @@ class UBLRenderer
         return $rendered;
     }
 
+    public function ParseUBL(): ParsedUBLInvoice
+    {
+        $reader = XMLReaderProvider::CreateReader();
+        $reader->xml($this->UBLContent);
+        /**
+         * @var ParsedUBLInvoice $invoice
+         * @noinspection PhpRedundantVariableDocTypeInspection
+         */
+        $invoice=ParsedUBLInvoice::XMLDeserialize($reader);
+        self::$CurrentInvoice = $invoice;
+        return $invoice;
+    }
+
+    /**
+     * @param IInvoiceWriter[] $writer
+     * @return void
+     */
+    public function WriteToFiles(array $writer)
+    {
+        $invoice = $this->ParseUBL();
+        $html = $this->CreateHTML($invoice);
+        foreach ($writer as $w)
+        {
+            $w->WriteContent($html, $invoice);
+        }
+    }
+
+    public function WriteFile(IInvoiceWriter $writer)
+    {
+        $invoice = $this->ParseUBL();
+        $html = $this->CreateHTML($invoice);
+        $writer->WriteContent($html, $invoice);
+    }
+
     public static function GetCurrentInvoice(): ParsedUBLInvoice
     {
         if(self::$CurrentInvoice == null)
@@ -61,6 +92,33 @@ class UBLRenderer
             throw new Exception("Bad execution order, no invoice is currently being processed.");
         }
         return self::$CurrentInvoice;
+    }
+
+    public static function LoadUBLFromZip(string $zipPath): string
+    {
+        $zip = new \ZipArchive();
+        $zip->open($zipPath);
+        if($zip->count()!=2)
+        {
+            throw new Exception("Invalid ZIP file format: must contain exactly 2 files!");
+        }
+        for($i=0; $i<$zip->count(); $i++)
+        {
+            $filename = $zip->getNameIndex($i);
+            if(str_starts_with("semnatura_", $filename) && str_ends_with(".xml", $filename))
+            {
+                $invoiceFileName=trim(explode("_", $filename)[1]);
+                $content=$zip->getFromName($invoiceFileName);
+                if($content===false)
+                {
+                    throw new Exception("Invalid ZIP file format: could not read invoice file!");
+                }
+                return $content;
+            }
+        }
+
+        $zip->close();
+        throw new Exception("Invalid ZIP file format: could not find valid signature file (semnatura_*.xml)!");
     }
 
 }
