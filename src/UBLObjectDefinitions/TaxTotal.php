@@ -46,7 +46,7 @@ class TaxTotal extends UBLDeserializable
                 {
                     case "TaxAmount":
                         $parsed= $reader->parseCurrentElement();
-                        $instance->TaxAmount = $reader["value"];
+                        $instance->TaxAmount = $parsed["value"];
                         if (isset($parsed["attributes"]["currencyID"]))
                         {
                             $instance->TaxAmountCurrency = $parsed["attributes"]["currencyID"];
