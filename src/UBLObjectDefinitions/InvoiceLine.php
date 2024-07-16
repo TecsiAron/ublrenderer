@@ -281,6 +281,29 @@ class InvoiceLine extends UBLDeserializable
         }
         return $this->item->classifiedTaxCategory->percent."%";
     }
+
+    public function getNoVATValue():?string
+    {
+        if(empty($this->lineExtensionAmount))
+        {
+            return null;
+        }
+        return $this->lineExtensionAmount;
+    }
+
+    public function getNoVATUnitValue():?string
+    {
+        if(!isset($this->price->priceAmount) || empty($this->price->priceAmount))
+        {
+            return null;
+        }
+        return $this->price->priceAmount;
+    }
+
+    public function hasAllowanceCharges():bool
+    {
+        return sizeof($this->allAllowanceCharges)!=0;
+    }
     protected function DeserializeComplete(): void
     {
         $nestedAllowanceCharges = $this->price->allowanceCharge ?? [];
