@@ -127,6 +127,12 @@
     {% for line in invoice.invoiceLines %}
         <tr class="invoice-line">
             <td>{{ loop.index }}</td>
+            <td>{{ line.item.name }}</td>
+            <td>{{ line.getUnitCode() }}</td>
+            {% if invoice.hasAnyItemIDs() %}
+            <td>{{ line.item.getItemIDs("<br>") }}</td>
+            {% endif %}
+            <td>{{ line.getVATRate() }}</td>
         </tr>
     {% endfor %}
 </table>
