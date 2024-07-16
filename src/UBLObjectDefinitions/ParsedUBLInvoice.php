@@ -25,36 +25,36 @@ use XMLReader;
 
 class ParsedUBLInvoice extends UBLDeserializable
 {
-    protected string $UBLVersionID;
-    protected string $customizationID = '1.0';
-    protected ?string $id = null;
-    protected ?bool $copyIndicator = null;
-    protected ?DateTime $issueDate = null;
-    protected ?InvoiceTypeCode $invoiceTypeCode = InvoiceTypeCode::INVOICE;
-    protected ?string $note = null;
-    protected ?DateTime $taxPointDate = null;
-    protected ?DateTime $dueDate = null;
-    protected ?PaymentTerms $paymentTerms = null;
-    protected ?Party $accountingSupplierParty = null;
-    protected ?Party $accountingCustomerParty = null;
-    protected ?Party $payeeParty = null;
-    protected ?string $supplierAssignedAccountID = null;
-    protected ?PaymentMeans $paymentMeans = null;
-    protected ?TaxTotal $taxTotal = null;
-    protected ?LegalMonetaryTotal $legalMonetaryTotal = null;
-    /** @var InvoiceLine[]|null $invoiceLines */
-    protected ?array $invoiceLines = null;
-    /** @var AllowanceCharge[]|null $allowanceCharges */
-    protected ?array $allowanceCharges = null;
+    public string $UBLVersionID;
+    public string $CustomizationID = '1.0';
+    public ?string $ID = null;
+    public ?bool $CopyIndicator = null;
+    public ?DateTime $IssueDate = null;
+    public ?InvoiceTypeCode $InvoiceTypeCode = InvoiceTypeCode::INVOICE;
+    public ?string $Note = null;
+    public ?DateTime $TaxPointDate = null;
+    public ?DateTime $DueDate = null;
+    public ?PaymentTerms $PaymentTerms = null;
+    public ?Party $AccountingSupplierParty = null;
+    public ?Party $AccountingCustomerParty = null;
+    public ?Party $PayeeParty = null;
+    public ?string $SupplierAssignedAccountID = null;
+    public ?PaymentMeans $PaymentMeans = null;
+    public ?TaxTotal $TaxTotal = null;
+    public ?LegalMonetaryTotal $LegalMonetaryTotal = null;
+    /** @var InvoiceLine[]|null $InvoiceLines */
+    public ?array $InvoiceLines = null;
+    /** @var AllowanceCharge[]|null $AllowanceCharges */
+    public ?array $AllowanceCharges = null;
     /** @var AdditionalDocumentReference[] $additionalDocumentReference */
-    protected array $additionalDocumentReferences = [];
-    protected ?string $documentCurrencyCode = null;
-    protected ?string $buyerReference = null;
-    protected ?string $accountingCostCode = null;
-    protected ?InvoicePeriod $invoicePeriod = null;
-    protected ?Delivery $delivery = null;
-    protected ?OrderReference $orderReference = null;
-    protected ?ContractDocumentReference $contractDocumentReference = null;
+    public array $AdditionalDocumentReferences = [];
+    public ?string $DocumentCurrencyCode = null;
+    public ?string $BuyerReference = null;
+    public ?string $AccountingCostCode = null;
+    public ?InvoicePeriod $InvoicePeriod = null;
+    public ?Delivery $Delivery = null;
+    public ?OrderReference $OrderReference = null;
+    public ?ContractDocumentReference $ContractDocumentReference = null;
 
     public static function XMLDeserialize(Reader $reader): self
     {
@@ -73,108 +73,108 @@ class ParsedUBLInvoice extends UBLDeserializable
                         $reader->next();
                         break;
                     case "CustomizationID":
-                        $instance->customizationID = $reader->readString();
+                        $instance->CustomizationID = $reader->readString();
                         $reader->next();
                         break;
                     case "ID":
-                        $instance->id = $reader->readString();
+                        $instance->ID = $reader->readString();
                         $reader->next();
                         break;
                     case "CopyIndicator":
-                        $instance->copyIndicator = $reader->readString() === 'true';
+                        $instance->CopyIndicator = $reader->readString() === 'true';
                         $reader->next();
                         break;
                     case "IssueDate":
-                        $instance->issueDate = DateTime::createFromFormat("Y-m-d", $reader->readString());
+                        $instance->IssueDate = DateTime::createFromFormat("Y-m-d", $reader->readString());
                         $reader->next();
                         break;
                     case "InvoiceTypeCode":
-                        $instance->invoiceTypeCode = InvoiceTypeCode::tryFrom($reader->readString()) ?? InvoiceTypeCode::INVALID;
+                        $instance->InvoiceTypeCode = InvoiceTypeCode::tryFrom($reader->readString()) ?? InvoiceTypeCode::INVALID;
                         $reader->next();
                         break;
                     case "Note":
-                        $instance->note = $reader->readString();
+                        $instance->Note = $reader->readString();
                         $reader->next();
                         break;
                     case "TaxPointDate":
-                        $instance->taxPointDate = DateTime::createFromFormat("Y-m-d", $reader->readString());
+                        $instance->TaxPointDate = DateTime::createFromFormat("Y-m-d", $reader->readString());
                         $reader->next();
                         break;
                     case "DueDate":
-                        $instance->dueDate = DateTime::createFromFormat("Y-m-d", $reader->readString());
+                        $instance->DueDate = DateTime::createFromFormat("Y-m-d", $reader->readString());
                         $reader->next();
                         break;
                     case "PaymentTerms":
                         $parsed = $reader->parseCurrentElement();
-                        $instance->paymentTerms = $parsed["value"];
+                        $instance->PaymentTerms = $parsed["value"];
                         break;
                     case "AccountingSupplierParty":
                         $parsed = $reader->parseCurrentElement();
-                        $instance->accountingSupplierParty = $parsed["value"][0]["value"];
+                        $instance->AccountingSupplierParty = $parsed["value"][0]["value"];
                         break;
                     case "AccountingCustomerParty":
                         $parsed = $reader->parseCurrentElement();
-                        $instance->accountingCustomerParty = $parsed["value"][0]["value"];
+                        $instance->AccountingCustomerParty = $parsed["value"][0]["value"];
                         break;
                     case "PayeeParty":
                         $parsed = $reader->parseCurrentElement();
-                        $instance->payeeParty = $parsed["value"][0]["value"];
+                        $instance->PayeeParty = $parsed["value"][0]["value"];
                         break;
                     case "SupplierAssignedAccountID":
-                        $instance->supplierAssignedAccountID = $reader->readString();
+                        $instance->SupplierAssignedAccountID = $reader->readString();
                         $reader->next();
                         break;
                     case "PaymentMeans":
                         $parsed = $reader->parseCurrentElement();
-                        $instance->paymentMeans = $parsed["value"];
+                        $instance->PaymentMeans = $parsed["value"];
                         break;
                     case "TaxTotal":
                         $parsed = $reader->parseCurrentElement();
-                        $instance->taxTotal = $parsed["value"];
+                        $instance->TaxTotal = $parsed["value"];
                         break;
                     case "LegalMonetaryTotal":
                         $parsed = $reader->parseCurrentElement();
-                        $instance->legalMonetaryTotal = $parsed["value"];
+                        $instance->LegalMonetaryTotal = $parsed["value"];
                         break;
                     case "InvoiceLine":
                         $parsed = $reader->parseCurrentElement();
-                        $instance->invoiceLines[] = $parsed["value"];
+                        $instance->InvoiceLines[] = $parsed["value"];
                         break;
                     case "AllowanceCharge":
                         $parsed = $reader->parseCurrentElement();
-                        $instance->allowanceCharges[] = $parsed["value"];
+                        $instance->AllowanceCharges[] = $parsed["value"];
                         break;
                     case "AdditionalDocumentReference":
                         $parsed = $reader->parseCurrentElement();
-                        $instance->additionalDocumentReferences[] = $parsed["value"];
+                        $instance->AdditionalDocumentReferences[] = $parsed["value"];
                         break;
                     case "DocumentCurrencyCode":
-                        $instance->documentCurrencyCode = $reader->readString();
+                        $instance->DocumentCurrencyCode = $reader->readString();
                         $reader->next();
                         break;
                     case "BuyerReference":
-                        $instance->buyerReference = $reader->readString();
+                        $instance->BuyerReference = $reader->readString();
                         $reader->next();
                         break;
                     case "AccountingCostCode":
-                        $instance->accountingCostCode = $reader->readString();
+                        $instance->AccountingCostCode = $reader->readString();
                         $reader->next();
                         break;
                     case "InvoicePeriod":
                         $parsed = $reader->parseCurrentElement();
-                        $instance->invoicePeriod = $parsed["value"];
+                        $instance->InvoicePeriod = $parsed["value"];
                         break;
                     case "Delivery":
                         $parsed = $reader->parseCurrentElement();
-                        $instance->delivery = $parsed["value"];
+                        $instance->Delivery = $parsed["value"];
                         break;
                     case "OrderReference":
                         $parsed = $reader->parseCurrentElement();
-                        $instance->orderReference = $parsed["value"];
+                        $instance->OrderReference = $parsed["value"];
                         break;
                     case "ContractDocumentReference":
                         $parsed = $reader->parseCurrentElement();
-                        $instance->contractDocumentReference = $parsed["value"];
+                        $instance->ContractDocumentReference = $parsed["value"];
                         break;
                 }
             }
@@ -187,273 +187,27 @@ class ParsedUBLInvoice extends UBLDeserializable
         return $instance;
     }
 
-    public function GetUBLVersionID(): string
-    {
-        return $this->UBLVersionID;
-    }
-
-    public function SetUBLVersionID(string $UBLVersionID): void
-    {
-        $this->UBLVersionID = $UBLVersionID;
-    }
-
-    public function GetCustomizationID(): string
-    {
-        return $this->customizationID;
-    }
-
-    public function SetCustomizationID(string $customizationID): void
-    {
-        $this->customizationID = $customizationID;
-    }
-
-    public function GetID(): ?string
-    {
-        return $this->id;
-    }
-
-    public function SetID(?string $id): void
-    {
-        $this->id = $id;
-    }
-
-    public function GetIssueDate(): ?DateTime
-    {
-        return $this->issueDate;
-    }
-
-    public function SetIssueDate(?DateTime $issueDate): void
-    {
-        $this->issueDate = $issueDate;
-    }
-
-    public function GetCopyIndicator(): ?bool
-    {
-        return $this->copyIndicator;
-    }
-
-    public function SetCopyIndicator(?bool $copyIndicator): void
-    {
-        $this->copyIndicator = $copyIndicator;
-    }
-
-    public function GetTaxPointDate(): ?DateTime
-    {
-        return $this->taxPointDate;
-    }
-
-    public function SetTaxPointDate(?DateTime $taxPointDate): void
-    {
-        $this->taxPointDate = $taxPointDate;
-    }
-
-    public function GetInvoiceTypeCode(): ?InvoiceTypeCode
-    {
-        return $this->invoiceTypeCode;
-    }
-
-    public function SetInvoiceTypeCode(?InvoiceTypeCode $invoiceTypeCode): void
-    {
-        $this->invoiceTypeCode = $invoiceTypeCode;
-    }
-
-    public function GetDueDate(): ?DateTime
-    {
-        return $this->dueDate;
-    }
-
-    public function SetDueDate(?DateTime $dueDate): void
-    {
-        $this->dueDate = $dueDate;
-    }
-
-    public function GetAllowanceCharges(): ?array
-    {
-        return $this->allowanceCharges;
-    }
-
-    public function SetAllowanceCharges(?array $allowanceCharges): void
-    {
-        $this->allowanceCharges = $allowanceCharges;
-    }
-
-    public function GetPaymentTerms(): ?PaymentTerms
-    {
-        return $this->paymentTerms;
-    }
-
-    public function SetPaymentTerms(?PaymentTerms $paymentTerms): void
-    {
-        $this->paymentTerms = $paymentTerms;
-    }
-
-    public function GetAccountingSupplierParty(): ?Party
-    {
-        return $this->accountingSupplierParty;
-    }
-
-    public function SetAccountingSupplierParty(?Party $accountingSupplierParty): void
-    {
-        $this->accountingSupplierParty = $accountingSupplierParty;
-    }
-
-    public function GetAccountingCostCode(): ?string
-    {
-        return $this->accountingCostCode;
-    }
-
-    public function SetAccountingCostCode(?string $accountingCostCode): void
-    {
-        $this->accountingCostCode = $accountingCostCode;
-    }
-
-    public function GetAdditionalDocumentReferences(): array
-    {
-        return $this->additionalDocumentReferences;
-    }
-
-    public function SetAdditionalDocumentReferences(array $additionalDocumentReferences): void
-    {
-        $this->additionalDocumentReferences = $additionalDocumentReferences;
-    }
-
-    public function GetDocumentCurrencyCode(): ?string
-    {
-        return $this->documentCurrencyCode;
-    }
-
-    public function SetDocumentCurrencyCode(string $documentCurrencyCode): void
-    {
-        $this->documentCurrencyCode = $documentCurrencyCode;
-    }
-
-    public function GetBuyerReference(): ?string
-    {
-        return $this->buyerReference;
-    }
-
-    public function SetBuyerReference(?string $buyerReference): void
-    {
-        $this->buyerReference = $buyerReference;
-    }
-
-    public function GetOrderReference(): ?OrderReference
-    {
-        return $this->orderReference;
-    }
-
-    public function SetOrderReference(?OrderReference $orderReference): void
-    {
-        $this->orderReference = $orderReference;
-    }
-
-    public function GetContractDocumentReference(): ?ContractDocumentReference
-    {
-        return $this->contractDocumentReference;
-    }
-
-    public function SetContractDocumentReference(?ContractDocumentReference $contractDocumentReference): void
-    {
-        $this->contractDocumentReference = $contractDocumentReference;
-    }
-
-    public function GetAccountingCustomerParty(): ?Party
-    {
-        return $this->accountingCustomerParty;
-    }
-
-    public function SetAccountingCustomerParty(?Party $accountingCustomerParty): void
-    {
-        $this->accountingCustomerParty = $accountingCustomerParty;
-    }
-
-    public function GetPayeeParty(): ?Party
-    {
-        return $this->payeeParty;
-    }
-
-    public function SetPayeeParty(?Party $payeeParty): void
-    {
-        $this->payeeParty = $payeeParty;
-    }
-
-    public function GetSupplierAssignedAccountID(): ?string
-    {
-        return $this->supplierAssignedAccountID;
-    }
-
-    public function SetSupplierAssignedAccountID(?string $supplierAssignedAccountID): void
-    {
-        $this->supplierAssignedAccountID = $supplierAssignedAccountID;
-    }
-
-    public function GetPaymentMeans(): ?PaymentMeans
-    {
-        return $this->paymentMeans;
-    }
-
-    public function SetPaymentMeans(?PaymentMeans $paymentMeans): void
-    {
-        $this->paymentMeans = $paymentMeans;
-    }
+    
 
     public static function GetNamespace(): string
     {
         return "{urn:oasis:names:specification:ubl:schema:xsd:Invoice-2}Invoice";
     }
-
-    public function GetTaxTotal(): ?TaxTotal
-    {
-        return $this->taxTotal;
-    }
-
-    public function SetTaxTotal(?TaxTotal $taxTotal): void
-    {
-        $this->taxTotal = $taxTotal;
-    }
-
-    public function GetLegalMonetaryTotal(): ?LegalMonetaryTotal
-    {
-        return $this->legalMonetaryTotal;
-    }
-
-    public function SetLegalMonetaryTotal(?LegalMonetaryTotal $legalMonetaryTotal): void
-    {
-        $this->legalMonetaryTotal = $legalMonetaryTotal;
-    }
-
-    /**
-     * @return ?InvoiceLine[]
-     */
-    public function GetInvoiceLines(): ?array
-    {
-        return $this->invoiceLines;
-    }
-
-    /**
-     * @param InvoiceLine[]|null $invoiceLines
-     * @return void
-     */
-    public function SetInvoiceLines(?array $invoiceLines): void
-    {
-        $this->invoiceLines = $invoiceLines;
-    }
-
     public function HasSupplierAccountInfo():bool
     {
-        return isset($this->paymentMeans->PayeeFinancialAccount);
+        return isset($this->PaymentMeans->PayeeFinancialAccount);
     }
 
     public function HasAnyItemIDs():bool
     {
-        if(empty($this->invoiceLines))
+        if(empty($this->InvoiceLines))
         {
             return false;
         }
-        $count=count($this->invoiceLines);
+        $count=count($this->InvoiceLines);
         for($i=0;$i<$count;$i++)
         {
-            if(isset($this->invoiceLines[$i]->Item->SellersItemIdentification) || isset($this->invoiceLines[$i]->Item->BuyersItemIdentification))
+            if(isset($this->InvoiceLines[$i]->Item->SellersItemIdentification) || isset($this->InvoiceLines[$i]->Item->BuyersItemIdentification))
             {
                 return true;
             }
@@ -463,14 +217,14 @@ class ParsedUBLInvoice extends UBLDeserializable
 
     public function AllItemsHaveShortUnitCodeMapped():bool
     {
-        if(empty($this->invoiceLines))
+        if(empty($this->InvoiceLines))
         {
             return false;
         }
-        $count=count($this->invoiceLines);
+        $count=count($this->InvoiceLines);
         for($i=0;$i<$count;$i++)
         {
-            if(!$this->invoiceLines[$i]->HasShortMappedUnitCode())
+            if(!$this->InvoiceLines[$i]->HasShortMappedUnitCode())
             {
                 return false;
             }
@@ -480,7 +234,7 @@ class ParsedUBLInvoice extends UBLDeserializable
 
     public function CanShowUnitCodeDetails():bool
     {
-        if(empty($this->invoiceLines))
+        if(empty($this->InvoiceLines))
         {
             return false;
         }
@@ -488,11 +242,11 @@ class ParsedUBLInvoice extends UBLDeserializable
         {
             return false;
         }
-        $count=count($this->invoiceLines);
+        $count=count($this->InvoiceLines);
         $foundSomeDetails=false;
         for($i=0;$i<$count;$i++)
         {
-            if($this->invoiceLines[$i]->HasMappedUnitCode())
+            if($this->InvoiceLines[$i]->HasMappedUnitCode())
             {
                $foundSomeDetails=true;
                break;
@@ -503,14 +257,14 @@ class ParsedUBLInvoice extends UBLDeserializable
 
     public function GetLineNumber(InvoiceLine $line):?int
     {
-        if(empty($this->invoiceLines))
+        if(empty($this->InvoiceLines))
         {
             return null;
         }
-        $count=count($this->invoiceLines);
+        $count=count($this->InvoiceLines);
         for($i=0;$i<$count;$i++)
         {
-            if($this->invoiceLines[$i]===$line)
+            if($this->InvoiceLines[$i]===$line)
             {
                 return $i+1;
             }
@@ -535,249 +289,249 @@ class ParsedUBLInvoice extends UBLDeserializable
             $reason = "Instance is not of type ParsedUBLInvoice";
             return false;
         }
-        if ($instance->GetUBLVersionID() != "2.1")
+        if ($instance->UBLVersionID != "2.1")
         {
             $reason = "UBLVersionID is not 2.1";
             return false;
         }
-        if ($instance->GetCustomizationID() != "urn:cen.eu:en16931:2017#compliant#urn:efactura.mfinante.ro:CIUS-RO:1.0.0")
+        if ($instance->CustomizationID != "urn:cen.eu:en16931:2017#compliant#urn:efactura.mfinante.ro:CIUS-RO:1.0.0")
         {
             $reason = "CustomizationID is not urn:cen.eu:en16931:2017#compliant#urn:efactura.mfinante.ro:CIUS-RO:1.0.0";
             return false;
         }
-        if ($instance->GetDocumentCurrencyCode() != "RON")
+        if ($instance->DocumentCurrencyCode != "RON")
         {
             $reason = "DocumentCurrencyCode is not RON";
             return false;
         }
-        if ($instance->GetInvoiceTypeCode() != InvoiceTypeCode::INVOICE)
+        if ($instance->InvoiceTypeCode != InvoiceTypeCode::INVOICE)
         {
             $reason = "InvoiceTypeCode is not INVOICE";
             return false;
         }
-        if ($instance->GetIssueDate()->format("Y-m-d") != "2022-05-31")
+        if ($instance->IssueDate->format("Y-m-d") != "2022-05-31")
         {
             $reason = "IssueDate is not 2022-05-31";
             return false;
         }
-        if ($instance->GetDueDate()->format("Y-m-d") != "2022-05-31")
+        if ($instance->DueDate->format("Y-m-d") != "2022-05-31")
         {
             $reason = "DueDate is not 2022-05-31";
             return false;
         }
-        if ($instance->GetAccountingSupplierParty() == null)
+        if ($instance->AccountingSupplierParty == null)
         {
             $reason = "AccountingSupplierParty is null";
             return false;
         }
-        if ($instance->GetAccountingCustomerParty() == null)
+        if ($instance->AccountingCustomerParty == null)
         {
             $reason = "AccountingCustomerParty is null";
             return false;
         }
-        if ($instance->GetAccountingSupplierParty()->Name != "Seller SRL")
+        if ($instance->AccountingSupplierParty->Name != "Seller SRL")
         {
             $reason = "AccountingSupplierParty name is not Seller SRL";
             return false;
         }
-        if ($instance->GetAccountingCustomerParty()->Name != "Buyer name")
+        if ($instance->AccountingCustomerParty->Name != "Buyer name")
         {
             $reason = "AccountingCustomerParty name is not Buyer name";
             return false;
         }
-        if ($instance->GetAccountingCustomerParty()->PartyIdentificationId != "123456")
+        if ($instance->AccountingCustomerParty->PartyIdentificationId != "123456")
         {
             $reason = "AccountingCustomerParty partyIdentificationId is not 123456";
             return false;
         }
-        if ($instance->GetAccountingSupplierParty()->PostalAddress->StreetName != "line1")
+        if ($instance->AccountingSupplierParty->PostalAddress->StreetName != "line1")
         {
             $reason = "AccountingSupplierParty postalAddress streetName is not line1";
             return false;
         }
-        if ($instance->GetAccountingCustomerParty()->PostalAddress->StreetName != "BD DECEBAL NR 1 ET1")
+        if ($instance->AccountingCustomerParty->PostalAddress->StreetName != "BD DECEBAL NR 1 ET1")
         {
             $reason = "AccountingCustomerParty postalAddress streetName is not BD DECEBAL NR 1 ET1";
             return false;
         }
-        if ($instance->GetAccountingSupplierParty()->PostalAddress->CityName != "SECTOR1")
+        if ($instance->AccountingSupplierParty->PostalAddress->CityName != "SECTOR1")
         {
             $reason = "AccountingSupplierParty postalAddress cityName is not SECTOR1";
             return false;
         }
-        if ($instance->GetAccountingCustomerParty()->PostalAddress->CityName != "ARAD")
+        if ($instance->AccountingCustomerParty->PostalAddress->CityName != "ARAD")
         {
             $reason = "AccountingCustomerParty postalAddress cityName is not ARAD";
             return false;
         }
-        if ($instance->GetAccountingSupplierParty()->PostalAddress->PostalZone != "013329")
+        if ($instance->AccountingSupplierParty->PostalAddress->PostalZone != "013329")
         {
             $reason = "AccountingSupplierParty postalAddress postalZone is not 013329";
             return false;
         }
-        if ($instance->GetAccountingCustomerParty()->PostalAddress->PostalZone != "123456")
+        if ($instance->AccountingCustomerParty->PostalAddress->PostalZone != "123456")
         {
             $reason = "AccountingCustomerParty postalAddress postalZone is not 123456";
             return false;
         }
-        if ($instance->GetAccountingSupplierParty()->PostalAddress->CountrySubentity != "RO-B")
+        if ($instance->AccountingSupplierParty->PostalAddress->CountrySubentity != "RO-B")
         {
             $reason = "AccountingSupplierParty postalAddress countrySubentity is not RO-B";
             return false;
         }
-        if ($instance->GetAccountingCustomerParty()->PostalAddress->CountrySubentity != "RO-AR")
+        if ($instance->AccountingCustomerParty->PostalAddress->CountrySubentity != "RO-AR")
         {
             $reason = "AccountingCustomerParty postalAddress countrySubentity is not RO-AR";
             return false;
         }
-        if ($instance->GetAccountingSupplierParty()->PartyTaxScheme->CompanyId != "RO1234567890")
+        if ($instance->AccountingSupplierParty->PartyTaxScheme->CompanyId != "RO1234567890")
         {
             $reason = "AccountingSupplierParty partyTaxScheme companyID is not RO1234567890";
             return false;
         }
-        if ($instance->GetAccountingCustomerParty()->PartyTaxScheme->CompanyId != "RO987456123")
+        if ($instance->AccountingCustomerParty->PartyTaxScheme->CompanyId != "RO987456123")
         {
             $reason = "AccountingCustomerParty partyTaxScheme companyId is not RO987456123";
             return false;
         }
-        if ($instance->GetAccountingSupplierParty()->PartyTaxScheme->TaxScheme->ID != "VAT")
+        if ($instance->AccountingSupplierParty->PartyTaxScheme->TaxScheme->ID != "VAT")
         {
             $reason = "AccountingSupplierParty partyTaxScheme taxScheme id is not VAT";
             return false;
         }
-        if ($instance->GetAccountingCustomerParty()->PartyTaxScheme->TaxScheme->ID != "VAT")
+        if ($instance->AccountingCustomerParty->PartyTaxScheme->TaxScheme->ID != "VAT")
         {
             $reason = "AccountingCustomerParty partyTaxScheme taxScheme id is not VAT";
             return false;
         }
-        if ($instance->GetAccountingSupplierParty()->LegalEntity->RegistrationName != "Seller SRL")
+        if ($instance->AccountingSupplierParty->LegalEntity->RegistrationName != "Seller SRL")
         {
             $reason = "AccountingSupplierParty partyLegalEntity registrationName is not Seller SRL";
             return false;
         }
-        if ($instance->GetAccountingCustomerParty()->LegalEntity->RegistrationName != "Buyer SRL")
+        if ($instance->AccountingCustomerParty->LegalEntity->RegistrationName != "Buyer SRL")
         {
             $reason = "AccountingCustomerParty partyLegalEntity registrationName is not Buyer SRL";
             return false;
         }
-        if ($instance->GetAccountingSupplierParty()->LegalEntity->CompanyLegalForm != "J40/12345/1998")
+        if ($instance->AccountingSupplierParty->LegalEntity->CompanyLegalForm != "J40/12345/1998")
         {
             $reason = "AccountingSupplierParty partyLegalEntity companyLegalForm is not J40/12345/1998";
             return false;
         }
-        if ($instance->GetAccountingCustomerParty()->LegalEntity->CompanyID != "J02/321/2010")
+        if ($instance->AccountingCustomerParty->LegalEntity->CompanyID != "J02/321/2010")
         {
             $reason = "AccountingCustomerParty partyLegalEntity companyLegalForm is not J02/321/2010";
             return false;
         }
-        if ($instance->GetAccountingSupplierParty()->Contact->ElectronicMail != "mail@seller.com")
+        if ($instance->AccountingSupplierParty->Contact->ElectronicMail != "mail@seller.com")
         {
             $reason = "AccountingSupplierParty contact electronicMail is not mail@seller.com";
             return false;
         }
-        if ($instance->GetAccountingCustomerParty()->Contact != null)
+        if ($instance->AccountingCustomerParty->Contact != null)
         {
             $reason = "AccountingCustomerParty contact contact is not empty";
             return false;
         }
-        if ($instance->GetPaymentMeans()->PaymentMeansCode != PaymentMeansCode::DebitTransfer)
+        if ($instance->PaymentMeans->PaymentMeansCode != PaymentMeansCode::DebitTransfer)
         {
             $reason = "PaymentMeans paymentMeansCode is not 31(DebitTransfer)";
             return false;
         }
-        if ($instance->GetPaymentMeans()->PayeeFinancialAccount->ID != "RO80RNCB0067054355123456")
+        if ($instance->PaymentMeans->PayeeFinancialAccount->ID != "RO80RNCB0067054355123456")
         {
             $reason = "PaymentMeans payeeFinancialAccount id is not RO80RNCB0067054355123456";
             return false;
         }
-        if ($instance->GetTaxTotal()->TaxAmount != 6598592.6)
+        if ($instance->TaxTotal->TaxAmount != 6598592.6)
         {
             $reason = "TaxTotal taxAmount is not 6598592.6";
             return false;
         }
-        if ($instance->GetTaxTotal()->TaxSubtotals[0]->TaxableAmount !== "696.12")
+        if ($instance->TaxTotal->TaxSubtotals[0]->TaxableAmount !== "696.12")
         {
-            $reason = "TaxTotal taxSubtotals[0] taxableAmount is not 696.12 (" . $instance->GetTaxTotal()->TaxSubtotals[0]->TaxableAmount . ")";
-            echo json_encode($instance->GetTaxTotal());
+            $reason = "TaxTotal taxSubtotals[0] taxableAmount is not 696.12 (" . $instance->TaxTotal->TaxSubtotals[0]->TaxableAmount . ")";
+            echo json_encode($instance->TaxTotal);
             return false;
         }
-        if ($instance->GetTaxTotal()->TaxSubtotals[0]->TaxAmount !== "34.79")
+        if ($instance->TaxTotal->TaxSubtotals[0]->TaxAmount !== "34.79")
         {
             $reason = "TaxTotal taxSubtotals[0] taxAmount is not 34.79";
             return false;
         }
-        if ($instance->GetTaxTotal()->TaxSubtotals[0]->TaxableAmount !== "696.12")
+        if ($instance->TaxTotal->TaxSubtotals[0]->TaxableAmount !== "696.12")
         {
             $reason = "TaxTotal taxSubtotals[0] taxableAmount is not 696.12";
             return false;
         }
-        if ($instance->GetTaxTotal()->TaxSubtotals[0]->TaxCategory->ID != "S")
+        if ($instance->TaxTotal->TaxSubtotals[0]->TaxCategory->ID != "S")
         {
             $reason = "TaxTotal taxSubtotals[0] taxCategory id is not S";
             return false;
         }
-        if ($instance->GetTaxTotal()->TaxSubtotals[0]->TaxCategory->Percent !== "5.00")
+        if ($instance->TaxTotal->TaxSubtotals[0]->TaxCategory->Percent !== "5.00")
         {
             $reason = "TaxTotal taxSubtotals[0] taxCategory percent is not 5.00";
             return false;
         }
-        if ($instance->GetTaxTotal()->TaxSubtotals[0]->TaxCategory->TaxScheme->ID != "VAT")
+        if ($instance->TaxTotal->TaxSubtotals[0]->TaxCategory->TaxScheme->ID != "VAT")
         {
             $reason = "TaxTotal taxSubtotals[0] taxCategory taxScheme id is not VAT";
             return false;
         }
-        if ($instance->GetLegalMonetaryTotal()->LineExtensionAmount !== "34741984.11")
+        if ($instance->LegalMonetaryTotal->LineExtensionAmount !== "34741984.11")
         {
             $reason = "LegalMonetaryTotal lineExtensionAmount is not 34741984.11";
             return false;
         }
-        if ($instance->GetLegalMonetaryTotal()->TaxExclusiveAmount !== "34741984.11")
+        if ($instance->LegalMonetaryTotal->TaxExclusiveAmount !== "34741984.11")
         {
             $reason = "LegalMonetaryTotal taxExclusiveAmount is not 34741984.11";
             return false;
         }
-        if ($instance->GetLegalMonetaryTotal()->TaxInclusiveAmount !== "41340576.71")
+        if ($instance->LegalMonetaryTotal->TaxInclusiveAmount !== "41340576.71")
         {
             $reason = "LegalMonetaryTotal taxInclusiveAmount is not 41340576.71";
             return false;
         }
-        if ($instance->GetLegalMonetaryTotal()->PayableAmount !== "41340576.71")
+        if ($instance->LegalMonetaryTotal->PayableAmount !== "41340576.71")
         {
             $reason = "LegalMonetaryTotal payableAmount is not 41340576.71";
             return false;
         }
-        if ($instance->GetLegalMonetaryTotal()->LineExtensionCurrency != "RON")
+        if ($instance->LegalMonetaryTotal->LineExtensionCurrency != "RON")
         {
             $reason = "LegalMonetaryTotal lineExtensionCurrencyID is not RON";
             return false;
         }
-        if ($instance->GetLegalMonetaryTotal()->TaxExclusiveCurrency != "RON")
+        if ($instance->LegalMonetaryTotal->TaxExclusiveCurrency != "RON")
         {
             $reason = "LegalMonetaryTotal taxExclusiveCurrencyID is not RON";
             return false;
         }
-        if ($instance->GetLegalMonetaryTotal()->TaxInclusiveCurrency != "RON")
+        if ($instance->LegalMonetaryTotal->TaxInclusiveCurrency != "RON")
         {
             $reason = "LegalMonetaryTotal taxInclusiveCurrencyID is not RON";
             return false;
         }
-        if ($instance->GetLegalMonetaryTotal()->PayableCurrency != "RON")
+        if ($instance->LegalMonetaryTotal->PayableCurrency != "RON")
         {
             $reason = "LegalMonetaryTotal payableCurrencyID is not RON";
             return false;
         }
-        if ($instance->GetInvoiceLines() == null)
+        if ($instance->InvoiceLines == null)
         {
             $reason = "InvoiceLines is null";
             return false;
         }
-        if (count($instance->GetInvoiceLines()) != 35)
+        if (count($instance->InvoiceLines) != 35)
         {
             $reason = "InvoiceLines count is not 35";
             return false;
         }
         /** @var InvoiceLine $line */
-        $line = $instance->GetInvoiceLines()[0];
+        $line = $instance->InvoiceLines[0];
         if ($line->ID != "1")
         {
             $reason = "InvoiceLines[0] id is not 1";
