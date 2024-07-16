@@ -68,9 +68,9 @@ abstract class UBLDeserializable
     {
         if ($currencyVar == null)
         {
-            if(UBLRenderer::GetCurrentInvoice()->GetDocumentCurrencyCode()!==null)
+            if(!empty(UBLRenderer::GetCurrentInvoice()->DocumentCurrencyCode))
             {
-                return UBLRenderer::GetCurrentInvoice()->GetDocumentCurrencyCode();
+                return UBLRenderer::GetCurrentInvoice()->DocumentCurrencyCode;
             }
             return "RON";
         }
