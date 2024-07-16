@@ -121,10 +121,11 @@
             <th>Cantitate</th>
             <th>Preț unitar<br>(fără TVA)</th>
             <th>Valoare<br>(fără TVA)</th>
-            <th>TVA</th>
+            <th>TVA<br>(aprox.)</th>
         </tr>
     </thead>
-    {% for line in invoice.invoiceLines %}
+    {# @var line \EdituraEDU\UBLRenderer\UBLObjectDefinitions\InvoiceLine #}
+    {% for line in invoice.GetInvoiceLines() %}
         <tr class="invoice-line">
             <td>{{ invoice.GetLineNumber(line) }}</td>
             <td>{{ line.Item.Name }}</td>
@@ -136,10 +137,25 @@
             <td>{{ line.InvoicedQuantity }}</td>
             <td>{{ line.GetNoVATUnitValue }}</td>
             <td>{{ line.GetNoVATValue() }}</td>
-
-
-
+            <td>{{ line.GetVATValue() }}</td>
         </tr>
+        {% if line.HasAllowanceCharges() %}
+            {% for allowance in line.AllAllowanceCharges %}
+            <tr class="invoice-line">
+                <td><!-- No line number --></td>
+                <td> {{ allowance.ToString() }}</td>
+                <td><!-- No unit code --></td>
+                {% if invoice.HasAnyItemIDs() %}
+                <td><!-- No item ID? --></td>
+                {% endif %}
+                <td><!-- No vat rate --></td>
+                <td><!-- No quantity--></td>
+                <td><!-- No unit price --></td>
+                <td><!-- No value --></td>
+                <td><!-- No vat value--></td>
+            </tr>
+            {% endfor %}
+        {% endif %}
     {% endfor %}
 </table>
 </body>
