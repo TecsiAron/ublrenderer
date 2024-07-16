@@ -501,6 +501,23 @@ class ParsedUBLInvoice extends UBLDeserializable
         return $foundSomeDetails;
     }
 
+    public function getLineNumber(InvoiceLine $line):?int
+    {
+        if(empty($this->invoiceLines))
+        {
+            return null;
+        }
+        $count=count($this->invoiceLines);
+        for($i=0;$i<$count;$i++)
+        {
+            if($this->invoiceLines[$i]===$line)
+            {
+                return $i+1;
+            }
+        }
+        return null;
+    }
+
     public static function GetTestXML(): string
     {
         return file_get_contents(dirname(__FILE__) . "/../efactura_sample_invoice.xml");
