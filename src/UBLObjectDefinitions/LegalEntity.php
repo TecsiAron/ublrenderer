@@ -23,11 +23,14 @@ use XMLReader;
 
 class LegalEntity extends UBLDeserializable
 {
-    public ?string $registrationName = null;
-    public ?string $companyId = null;
-    public ?string $companyIdAttributes = null;
+    public ?string $RegistrationName = null;
+    public ?string $CompanyID = null;
+    /**
+     * @deprecated  ??
+     */
+    public ?string $CompanyIDAttributes = null;
 
-    public ?string $companyLegalForm = null;
+    public ?string $CompanyLegalForm = null;
 
     public static function XMLDeserialize(Reader $reader): self
     {
@@ -42,16 +45,16 @@ class LegalEntity extends UBLDeserializable
                 switch ($reader->localName)
                 {
                     case "RegistrationName":
-                        $instance->registrationName = $reader->readString();
+                        $instance->RegistrationName = $reader->readString();
                         $reader->next();
                         break;
                     case "CompanyID":
-                        $instance->companyId = trim($reader->readString());
-                        $instance->companyIdAttributes = $reader->getAttribute("schemeID");
+                        $instance->CompanyID = trim($reader->readString());
+                        $instance->CompanyIDAttributes = $reader->getAttribute("schemeID");
                         $reader->next();
                         break;
                     case "CompanyLegalForm":
-                        $instance->companyLegalForm = trim($reader->readString());
+                        $instance->CompanyLegalForm = trim($reader->readString());
                         $reader->next();
                         break;
                 }
@@ -91,23 +94,23 @@ class LegalEntity extends UBLDeserializable
             $reason = "Instance is not LegalEntity";
             return false;
         }
-        if ($instance->registrationName !== "John Doe")
+        if ($instance->RegistrationName !== "John Doe")
         {
             $reason = "RegistrationName is not John Doe";
             return false;
         }
-        if ($instance->companyId !== "123456789")
+        if ($instance->CompanyID !== "123456789")
         {
             $reason = "CompanyID is not 123456789";
             return false;
         }
-        if ($instance->companyIdAttributes !== "RO")
+        if ($instance->CompanyIDAttributes !== "RO")
         {
             $reason = "CompanyID schemeID is not RO";
             return false;
         }
 
-        if ($instance->companyLegalForm !== "J40/12345/1998")
+        if ($instance->CompanyLegalForm !== "J40/12345/1998")
         {
             $reason = "CompanyLegalForm is not J40/12345/1998";
             return false;

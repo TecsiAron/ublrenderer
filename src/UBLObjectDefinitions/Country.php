@@ -23,8 +23,8 @@ use XMLReader;
 
 class Country extends UBLDeserializable
 {
-    public string $identificationCode;
-    private ?string $listId = null;
+    public string $IdentificationCode;
+    private ?string $ListID = null;
 
     public static function XMLDeserialize(Reader $reader): self
     {
@@ -39,7 +39,7 @@ class Country extends UBLDeserializable
                 switch ($reader->localName)
                 {
                     case "IdentificationCode":
-                        $instance->identificationCode = $reader->readString();
+                        $instance->IdentificationCode = $reader->readString();
                         $reader->next();
                         break;
                 }
@@ -78,7 +78,7 @@ class Country extends UBLDeserializable
             $reason = "Instance is not Country";
             return false;
         }
-        if ($instance->identificationCode !== "RO")
+        if ($instance->IdentificationCode !== "RO")
         {
             $reason = "IdentificationCode is not RO";
             return false;

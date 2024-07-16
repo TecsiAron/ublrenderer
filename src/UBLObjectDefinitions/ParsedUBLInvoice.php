@@ -187,212 +187,212 @@ class ParsedUBLInvoice extends UBLDeserializable
         return $instance;
     }
 
-    public function getUBLVersionID(): string
+    public function GetUBLVersionID(): string
     {
         return $this->UBLVersionID;
     }
 
-    public function setUBLVersionID(string $UBLVersionID): void
+    public function SetUBLVersionID(string $UBLVersionID): void
     {
         $this->UBLVersionID = $UBLVersionID;
     }
 
-    public function getCustomizationID(): string
+    public function GetCustomizationID(): string
     {
         return $this->customizationID;
     }
 
-    public function setCustomizationID(string $customizationID): void
+    public function SetCustomizationID(string $customizationID): void
     {
         $this->customizationID = $customizationID;
     }
 
-    public function getId(): ?string
+    public function GetID(): ?string
     {
         return $this->id;
     }
 
-    public function setId(?string $id): void
+    public function SetID(?string $id): void
     {
         $this->id = $id;
     }
 
-    public function getIssueDate(): ?DateTime
+    public function GetIssueDate(): ?DateTime
     {
         return $this->issueDate;
     }
 
-    public function setIssueDate(?DateTime $issueDate): void
+    public function SetIssueDate(?DateTime $issueDate): void
     {
         $this->issueDate = $issueDate;
     }
 
-    public function getCopyIndicator(): ?bool
+    public function GetCopyIndicator(): ?bool
     {
         return $this->copyIndicator;
     }
 
-    public function setCopyIndicator(?bool $copyIndicator): void
+    public function SetCopyIndicator(?bool $copyIndicator): void
     {
         $this->copyIndicator = $copyIndicator;
     }
 
-    public function getTaxPointDate(): ?DateTime
+    public function GetTaxPointDate(): ?DateTime
     {
         return $this->taxPointDate;
     }
 
-    public function setTaxPointDate(?DateTime $taxPointDate): void
+    public function SetTaxPointDate(?DateTime $taxPointDate): void
     {
         $this->taxPointDate = $taxPointDate;
     }
 
-    public function getInvoiceTypeCode(): ?InvoiceTypeCode
+    public function GetInvoiceTypeCode(): ?InvoiceTypeCode
     {
         return $this->invoiceTypeCode;
     }
 
-    public function setInvoiceTypeCode(?InvoiceTypeCode $invoiceTypeCode): void
+    public function SetInvoiceTypeCode(?InvoiceTypeCode $invoiceTypeCode): void
     {
         $this->invoiceTypeCode = $invoiceTypeCode;
     }
 
-    public function getDueDate(): ?DateTime
+    public function GetDueDate(): ?DateTime
     {
         return $this->dueDate;
     }
 
-    public function setDueDate(?DateTime $dueDate): void
+    public function SetDueDate(?DateTime $dueDate): void
     {
         $this->dueDate = $dueDate;
     }
 
-    public function getAllowanceCharges(): ?array
+    public function GetAllowanceCharges(): ?array
     {
         return $this->allowanceCharges;
     }
 
-    public function setAllowanceCharges(?array $allowanceCharges): void
+    public function SetAllowanceCharges(?array $allowanceCharges): void
     {
         $this->allowanceCharges = $allowanceCharges;
     }
 
-    public function getPaymentTerms(): ?PaymentTerms
+    public function GetPaymentTerms(): ?PaymentTerms
     {
         return $this->paymentTerms;
     }
 
-    public function setPaymentTerms(?PaymentTerms $paymentTerms): void
+    public function SetPaymentTerms(?PaymentTerms $paymentTerms): void
     {
         $this->paymentTerms = $paymentTerms;
     }
 
-    public function getAccountingSupplierParty(): ?Party
+    public function GetAccountingSupplierParty(): ?Party
     {
         return $this->accountingSupplierParty;
     }
 
-    public function setAccountingSupplierParty(?Party $accountingSupplierParty): void
+    public function SetAccountingSupplierParty(?Party $accountingSupplierParty): void
     {
         $this->accountingSupplierParty = $accountingSupplierParty;
     }
 
-    public function getAccountingCostCode(): ?string
+    public function GetAccountingCostCode(): ?string
     {
         return $this->accountingCostCode;
     }
 
-    public function setAccountingCostCode(?string $accountingCostCode): void
+    public function SetAccountingCostCode(?string $accountingCostCode): void
     {
         $this->accountingCostCode = $accountingCostCode;
     }
 
-    public function getAdditionalDocumentReferences(): array
+    public function GetAdditionalDocumentReferences(): array
     {
         return $this->additionalDocumentReferences;
     }
 
-    public function setAdditionalDocumentReferences(array $additionalDocumentReferences): void
+    public function SetAdditionalDocumentReferences(array $additionalDocumentReferences): void
     {
         $this->additionalDocumentReferences = $additionalDocumentReferences;
     }
 
-    public function getDocumentCurrencyCode(): string
+    public function GetDocumentCurrencyCode(): string
     {
         return $this->documentCurrencyCode;
     }
 
-    public function setDocumentCurrencyCode(string $documentCurrencyCode): void
+    public function SetDocumentCurrencyCode(string $documentCurrencyCode): void
     {
         $this->documentCurrencyCode = $documentCurrencyCode;
     }
 
-    public function getBuyerReference(): ?string
+    public function GetBuyerReference(): ?string
     {
         return $this->buyerReference;
     }
 
-    public function setBuyerReference(?string $buyerReference): void
+    public function SetBuyerReference(?string $buyerReference): void
     {
         $this->buyerReference = $buyerReference;
     }
 
-    public function getOrderReference(): ?OrderReference
+    public function GetOrderReference(): ?OrderReference
     {
         return $this->orderReference;
     }
 
-    public function setOrderReference(?OrderReference $orderReference): void
+    public function SetOrderReference(?OrderReference $orderReference): void
     {
         $this->orderReference = $orderReference;
     }
 
-    public function getContractDocumentReference(): ?ContractDocumentReference
+    public function GetContractDocumentReference(): ?ContractDocumentReference
     {
         return $this->contractDocumentReference;
     }
 
-    public function setContractDocumentReference(?ContractDocumentReference $contractDocumentReference): void
+    public function SetContractDocumentReference(?ContractDocumentReference $contractDocumentReference): void
     {
         $this->contractDocumentReference = $contractDocumentReference;
     }
 
-    public function getAccountingCustomerParty(): ?Party
+    public function GetAccountingCustomerParty(): ?Party
     {
         return $this->accountingCustomerParty;
     }
 
-    public function setAccountingCustomerParty(?Party $accountingCustomerParty): void
+    public function SetAccountingCustomerParty(?Party $accountingCustomerParty): void
     {
         $this->accountingCustomerParty = $accountingCustomerParty;
     }
 
-    public function getPayeeParty(): ?Party
+    public function GetPayeeParty(): ?Party
     {
         return $this->payeeParty;
     }
 
-    public function setPayeeParty(?Party $payeeParty): void
+    public function SetPayeeParty(?Party $payeeParty): void
     {
         $this->payeeParty = $payeeParty;
     }
 
-    public function getSupplierAssignedAccountID(): ?string
+    public function GetSupplierAssignedAccountID(): ?string
     {
         return $this->supplierAssignedAccountID;
     }
 
-    public function setSupplierAssignedAccountID(?string $supplierAssignedAccountID): void
+    public function SetSupplierAssignedAccountID(?string $supplierAssignedAccountID): void
     {
         $this->supplierAssignedAccountID = $supplierAssignedAccountID;
     }
 
-    public function getPaymentMeans(): ?PaymentMeans
+    public function GetPaymentMeans(): ?PaymentMeans
     {
         return $this->paymentMeans;
     }
 
-    public function setPaymentMeans(?PaymentMeans $paymentMeans): void
+    public function SetPaymentMeans(?PaymentMeans $paymentMeans): void
     {
         $this->paymentMeans = $paymentMeans;
     }
@@ -402,22 +402,22 @@ class ParsedUBLInvoice extends UBLDeserializable
         return "{urn:oasis:names:specification:ubl:schema:xsd:Invoice-2}Invoice";
     }
 
-    public function getTaxTotal(): ?TaxTotal
+    public function GetTaxTotal(): ?TaxTotal
     {
         return $this->taxTotal;
     }
 
-    public function setTaxTotal(?TaxTotal $taxTotal): void
+    public function SetTaxTotal(?TaxTotal $taxTotal): void
     {
         $this->taxTotal = $taxTotal;
     }
 
-    public function getLegalMonetaryTotal(): ?LegalMonetaryTotal
+    public function GetLegalMonetaryTotal(): ?LegalMonetaryTotal
     {
         return $this->legalMonetaryTotal;
     }
 
-    public function setLegalMonetaryTotal(?LegalMonetaryTotal $legalMonetaryTotal): void
+    public function SetLegalMonetaryTotal(?LegalMonetaryTotal $legalMonetaryTotal): void
     {
         $this->legalMonetaryTotal = $legalMonetaryTotal;
     }
@@ -425,7 +425,7 @@ class ParsedUBLInvoice extends UBLDeserializable
     /**
      * @return ?InvoiceLine[]
      */
-    public function getInvoiceLines(): ?array
+    public function GetInvoiceLines(): ?array
     {
         return $this->invoiceLines;
     }
@@ -434,17 +434,17 @@ class ParsedUBLInvoice extends UBLDeserializable
      * @param InvoiceLine[]|null $invoiceLines
      * @return void
      */
-    public function setInvoiceLines(?array $invoiceLines): void
+    public function SetInvoiceLines(?array $invoiceLines): void
     {
         $this->invoiceLines = $invoiceLines;
     }
 
-    public function hasSupplierAccountInfo():bool
+    public function HasSupplierAccountInfo():bool
     {
-        return isset($this->paymentMeans->payeeFinancialAccount);
+        return isset($this->paymentMeans->PayeeFinancialAccount);
     }
 
-    public function hasAnyItemIDs():bool
+    public function HasAnyItemIDs():bool
     {
         if(empty($this->invoiceLines))
         {
@@ -453,7 +453,7 @@ class ParsedUBLInvoice extends UBLDeserializable
         $count=count($this->invoiceLines);
         for($i=0;$i<$count;$i++)
         {
-            if(isset($this->invoiceLines[$i]->item->sellersItemIdentification) || isset($this->invoiceLines[$i]->item->buyersItemIdentification))
+            if(isset($this->invoiceLines[$i]->Item->SellersItemIdentification) || isset($this->invoiceLines[$i]->Item->BuyersItemIdentification))
             {
                 return true;
             }
@@ -501,7 +501,7 @@ class ParsedUBLInvoice extends UBLDeserializable
         return $foundSomeDetails;
     }
 
-    public function getLineNumber(InvoiceLine $line):?int
+    public function GetLineNumber(InvoiceLine $line):?int
     {
         if(empty($this->invoiceLines))
         {
@@ -535,385 +535,385 @@ class ParsedUBLInvoice extends UBLDeserializable
             $reason = "Instance is not of type ParsedUBLInvoice";
             return false;
         }
-        if ($instance->getUBLVersionID() != "2.1")
+        if ($instance->GetUBLVersionID() != "2.1")
         {
             $reason = "UBLVersionID is not 2.1";
             return false;
         }
-        if ($instance->getCustomizationID() != "urn:cen.eu:en16931:2017#compliant#urn:efactura.mfinante.ro:CIUS-RO:1.0.0")
+        if ($instance->GetCustomizationID() != "urn:cen.eu:en16931:2017#compliant#urn:efactura.mfinante.ro:CIUS-RO:1.0.0")
         {
             $reason = "CustomizationID is not urn:cen.eu:en16931:2017#compliant#urn:efactura.mfinante.ro:CIUS-RO:1.0.0";
             return false;
         }
-        if ($instance->getDocumentCurrencyCode() != "RON")
+        if ($instance->GetDocumentCurrencyCode() != "RON")
         {
             $reason = "DocumentCurrencyCode is not RON";
             return false;
         }
-        if ($instance->getInvoiceTypeCode() != InvoiceTypeCode::INVOICE)
+        if ($instance->GetInvoiceTypeCode() != InvoiceTypeCode::INVOICE)
         {
             $reason = "InvoiceTypeCode is not INVOICE";
             return false;
         }
-        if ($instance->getIssueDate()->format("Y-m-d") != "2022-05-31")
+        if ($instance->GetIssueDate()->format("Y-m-d") != "2022-05-31")
         {
             $reason = "IssueDate is not 2022-05-31";
             return false;
         }
-        if ($instance->getDueDate()->format("Y-m-d") != "2022-05-31")
+        if ($instance->GetDueDate()->format("Y-m-d") != "2022-05-31")
         {
             $reason = "DueDate is not 2022-05-31";
             return false;
         }
-        if ($instance->getAccountingSupplierParty() == null)
+        if ($instance->GetAccountingSupplierParty() == null)
         {
             $reason = "AccountingSupplierParty is null";
             return false;
         }
-        if ($instance->getAccountingCustomerParty() == null)
+        if ($instance->GetAccountingCustomerParty() == null)
         {
             $reason = "AccountingCustomerParty is null";
             return false;
         }
-        if ($instance->getAccountingSupplierParty()->name != "Seller SRL")
+        if ($instance->GetAccountingSupplierParty()->Name != "Seller SRL")
         {
             $reason = "AccountingSupplierParty name is not Seller SRL";
             return false;
         }
-        if ($instance->getAccountingCustomerParty()->name != "Buyer name")
+        if ($instance->GetAccountingCustomerParty()->Name != "Buyer name")
         {
             $reason = "AccountingCustomerParty name is not Buyer name";
             return false;
         }
-        if ($instance->getAccountingCustomerParty()->partyIdentificationId != "123456")
+        if ($instance->GetAccountingCustomerParty()->PartyIdentificationId != "123456")
         {
             $reason = "AccountingCustomerParty partyIdentificationId is not 123456";
             return false;
         }
-        if ($instance->getAccountingSupplierParty()->postalAddress->streetName != "line1")
+        if ($instance->GetAccountingSupplierParty()->PostalAddress->StreetName != "line1")
         {
             $reason = "AccountingSupplierParty postalAddress streetName is not line1";
             return false;
         }
-        if ($instance->getAccountingCustomerParty()->postalAddress->streetName != "BD DECEBAL NR 1 ET1")
+        if ($instance->GetAccountingCustomerParty()->PostalAddress->StreetName != "BD DECEBAL NR 1 ET1")
         {
             $reason = "AccountingCustomerParty postalAddress streetName is not BD DECEBAL NR 1 ET1";
             return false;
         }
-        if ($instance->getAccountingSupplierParty()->postalAddress->cityName != "SECTOR1")
+        if ($instance->GetAccountingSupplierParty()->PostalAddress->CityName != "SECTOR1")
         {
             $reason = "AccountingSupplierParty postalAddress cityName is not SECTOR1";
             return false;
         }
-        if ($instance->getAccountingCustomerParty()->postalAddress->cityName != "ARAD")
+        if ($instance->GetAccountingCustomerParty()->PostalAddress->CityName != "ARAD")
         {
             $reason = "AccountingCustomerParty postalAddress cityName is not ARAD";
             return false;
         }
-        if ($instance->getAccountingSupplierParty()->postalAddress->postalZone != "013329")
+        if ($instance->GetAccountingSupplierParty()->PostalAddress->PostalZone != "013329")
         {
             $reason = "AccountingSupplierParty postalAddress postalZone is not 013329";
             return false;
         }
-        if ($instance->getAccountingCustomerParty()->postalAddress->postalZone != "123456")
+        if ($instance->GetAccountingCustomerParty()->PostalAddress->PostalZone != "123456")
         {
             $reason = "AccountingCustomerParty postalAddress postalZone is not 123456";
             return false;
         }
-        if ($instance->getAccountingSupplierParty()->postalAddress->countrySubentity != "RO-B")
+        if ($instance->GetAccountingSupplierParty()->PostalAddress->CountrySubentity != "RO-B")
         {
             $reason = "AccountingSupplierParty postalAddress countrySubentity is not RO-B";
             return false;
         }
-        if ($instance->getAccountingCustomerParty()->postalAddress->countrySubentity != "RO-AR")
+        if ($instance->GetAccountingCustomerParty()->PostalAddress->CountrySubentity != "RO-AR")
         {
             $reason = "AccountingCustomerParty postalAddress countrySubentity is not RO-AR";
             return false;
         }
-        if ($instance->getAccountingSupplierParty()->partyTaxScheme->companyId != "RO1234567890")
+        if ($instance->GetAccountingSupplierParty()->PartyTaxScheme->CompanyId != "RO1234567890")
         {
             $reason = "AccountingSupplierParty partyTaxScheme companyID is not RO1234567890";
             return false;
         }
-        if ($instance->getAccountingCustomerParty()->partyTaxScheme->companyId != "RO987456123")
+        if ($instance->GetAccountingCustomerParty()->PartyTaxScheme->CompanyId != "RO987456123")
         {
             $reason = "AccountingCustomerParty partyTaxScheme companyId is not RO987456123";
             return false;
         }
-        if ($instance->getAccountingSupplierParty()->partyTaxScheme->taxScheme->id != "VAT")
+        if ($instance->GetAccountingSupplierParty()->PartyTaxScheme->TaxScheme->ID != "VAT")
         {
             $reason = "AccountingSupplierParty partyTaxScheme taxScheme id is not VAT";
             return false;
         }
-        if ($instance->getAccountingCustomerParty()->partyTaxScheme->taxScheme->id != "VAT")
+        if ($instance->GetAccountingCustomerParty()->PartyTaxScheme->TaxScheme->ID != "VAT")
         {
             $reason = "AccountingCustomerParty partyTaxScheme taxScheme id is not VAT";
             return false;
         }
-        if ($instance->getAccountingSupplierParty()->legalEntity->registrationName != "Seller SRL")
+        if ($instance->GetAccountingSupplierParty()->LegalEntity->RegistrationName != "Seller SRL")
         {
             $reason = "AccountingSupplierParty partyLegalEntity registrationName is not Seller SRL";
             return false;
         }
-        if ($instance->getAccountingCustomerParty()->legalEntity->registrationName != "Buyer SRL")
+        if ($instance->GetAccountingCustomerParty()->LegalEntity->RegistrationName != "Buyer SRL")
         {
             $reason = "AccountingCustomerParty partyLegalEntity registrationName is not Buyer SRL";
             return false;
         }
-        if ($instance->getAccountingSupplierParty()->legalEntity->companyLegalForm != "J40/12345/1998")
+        if ($instance->GetAccountingSupplierParty()->LegalEntity->CompanyLegalForm != "J40/12345/1998")
         {
             $reason = "AccountingSupplierParty partyLegalEntity companyLegalForm is not J40/12345/1998";
             return false;
         }
-        if ($instance->getAccountingCustomerParty()->legalEntity->companyId != "J02/321/2010")
+        if ($instance->GetAccountingCustomerParty()->LegalEntity->CompanyID != "J02/321/2010")
         {
             $reason = "AccountingCustomerParty partyLegalEntity companyLegalForm is not J02/321/2010";
             return false;
         }
-        if ($instance->getAccountingSupplierParty()->contact->electronicMail != "mail@seller.com")
+        if ($instance->GetAccountingSupplierParty()->Contact->ElectronicMail != "mail@seller.com")
         {
             $reason = "AccountingSupplierParty contact electronicMail is not mail@seller.com";
             return false;
         }
-        if ($instance->getAccountingCustomerParty()->contact != null)
+        if ($instance->GetAccountingCustomerParty()->Contact != null)
         {
             $reason = "AccountingCustomerParty contact contact is not empty";
             return false;
         }
-        if ($instance->getPaymentMeans()->paymentMeansCode != PaymentMeansCode::DebitTransfer)
+        if ($instance->GetPaymentMeans()->PaymentMeansCode != PaymentMeansCode::DebitTransfer)
         {
             $reason = "PaymentMeans paymentMeansCode is not 31(DebitTransfer)";
             return false;
         }
-        if ($instance->getPaymentMeans()->payeeFinancialAccount->id != "RO80RNCB0067054355123456")
+        if ($instance->GetPaymentMeans()->PayeeFinancialAccount->ID != "RO80RNCB0067054355123456")
         {
             $reason = "PaymentMeans payeeFinancialAccount id is not RO80RNCB0067054355123456";
             return false;
         }
-        if ($instance->getTaxTotal()->taxAmount != 6598592.6)
+        if ($instance->GetTaxTotal()->TaxAmount != 6598592.6)
         {
             $reason = "TaxTotal taxAmount is not 6598592.6";
             return false;
         }
-        if ($instance->getTaxTotal()->taxSubtotals[0]->taxableAmount !== "696.12")
+        if ($instance->GetTaxTotal()->TaxSubtotals[0]->TaxableAmount !== "696.12")
         {
-            $reason = "TaxTotal taxSubtotals[0] taxableAmount is not 696.12 (" . $instance->getTaxTotal()->taxSubtotals[0]->taxableAmount . ")";
-            echo json_encode($instance->getTaxTotal());
+            $reason = "TaxTotal taxSubtotals[0] taxableAmount is not 696.12 (" . $instance->GetTaxTotal()->TaxSubtotals[0]->TaxableAmount . ")";
+            echo json_encode($instance->GetTaxTotal());
             return false;
         }
-        if ($instance->getTaxTotal()->taxSubtotals[0]->taxAmount !== "34.79")
+        if ($instance->GetTaxTotal()->TaxSubtotals[0]->TaxAmount !== "34.79")
         {
             $reason = "TaxTotal taxSubtotals[0] taxAmount is not 34.79";
             return false;
         }
-        if ($instance->getTaxTotal()->taxSubtotals[0]->taxableAmount !== "696.12")
+        if ($instance->GetTaxTotal()->TaxSubtotals[0]->TaxableAmount !== "696.12")
         {
             $reason = "TaxTotal taxSubtotals[0] taxableAmount is not 696.12";
             return false;
         }
-        if ($instance->getTaxTotal()->taxSubtotals[0]->taxCategory->id != "S")
+        if ($instance->GetTaxTotal()->TaxSubtotals[0]->TaxCategory->ID != "S")
         {
             $reason = "TaxTotal taxSubtotals[0] taxCategory id is not S";
             return false;
         }
-        if ($instance->getTaxTotal()->taxSubtotals[0]->taxCategory->percent !== "5.00")
+        if ($instance->GetTaxTotal()->TaxSubtotals[0]->TaxCategory->Percent !== "5.00")
         {
             $reason = "TaxTotal taxSubtotals[0] taxCategory percent is not 5.00";
             return false;
         }
-        if ($instance->getTaxTotal()->taxSubtotals[0]->taxCategory->taxScheme->id != "VAT")
+        if ($instance->GetTaxTotal()->TaxSubtotals[0]->TaxCategory->TaxScheme->ID != "VAT")
         {
             $reason = "TaxTotal taxSubtotals[0] taxCategory taxScheme id is not VAT";
             return false;
         }
-        if ($instance->getLegalMonetaryTotal()->lineExtensionAmount !== "34741984.11")
+        if ($instance->GetLegalMonetaryTotal()->LineExtensionAmount !== "34741984.11")
         {
             $reason = "LegalMonetaryTotal lineExtensionAmount is not 34741984.11";
             return false;
         }
-        if ($instance->getLegalMonetaryTotal()->taxExclusiveAmount !== "34741984.11")
+        if ($instance->GetLegalMonetaryTotal()->TaxExclusiveAmount !== "34741984.11")
         {
             $reason = "LegalMonetaryTotal taxExclusiveAmount is not 34741984.11";
             return false;
         }
-        if ($instance->getLegalMonetaryTotal()->taxInclusiveAmount !== "41340576.71")
+        if ($instance->GetLegalMonetaryTotal()->TaxInclusiveAmount !== "41340576.71")
         {
             $reason = "LegalMonetaryTotal taxInclusiveAmount is not 41340576.71";
             return false;
         }
-        if ($instance->getLegalMonetaryTotal()->payableAmount !== "41340576.71")
+        if ($instance->GetLegalMonetaryTotal()->PayableAmount !== "41340576.71")
         {
             $reason = "LegalMonetaryTotal payableAmount is not 41340576.71";
             return false;
         }
-        if ($instance->getLegalMonetaryTotal()->lineExtensionCurrency != "RON")
+        if ($instance->GetLegalMonetaryTotal()->LineExtensionCurrency != "RON")
         {
             $reason = "LegalMonetaryTotal lineExtensionCurrencyID is not RON";
             return false;
         }
-        if ($instance->getLegalMonetaryTotal()->taxExclusiveCurrency != "RON")
+        if ($instance->GetLegalMonetaryTotal()->TaxExclusiveCurrency != "RON")
         {
             $reason = "LegalMonetaryTotal taxExclusiveCurrencyID is not RON";
             return false;
         }
-        if ($instance->getLegalMonetaryTotal()->taxInclusiveCurrency != "RON")
+        if ($instance->GetLegalMonetaryTotal()->TaxInclusiveCurrency != "RON")
         {
             $reason = "LegalMonetaryTotal taxInclusiveCurrencyID is not RON";
             return false;
         }
-        if ($instance->getLegalMonetaryTotal()->payableCurrency != "RON")
+        if ($instance->GetLegalMonetaryTotal()->PayableCurrency != "RON")
         {
             $reason = "LegalMonetaryTotal payableCurrencyID is not RON";
             return false;
         }
-        if ($instance->getInvoiceLines() == null)
+        if ($instance->GetInvoiceLines() == null)
         {
             $reason = "InvoiceLines is null";
             return false;
         }
-        if (count($instance->getInvoiceLines()) != 35)
+        if (count($instance->GetInvoiceLines()) != 35)
         {
             $reason = "InvoiceLines count is not 35";
             return false;
         }
         /** @var InvoiceLine $line */
-        $line = $instance->getInvoiceLines()[0];
-        if ($line->id != "1")
+        $line = $instance->GetInvoiceLines()[0];
+        if ($line->ID != "1")
         {
             $reason = "InvoiceLines[0] id is not 1";
             return false;
         }
-        if ($line->invoicedQuantity !== "46396.67")
+        if ($line->InvoicedQuantity !== "46396.67")
         {
             $reason = "InvoiceLines[0] invoicedQuantity is not 46396.67";
             return false;
         }
-        if ($line->unitCode != "C62")
+        if ($line->UnitCode != "C62")
         {
             $reason = "InvoiceLines[0] unitCode is not C62";
             return false;
         }
-        if ($line->lineExtensionAmount != "334641.38")
+        if ($line->LineExtensionAmount != "334641.38")
         {
             $reason = "InvoiceLines[0] lineExtensionAmount is not 334641.38";
             return false;
         }
-        if ($line->lineExtensionAmountCurrencyID != "RON")
+        if ($line->LineExtensionAmountCurrencyID != "RON")
         {
             $reason = "InvoiceLines[0] lineExtensionCurrencyID is not RON";
             return false;
         }
-        if ($line->allAllowanceCharges == null)
+        if ($line->AllAllowanceCharges == null)
         {
             $reason = "InvoiceLines[0] allowanceCharges is null";
             return false;
         }
-        if (count($line->allAllowanceCharges) != 2)
+        if (count($line->AllAllowanceCharges) != 2)
         {
             $reason = "InvoiceLines[0] allowanceCharges count is not 2";
             return false;
         }
-        if ($line->allAllowanceCharges[0]->chargeIndicator !== false)
+        if ($line->AllAllowanceCharges[0]->ChargeIndicator !== false)
         {
             $reason = "InvoiceLines[0] allowanceCharges[0] chargeIndicator is not false";
             return false;
         }
-        if ($line->allAllowanceCharges[0]->amount !== "801.98")
+        if ($line->AllAllowanceCharges[0]->Amount !== "801.98")
         {
             $reason = "InvoiceLines[0] allowanceCharges[0] amount is not 801.98";
             return false;
         }
-        if ($line->allAllowanceCharges[0]->amountCurrency != "RON")
+        if ($line->AllAllowanceCharges[0]->AmountCurrency != "RON")
         {
             $reason = "InvoiceLines[0] allowanceCharges[0] amountCurrencyID is not RON";
             return false;
         }
-        if ($line->allAllowanceCharges[1]->baseAmountCurrency != "RON")
+        if ($line->AllAllowanceCharges[1]->BaseAmountCurrency != "RON")
         {
             $reason = "InvoiceLines[0] allowanceCharges[1] baseAmountCurrencyID is not RON";
             return false;
         }
-        if ($line->allAllowanceCharges[1]->baseAmount !== "354715.84")
+        if ($line->AllAllowanceCharges[1]->BaseAmount !== "354715.84")
         {
             $reason = "InvoiceLines[0] allowanceCharges[1] baseAmount is not 354715.84";
             return false;
         }
-        if ($line->allAllowanceCharges[0]->allowanceChargeReasonCode !== "95")
+        if ($line->AllAllowanceCharges[0]->AllowanceChargeReasonCode !== "95")
         {
             $reason = "InvoiceLines[0] allowanceCharges[0] allowanceChargeReasonCode is not 95";
             return false;
         }
-        if ($line->allAllowanceCharges[0]->allowanceChargeReason != "Discount")
+        if ($line->AllAllowanceCharges[0]->AllowanceChargeReason != "Discount")
         {
             $reason = "InvoiceLines[0] allowanceCharges[0] allowanceChargeReason is not Discount";
             return false;
         }
-        if ($line->item == null)
+        if ($line->Item == null)
         {
             $reason = "InvoiceLines[0] item is null";
             return false;
         }
-        if ($line->item->name != "item name")
+        if ($line->Item->Name != "item name")
         {
             $reason = "InvoiceLines[0] item name is not item name";
             return false;
         }
-        if ($line->item->sellersItemIdentification != "0102")
+        if ($line->Item->SellersItemIdentification != "0102")
         {
             $reason = "InvoiceLines[0] item sellersItemIdentification is not 0102";
             return false;
         }
-        if ($line->item->commodityClassification != "03222000-3")
+        if ($line->Item->CommodityClassification != "03222000-3")
         {
             $reason = "InvoiceLines[0] item commodityClassification is not 03222000-3";
             return false;
         }
-        if ($line->item->commodityClassificationListID != "STI")
+        if ($line->Item->CommodityClassificationListID != "STI")
         {
             $reason = "InvoiceLines[0] item commodityClassificationListID is not STI";
             return false;
         }
-        if ($line->item->classifiedTaxCategory == null)
+        if ($line->Item->ClassifiedTaxCategory == null)
         {
             $reason = "InvoiceLines[0] classifiedTaxCategory is null";
             return false;
         }
-        if ($line->item->classifiedTaxCategory->id != "S")
+        if ($line->Item->ClassifiedTaxCategory->ID != "S")
         {
             $reason = "InvoiceLines[0] classifiedTaxCategory id is not S";
             return false;
         }
-        if ($line->item->classifiedTaxCategory->percent !== "19.00")
+        if ($line->Item->ClassifiedTaxCategory->Percent !== "19.00")
         {
             $reason = "InvoiceLines[0] classifiedTaxCategory percent is not 5.00";
             return false;
         }
-        if ($line->item->classifiedTaxCategory->taxScheme->id != "VAT")
+        if ($line->Item->ClassifiedTaxCategory->TaxScheme->ID != "VAT")
         {
             $reason = "InvoiceLines[0] classifiedTaxCategory taxScheme id is not VAT";
             return false;
         }
-        if ($line->price == null)
+        if ($line->Price == null)
         {
             $reason = "InvoiceLines[0] price is null";
             return false;
         }
-        if ($line->price->priceAmount !== "7.6453")
+        if ($line->Price->PriceAmount !== "7.6453")
         {
             $reason = "InvoiceLines[0] price priceAmount is not 46396.67";
             return false;
         }
-        if ($line->price->priceCurrencyID != "RON")
+        if ($line->Price->PriceCurrencyID != "RON")
         {
             $reason = "InvoiceLines[0] price priceAmountCurrencyID is not RON";
             return false;
         }
-        if ($line->price->baseQuantity != 1)
+        if ($line->Price->BaseQuantity != 1)
         {
             $reason = "InvoiceLines[0] price baseQuantity is not 1";
             return false;
         }
-        if ($line->price->unitCode != "C62")
+        if ($line->Price->UnitCode != "C62")
         {
             $reason = "InvoiceLines[0] price baseQuantityUnitCode is not C62";
             return false;

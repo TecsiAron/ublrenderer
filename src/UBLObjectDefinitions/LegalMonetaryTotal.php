@@ -23,18 +23,18 @@ use XMLReader;
 
 class LegalMonetaryTotal extends UBLDeserializable
 {
-    public ?string $lineExtensionAmount = null;
-    public ?string $lineExtensionCurrency = null;
-    public ?string $taxExclusiveAmount = null;
-    public ?string $taxExclusiveCurrency = null;
-    public ?string $taxInclusiveAmount = null;
-    public ?string $taxInclusiveCurrency = null;
-    public ?string $allowanceTotalAmount = null;
-    public ?string $allowanceTotalCurrency = null;
-    public ?string $prepaidAmount = null;
-    public ?string $prepaidCurrency = null;
-    public ?string $payableAmount = null;
-    public ?string $payableCurrency = null;
+    public ?string $LineExtensionAmount = null;
+    public ?string $LineExtensionCurrency = null;
+    public ?string $TaxExclusiveAmount = null;
+    public ?string $TaxExclusiveCurrency = null;
+    public ?string $TaxInclusiveAmount = null;
+    public ?string $TaxInclusiveCurrency = null;
+    public ?string $AllowanceTotalAmount = null;
+    public ?string $AllowanceTotalCurrency = null;
+    public ?string $PrepaidAmount = null;
+    public ?string $PrepaidCurrency = null;
+    public ?string $PayableAmount = null;
+    public ?string $PayableCurrency = null;
 
     public static function XMLDeserialize(Reader $reader): self
     {
@@ -50,50 +50,50 @@ class LegalMonetaryTotal extends UBLDeserializable
                 {
                     case "LineExtensionAmount":
                         $parsed = $reader->parseCurrentElement();
-                        $instance->lineExtensionAmount = $parsed["value"];
+                        $instance->LineExtensionAmount = $parsed["value"];
                         if (isset($parsed["attributes"]["currencyID"]))
                         {
-                            $instance->lineExtensionCurrency = $parsed["attributes"]["currencyID"];
+                            $instance->LineExtensionCurrency = $parsed["attributes"]["currencyID"];
                         }
                         break;
                     case "TaxExclusiveAmount":
                         $parsed = $reader->parseCurrentElement();
-                        $instance->taxExclusiveAmount = $parsed["value"];
+                        $instance->TaxExclusiveAmount = $parsed["value"];
                         if (isset($parsed["attributes"]["currencyID"]))
                         {
-                            $instance->taxExclusiveCurrency = $parsed["attributes"]["currencyID"];
+                            $instance->TaxExclusiveCurrency = $parsed["attributes"]["currencyID"];
                         }
                         break;
                     case "TaxInclusiveAmount":
                         $parsed = $reader->parseCurrentElement();
-                        $instance->taxInclusiveAmount = $parsed["value"];
+                        $instance->TaxInclusiveAmount = $parsed["value"];
                         if (isset($parsed["attributes"]["currencyID"]))
                         {
-                            $instance->taxInclusiveCurrency = $parsed["attributes"]["currencyID"];
+                            $instance->TaxInclusiveCurrency = $parsed["attributes"]["currencyID"];
                         }
                         break;
                     case "AllowanceTotalAmount":
                         $parsed = $reader->parseCurrentElement();
-                        $instance->allowanceTotalAmount = $parsed["value"];
+                        $instance->AllowanceTotalAmount = $parsed["value"];
                         if (isset($parsed["attributes"]["currencyID"]))
                         {
-                            $instance->allowanceTotalCurrency = $parsed["attributes"]["currencyID"];
+                            $instance->AllowanceTotalCurrency = $parsed["attributes"]["currencyID"];
                         }
                         break;
                     case "PrepaidAmount":
                         $parsed = $reader->parseCurrentElement();
-                        $instance->prepaidAmount = $parsed["value"];
+                        $instance->PrepaidAmount = $parsed["value"];
                         if (isset($parsed["attributes"]["currencyID"]))
                         {
-                            $instance->prepaidCurrency = $parsed["attributes"]["currencyID"];
+                            $instance->PrepaidCurrency = $parsed["attributes"]["currencyID"];
                         }
                         break;
                     case "PayableAmount":
                         $parsed = $reader->parseCurrentElement();
-                        $instance->payableAmount = $parsed["value"];
+                        $instance->PayableAmount = $parsed["value"];
                         if (isset($parsed["attributes"]["currencyID"]))
                         {
-                            $instance->payableCurrency = $parsed["attributes"]["currencyID"];
+                            $instance->PayableCurrency = $parsed["attributes"]["currencyID"];
                         }
                         break;
                 }
@@ -136,62 +136,62 @@ class LegalMonetaryTotal extends UBLDeserializable
             $reason = "Instance is not of type LegalMonetaryTotal";
             return false;
         }
-        if ($instance->lineExtensionAmount !== "100")
+        if ($instance->LineExtensionAmount !== "100")
         {
             $reason = "LineExtensionAmount is not 100";
             return false;
         }
-        if ($instance->lineExtensionCurrency !== "RON")
+        if ($instance->LineExtensionCurrency !== "RON")
         {
             $reason = "LineExtensionCurrency is not RON";
             return false;
         }
-        if ($instance->taxExclusiveAmount !== "100")
+        if ($instance->TaxExclusiveAmount !== "100")
         {
             $reason = "TaxExclusiveAmount is not 100";
             return false;
         }
-        if ($instance->taxExclusiveCurrency !== "RON")
+        if ($instance->TaxExclusiveCurrency !== "RON")
         {
             $reason = "TaxExclusiveCurrency is not RON";
             return false;
         }
-        if ($instance->taxInclusiveAmount !== "100")
+        if ($instance->TaxInclusiveAmount !== "100")
         {
             $reason = "TaxInclusiveAmount is not 100";
             return false;
         }
-        if ($instance->taxInclusiveCurrency !== "RON")
+        if ($instance->TaxInclusiveCurrency !== "RON")
         {
             $reason = "TaxInclusiveCurrency is not RON";
             return false;
         }
-        if ($instance->allowanceTotalAmount !== "100")
+        if ($instance->AllowanceTotalAmount !== "100")
         {
             $reason = "AllowanceTotalAmount is not 100";
             return false;
         }
-        if ($instance->allowanceTotalCurrency !== "RON")
+        if ($instance->AllowanceTotalCurrency !== "RON")
         {
             $reason = "AllowanceTotalCurrency is not RON";
             return false;
         }
-        if ($instance->prepaidAmount !== "100")
+        if ($instance->PrepaidAmount !== "100")
         {
             $reason = "PrepaidAmount is not 100";
             return false;
         }
-        if ($instance->prepaidCurrency !== "RON")
+        if ($instance->PrepaidCurrency !== "RON")
         {
             $reason = "PrepaidCurrency is not RON";
             return false;
         }
-        if ($instance->payableAmount !== "100")
+        if ($instance->PayableAmount !== "100")
         {
             $reason = "PayableAmount is not 100";
             return false;
         }
-        if ($instance->payableCurrency !== "RON")
+        if ($instance->PayableCurrency !== "RON")
         {
             $reason = "PayableCurrency is not RON";
             return false;

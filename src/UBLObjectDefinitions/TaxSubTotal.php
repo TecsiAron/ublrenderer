@@ -23,10 +23,10 @@ use XMLReader;
 
 class TaxSubTotal extends UBLDeserializable
 {
-    public ?string $taxableAmount = null;
-    public ?string $taxAmount = null;
-    public ?TaxCategory $taxCategory = null;
-    private string $percent;
+    public ?string $TaxableAmount = null;
+    public ?string $TaxAmount = null;
+    public ?TaxCategory $TaxCategory = null;
+    private string $Percent;
 
     public static function XMLDeserialize(Reader $reader): self
     {
@@ -40,19 +40,19 @@ class TaxSubTotal extends UBLDeserializable
                 switch ($reader->localName)
                 {
                     case "TaxableAmount":
-                        $instance->taxableAmount = $reader->readString();
+                        $instance->TaxableAmount = $reader->readString();
                         $reader->next(); // Move past the current text node
                         break;
                     case "TaxAmount":
-                        $instance->taxAmount = $reader->readString();
+                        $instance->TaxAmount = $reader->readString();
                         $reader->next();
                         break;
                     case "TaxCategory":
                         $parsed = $reader->parseCurrentElement();
-                        $instance->taxCategory = $parsed["value"];
+                        $instance->TaxCategory = $parsed["value"];
                         break;
                     case "Percent":
-                        $instance->percent = $reader->readString();
+                        $instance->Percent = $reader->readString();
                         $reader->next();
                         break;
                 }
@@ -93,21 +93,21 @@ class TaxSubTotal extends UBLDeserializable
             $reason = "Failed to parse TaxSubTotal, wrong instance type";
             return false;
         }
-        if ($instance->taxableAmount !== "5.00")
+        if ($instance->TaxableAmount !== "5.00")
         {
             $reason = "Failed to parse TaxSubTotal, taxableAmount is not 5.00";
             return false;
         }
-        if ($instance->taxAmount !== "6.00")
+        if ($instance->TaxAmount !== "6.00")
         {
             $reason = "Failed to parse TaxSubTotal, taxAmount is not 6.00";
             return false;
         }
-        if (!TaxCategory::TestDefaultValues($instance->taxCategory, $reason))
+        if (!TaxCategory::TestDefaultValues($instance->TaxCategory, $reason))
         {
             return false;
         }
-        if ($instance->percent != "0.00")
+        if ($instance->Percent != "0.00")
         {
             $reason = "Failed to parse TaxSubTotal, percent is not 0.00";
             return false;

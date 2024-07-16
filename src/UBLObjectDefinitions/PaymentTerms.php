@@ -23,11 +23,11 @@ use XMLReader;
 
 class PaymentTerms extends UBLDeserializable
 {
-    public ?string $note = null;
-    public ?string $settlementDiscountPercent = null;
-    public ?string $amount = null;
-    public ?string $amountCurrencyID;
-    public ?SettlementPeriod $settlementPeriod;
+    public ?string $Note = null;
+    public ?string $SettlementDiscountPercent = null;
+    public ?string $Amount = null;
+    public ?string $AmountCurrencyID;
+    public ?SettlementPeriod $SettlementPeriod;
 
     public static function XMLDeserialize(Reader $reader): UBLDeserializable
     {
@@ -42,24 +42,24 @@ class PaymentTerms extends UBLDeserializable
                 switch ($reader->localName)
                 {
                     case "Note":
-                        $instance->note = $reader->readString();
+                        $instance->Note = $reader->readString();
                         $reader->next();
                         break;
                     case "SettlementDiscountPercent":
                         $string = trim($reader->readString(), "%");
-                        $instance->settlementDiscountPercent = $string;
+                        $instance->SettlementDiscountPercent = $string;
                         $reader->next();
                         break;
                     case "Amount":
-                        $instance->amount = $reader->readString();
+                        $instance->Amount = $reader->readString();
                         if ($reader->hasAttributes)
                         {
-                            $instance->amountCurrencyID = $reader->getAttribute("currencyID");
+                            $instance->AmountCurrencyID = $reader->getAttribute("currencyID");
                         }
                         $reader->next();
                         break;
                     case "SettlementPeriod":
-                        $instance->settlementPeriod = $reader->parseCurrentElement()["value"];
+                        $instance->SettlementPeriod = $reader->parseCurrentElement()["value"];
                         break;
                 }
             }
@@ -99,27 +99,27 @@ class PaymentTerms extends UBLDeserializable
             $reason = "Instance is not of type PaymentTerms";
             return false;
         }
-        if ($instance->note !== "Payment terms")
+        if ($instance->Note !== "Payment terms")
         {
             $reason = "Note is not Payment terms";
             return false;
         }
-        if ($instance->settlementDiscountPercent !== "10")
+        if ($instance->SettlementDiscountPercent !== "10")
         {
             $reason = "SettlementDiscountPercent is not 10";
             return false;
         }
-        if ($instance->amount !== "100")
+        if ($instance->Amount !== "100")
         {
             $reason = "Amount is not 100";
             return false;
         }
-        if ($instance->amountCurrencyID !== "RON")
+        if ($instance->AmountCurrencyID !== "RON")
         {
             $reason = "AmountCurrencyID is not RON";
             return false;
         }
-        if (!SettlementPeriod::TestDefaultValues($instance->settlementPeriod, $reason))
+        if (!SettlementPeriod::TestDefaultValues($instance->SettlementPeriod, $reason))
         {
             return false;
         }

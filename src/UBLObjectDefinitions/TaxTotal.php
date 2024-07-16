@@ -23,11 +23,11 @@ use XMLReader;
 
 class TaxTotal extends UBLDeserializable
 {
-    public ?string $taxAmount = null;
+    public ?string $TaxAmount = null;
     /**
-     * @var TaxSubTotal[] $taxSubTotals
+     * @var TaxSubTotal[] $TaxSubtotals
      */
-    public array $taxSubtotals = [];
+    public array $TaxSubtotals = [];
 
     public static function XMLDeserialize(Reader $reader): self
     {
@@ -44,12 +44,12 @@ class TaxTotal extends UBLDeserializable
                 switch ($reader->localName)
                 {
                     case "TaxAmount":
-                        $instance->taxAmount = $reader->readString();
+                        $instance->TaxAmount = $reader->readString();
                         $reader->next();
                         break;
                     case "TaxSubtotal":
                         $parsed = $reader->parseCurrentElement();
-                        $instance->taxSubtotals[] = $parsed["value"];
+                        $instance->TaxSubtotals[] = $parsed["value"];
                         break;
                 }
             }
@@ -88,17 +88,17 @@ class TaxTotal extends UBLDeserializable
             $reason = "Instance is not of type TaxTotal";
             return false;
         }
-        if ($instance->taxAmount != "0.00")
+        if ($instance->TaxAmount != "0.00")
         {
-            $reason = "TaxAmount is not 0.00 it is: " . $instance->taxAmount;
+            $reason = "TaxAmount is not 0.00 it is: " . $instance->TaxAmount;
             return false;
         }
-        if (count($instance->taxSubtotals) != 2)
+        if (count($instance->TaxSubtotals) != 2)
         {
             $reason = "TaxSubTotals count is not 2";
             return false;
         }
-        if (!TaxSubTotal::TestDefaultValues($instance->taxSubtotals[0], $reason))
+        if (!TaxSubTotal::TestDefaultValues($instance->TaxSubtotals[0], $reason))
         {
             $reason = "First TaxSubTotal failed with reason: " . $reason;
             return false;

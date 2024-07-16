@@ -24,10 +24,10 @@ use XMLReader;
 
 class Delivery extends UBLDeserializable
 {
-    public ?DateTime $actualDeliveryDate = null;
-    private ?Address $deliveryLocation = null;
-    public ?string $deliveryLocationID = null;
-    private ?string $deliveryPartyName = null;
+    public ?DateTime $ActualDeliveryDate = null;
+    private ?Address $DeliveryLocation = null;
+    public ?string $DeliveryLocationID = null;
+    private ?string $DeliveryPartyName = null;
 
     public static function XMLDeserialize(Reader $reader): UBLDeserializable
     {
@@ -42,18 +42,18 @@ class Delivery extends UBLDeserializable
                 switch ($reader->localName)
                 {
                     case "ActualDeliveryDate":
-                        $instance->actualDeliveryDate = DateTime::createFromFormat("Y-m-d", $reader->readString());
+                        $instance->ActualDeliveryDate = DateTime::createFromFormat("Y-m-d", $reader->readString());
                         $reader->next();
                         break;
                     case "DeliveryLocation":
                         $parsed = $reader->parseCurrentElement();
-                        $instance->deliveryLocationID = $parsed["value"][0]["value"];
-                        $instance->deliveryLocation = $parsed["value"][1]["value"];
+                        $instance->DeliveryLocationID = $parsed["value"][0]["value"];
+                        $instance->DeliveryLocation = $parsed["value"][1]["value"];
                         $reader->next();
                         break;
                     case "DeliveryParty":
                         $parsed = $reader->parseCurrentElement();
-                        $instance->deliveryPartyName = $parsed["value"][0]["value"][0]["value"];
+                        $instance->DeliveryPartyName = $parsed["value"][0]["value"][0]["value"];
                         break;
                 }
             }
@@ -99,22 +99,22 @@ class Delivery extends UBLDeserializable
             $reason = "Instance is not Delivery";
             return false;
         }
-        if ($instance->actualDeliveryDate->format("Y-m-d") !== "2021-01-01")
+        if ($instance->ActualDeliveryDate->format("Y-m-d") !== "2021-01-01")
         {
             $reason = "ActualDeliveryDate is not 2021-01-01";
             return false;
         }
-        if (Address::TestDefaultValues($instance->deliveryLocation, $reason) === false)
+        if (Address::TestDefaultValues($instance->DeliveryLocation, $reason) === false)
         {
             $reason = "Failed to parse DeliveryLocation";
             return false;
         }
-        if ($instance->deliveryPartyName !== "Test")
+        if ($instance->DeliveryPartyName !== "Test")
         {
             $reason = "Failed to parse DeliveryPartyName";
             return false;
         }
-        if ($instance->deliveryLocationID !== "1")
+        if ($instance->DeliveryLocationID !== "1")
         {
             $reason = "Failed to parse DeliveryLocationID";
             return false;

@@ -23,8 +23,8 @@ use XMLReader;
 
 class ClassifiedTaxCategory extends TaxCategory
 {
-    public ?string $schemeID = null;
-    public ?string $schemeName = null;
+    public ?string $SchemeID = null;
+    public ?string $SchemeName = null;
 
     public static function XMLDeserialize(Reader $reader): self
     {
@@ -39,35 +39,35 @@ class ClassifiedTaxCategory extends TaxCategory
                 switch ($reader->localName)
                 {
                     case "ID":
-                        $instance->id = $reader->readString();
+                        $instance->ID = $reader->readString();
                         $reader->next(); // Move past the current text node
                         break;
                     case "Name":
-                        $instance->name = $reader->readString();
+                        $instance->Name = $reader->readString();
                         $reader->next();
                         break;
                     case "Percent":
-                        $instance->percent = $reader->readString();
+                        $instance->Percent = $reader->readString();
                         $reader->next();
                         break;
                     case "TaxScheme":
                         $parsed = $reader->parseCurrentElement();
-                        $instance->taxScheme = $parsed["value"];
+                        $instance->TaxScheme = $parsed["value"];
                         break;
                     case "TaxExemptionReason":
-                        $instance->taxExemptionReason = $reader->readString();
+                        $instance->TaxExemptionReason = $reader->readString();
                         $reader->next();
                         break;
                     case "TaxExemptionReasonCode":
-                        $instance->taxExemptionReasonCode = $reader->readString();
+                        $instance->TaxExemptionReasonCode = $reader->readString();
                         $reader->next();
                         break;
                     case "SchemeID":
-                        $instance->schemeID = $reader->readString();
+                        $instance->SchemeID = $reader->readString();
                         $reader->next();
                         break;
                     case "SchemeName":
-                        $instance->schemeName = $reader->readString();
+                        $instance->SchemeName = $reader->readString();
                         $reader->next();
                         break;
                 }
@@ -112,42 +112,42 @@ class ClassifiedTaxCategory extends TaxCategory
             $reason = "Failed to parse ClassifiedTaxCategory, wrong instance type";
             return false;
         }
-        if ($instance->id !== "1")
+        if ($instance->ID !== "1")
         {
             $reason = "Failed to parse ID";
             return false;
         }
-        if ($instance->name != "VAT")
+        if ($instance->Name != "VAT")
         {
             $reason = "Failed to parse Name";
             return false;
         }
-        if ($instance->percent !== "19")
+        if ($instance->Percent !== "19")
         {
             $reason = "Failed to parse Percent";
             return false;
         }
-        if ($instance->taxExemptionReason != "Reason")
+        if ($instance->TaxExemptionReason != "Reason")
         {
             $reason = "Failed to parse TaxExemptionReason";
             return false;
         }
-        if ($instance->taxExemptionReasonCode != "Code")
+        if ($instance->TaxExemptionReasonCode != "Code")
         {
             $reason = "Failed to parse TaxExemptionReasonCode";
             return false;
         }
-        if ($instance->schemeID !== "1")
+        if ($instance->SchemeID !== "1")
         {
             $reason = "Failed to parse SchemeID";
             return false;
         }
-        if ($instance->schemeName !== "VAT")
+        if ($instance->SchemeName !== "VAT")
         {
             $reason = "Failed to parse SchemeName";
             return false;
         }
-        if (!TaxScheme::TestDefaultValues($instance->taxScheme, $reason))
+        if (!TaxScheme::TestDefaultValues($instance->TaxScheme, $reason))
         {
             return false;
         }

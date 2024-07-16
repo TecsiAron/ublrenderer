@@ -24,26 +24,31 @@ use XMLReader;
 
 class InvoiceLine extends UBLDeserializable
 {
-    public ?string $id = null;
-    public ?string $invoicedQuantity = null;
+    public ?string $ID = null;
+    public ?string $InvoicedQuantity = null;
 
-    public ?string $lineExtensionAmount = null;
-    public ?string $lineExtensionAmountCurrencyID = null;
-    public ?string $unitCode = null;
+    public ?string $LineExtensionAmount = null;
+    public ?string $LineExtensionAmountCurrencyID = null;
+    public ?string $UnitCode = null;
     /**
-     * @var AllowanceCharge[] $allowanceCharge
+     * @var AllowanceCharge[] $AllowanceCharge
      */
-    private ?array $allowanceCharge = null;
+    private ?array $AllowanceCharge = null;
     /**
-     * @var AllowanceCharge[] $allAllowanceCharges
+     * @var AllowanceCharge[] $AllAllowanceCharges
      */
-    public ?array $allAllowanceCharges = null;
-    public ?string $unitCodeListId = null;
-    public ?string $note = null;
-    public ?InvoiceItem $item = null;
-    public ?ItemPrice $price = null;
-    public ?string $accountingCostCode = null;
-    public ?string $accountingCost = null;
+    public ?array $AllAllowanceCharges = null;
+    public ?string $UnitCodeListId = null;
+    public ?string $Note = null;
+    public ?InvoiceItem $Item = null;
+    public ?ItemPrice $Price = null;
+
+    public ?InvoicePeriod $InvoicePeriod;
+
+    public ?string $AccountingCostCode = null;
+    public ?string $AccountingCost = null;
+
+    private TaxSubTotal $TaxSubTotal;
 
     public static function XMLDeserialize(Reader $reader): UBLDeserializable
     {
@@ -58,50 +63,53 @@ class InvoiceLine extends UBLDeserializable
                 switch ($reader->localName)
                 {
                     case "ID":
-                        $instance->id = $reader->readString();
+                        $instance->ID = $reader->readString();
                         $reader->next();
                         break;
                     case "InvoicedQuantity":
                         $parsed = $reader->parseCurrentElement();
-                        $instance->invoicedQuantity = $parsed["value"];
-                        $instance->unitCode = $parsed["attributes"]["unitCode"];
+                        $instance->InvoicedQuantity = $parsed["value"];
+                        $instance->UnitCode = $parsed["attributes"]["unitCode"];
                         if (isset($parsed["attributes"]["unitCodeListID"]))
                         {
-                            $instance->unitCodeListId = $parsed["attributes"]["unitCodeListID"];
+                            $instance->UnitCodeListId = $parsed["attributes"]["unitCodeListID"];
                         }
                         break;
                     case "LineExtensionAmount":
                         $parsed = $reader->parseCurrentElement();
-                        $instance->lineExtensionAmount = $parsed["value"];
+                        $instance->LineExtensionAmount = $parsed["value"];
                         if (isset($parsed["attributes"]["currencyID"]))
                         {
-                            $instance->lineExtensionAmountCurrencyID = $parsed["attributes"]["currencyID"];
+                            $instance->LineExtensionAmountCurrencyID = $parsed["attributes"]["currencyID"];
                         }
                         break;
                     case "Note":
-                        $instance->note = $reader->readString();
+                        $instance->Note = $reader->readString();
                         $reader->next();
                         break;
                     case "Item":
-                        $instance->item = $reader->parseCurrentElement()["value"];
+                        $instance->Item = $reader->parseCurrentElement()["value"];
                         break;
                     case "Price":
-                        $instance->price = $reader->parseCurrentElement()["value"];
+                        $instance->Price = $reader->parseCurrentElement()["value"];
                         break;
                     case "AccountingCostCode":
-                        $instance->accountingCostCode = $reader->readString();
+                        $instance->AccountingCostCode = $reader->readString();
                         $reader->next();
                         break;
                     case "AccountingCost":
-                        $instance->accountingCost = $reader->readString();
+                        $instance->AccountingCost = $reader->readString();
                         $reader->next();
                         break;
+                    case "InvoicePeriod":
+                        $instance->InvoicePeriod = $reader->parseCurrentElement()["value"];
+                        break;
                     case "AllowanceCharge":
-                        if (!isset($instance->allowanceCharge))
+                        if (!isset($instance->AllowanceCharge))
                         {
-                            $instance->allowanceCharge = [];
+                            $instance->AllowanceCharge = [];
                         }
-                        $instance->allowanceCharge[] = $reader->parseCurrentElement()["value"];
+                        $instance->AllowanceCharge[] = $reader->parseCurrentElement()["value"];
                         break;
                 }
             }
@@ -113,6 +121,11 @@ class InvoiceLine extends UBLDeserializable
         }
         $instance->DeserializeComplete();
         return $instance;
+    }
+
+    public function SetTaxSubtotal(TaxSubTotal $TaxSubTotal): void
+    {
+        $this->TaxSubTotal = $TaxSubTotal;
     }
 
     public static function GetNamespace(): string
@@ -128,7 +141,7 @@ class InvoiceLine extends UBLDeserializable
                     <cbc:LineExtensionAmount currencyID="RON">100</cbc:LineExtensionAmount>
                     '. AllowanceCharge::GetTestXML() . AllowanceCharge::GetTestXML() . '
                     <cbc:Note>Test note</cbc:Note>
-                    ' . InvoiceItem::GetTestXML() . ItemPrice::GetTestXML() . '                    
+                    ' . InvoiceItem::GetTestXML() . ItemPrice::GetTestXML() . InvoicePeriod::GetTestXML() . '                    
                     <cbc:AccountingCostCode>123</cbc:AccountingCostCode>
                     <cbc:AccountingCost>100</cbc:AccountingCost>
                 </cac:InvoiceLine>';
@@ -146,70 +159,64 @@ class InvoiceLine extends UBLDeserializable
             $reason = "Instance is not InvoiceLine";
             return false;
         }
-        if ($instance->id !== "1")
+        if ($instance->ID !== "1")
         {
             $reason = "ID is not 1";
             return false;
         }
-        if ($instance->invoicedQuantity != "1")
+        if ($instance->InvoicedQuantity != "1")
         {
             $reason = "InvoicedQuantity is not 1";
             return false;
         }
-        if ($instance->lineExtensionAmount != "100")
+        if ($instance->LineExtensionAmount != "100")
         {
             $reason = "LineExtensionAmount is not 100";
             return false;
         }
-        if ($instance->lineExtensionAmountCurrencyID !== "RON")
+        if ($instance->LineExtensionAmountCurrencyID !== "RON")
         {
             $reason = "LineExtensionAmountCurrencyID is not RON";
             return false;
         }
-        if ($instance->unitCode !== "C62")
+        if ($instance->UnitCode !== "C62")
         {
             $reason = "UnitCode is not C62(unit)";
             return false;
         }
-        if ($instance->unitCodeListId !== "UN/ECE rec 20")
+        if ($instance->UnitCodeListId !== "UN/ECE rec 20")
         {
             $reason = "UnitCodeListID is not UN/ECE rec 20";
             return false;
         }
-        if ($instance->note !== "Test note")
+        if ($instance->Note !== "Test note")
         {
             $reason = "Note is not Test note";
             return false;
         }
-        if ($instance->item === null)
-        {
-            $reason = "Item is null";
-            return false;
-        }
-        if ($instance->price === null)
-        {
-            $reason = "Price is null";
-            return false;
-        }
-        if ($instance->accountingCostCode !== "123")
+        if ($instance->AccountingCostCode !== "123")
         {
             $reason = "AccountingCostCode is not 123";
             return false;
         }
-        if ($instance->accountingCost !== "100")
+        if ($instance->AccountingCost !== "100")
         {
             $reason = "AccountingCost is not 100";
             return false;
         }
-        if(!AllowanceCharge::TestDefaultValues($instance->allowanceCharge[0], $reason))
+        if(!AllowanceCharge::TestDefaultValues($instance->AllowanceCharge[0], $reason))
         {
             return false;
         }
-        if(!ItemPrice::TestDefaultValues($instance->price, $reason))
+        if(!ItemPrice::TestDefaultValues($instance->Price, $reason))
         {
             return false;
         }
-        if(!InvoiceItem::TestDefaultValues($instance->item, $reason))
+        if(!InvoiceItem::TestDefaultValues($instance->Item, $reason))
+        {
+            return false;
+        }
+        if(!InvoicePeriod::TestDefaultValues($instance->InvoicePeriod, $reason))
         {
             return false;
         }
@@ -218,104 +225,104 @@ class InvoiceLine extends UBLDeserializable
 
     public function HasShortMappedUnitCode():bool
     {
-        if(empty($this->unitCode))
+        if(empty($this->UnitCode))
         {
             return true;// this will cause "BUC" to be used
         }
-        if(!MappingsManager::GetInstance()->UnitCodeHasMapping($this->unitCode))
+        if(!MappingsManager::GetInstance()->UnitCodeHasMapping($this->UnitCode))
         {
             return  false;
         }
-        return MappingsManager::GetInstance()->UnitCodeHasShortMapping($this->unitCode);
+        return MappingsManager::GetInstance()->UnitCodeHasShortMapping($this->UnitCode);
     }
 
     public function GetShortMappedUnitCode(): string
     {
-        if(empty($this->unitCode))
+        if(empty($this->UnitCode))
         {
             return "BUC";
         }
-        return MappingsManager::GetInstance()->GetUnitCodeMapping($this->unitCode);
+        return MappingsManager::GetInstance()->GetUnitCodeMapping($this->UnitCode);
     }
 
     public function HasMappedUnitCode():bool
     {
-        if(empty($this->unitCode))
+        if(empty($this->UnitCode))
         {
             return false;
         }
-        return MappingsManager::GetInstance()->UnitCodeHasMapping($this->unitCode);
+        return MappingsManager::GetInstance()->UnitCodeHasMapping($this->UnitCode);
     }
-    public function getUnitCode(): string
+    public function GetUnitCode(): string
     {
         if($this->HasShortMappedUnitCode())
         {
             return $this->GetShortMappedUnitCode();
         }
-        return $this->unitCode;
+        return $this->UnitCode;
     }
 
-    public function getItemIDs(string $lineBreak=","):string
+    public function GetItemIDs(string $lineBreak=","):string
     {
         $ids=[];
-        if(!empty($this->item->sellersItemIdentification))
+        if(!empty($this->Item->SellersItemIdentification))
         {
-            $ids[]="Vânz: $this->item->sellersItemIdentification";
+            $ids[]="Vânz: $this->Item->sellersItemIdentification";
         }
-        if(!empty($this->item->buyersItemIdentification))
+        if(!empty($this->Item->BuyersItemIdentification))
         {
-            $ids[]="Cump: $this->item->buyersItemIdentification";
+            $ids[]="Cump: $this->Item->buyersItemIdentification";
         }
         return implode($lineBreak, $ids);
     }
 
-    public function getVATRate():string
+    public function GetVATRate():string
     {
-        if(!isset($this->item->classifiedTaxCategory->percent))
+        if(!isset($this->Item->ClassifiedTaxCategory->Percent))
         {
             return "0%";
         }
-        if(empty($this->item->classifiedTaxCategory->percent))
+        if(empty($this->Item->ClassifiedTaxCategory->Percent))
         {
             return "0%";
         }
-        return $this->item->classifiedTaxCategory->percent."%";
+        return $this->Item->ClassifiedTaxCategory->Percent."%";
     }
 
-    public function getNoVATValue():?string
+    public function GetNoVATValue():?string
     {
-        if(empty($this->lineExtensionAmount))
+        if(empty($this->LineExtensionAmount))
         {
             return null;
         }
-        return $this->lineExtensionAmount;
+        return $this->LineExtensionAmount;
     }
 
-    public function getNoVATUnitValue():?string
+    public function GetNoVATUnitValue():?string
     {
-        if(!isset($this->price->priceAmount) || empty($this->price->priceAmount))
+        if(!isset($this->Price->PriceAmount) || empty($this->Price->PriceAmount))
         {
             return null;
         }
-        return $this->price->priceAmount;
+        return $this->Price->PriceAmount;
     }
 
-    public function hasAllowanceCharges():bool
+    public function HasAllowanceCharges():bool
     {
-        return sizeof($this->allAllowanceCharges)!=0;
+        return sizeof($this->AllAllowanceCharges)!=0;
     }
 
     public function CanRender():bool
     {
         return !$this->ContainsNull([
-            $this->getNoVATValue(),
-            $this->getNoVATUnitValue(),
+            $this->GetNoVATValue(),
+            $this->GetNoVATUnitValue(),
         ]);
     }
     protected function DeserializeComplete(): void
     {
-        $nestedAllowanceCharges = $this->price->allowanceCharge ?? [];
-        $lineCharge = $this->allowanceCharge ?? [];
-        $this->allAllowanceCharges = array_merge($lineCharge, $nestedAllowanceCharges);
+        $nestedAllowanceCharges = $this->Price->AllowanceCharge ?? [];
+        $lineCharge = $this->AllowanceCharge ?? [];
+        $this->AllAllowanceCharges = array_merge($lineCharge, $nestedAllowanceCharges);
     }
 }

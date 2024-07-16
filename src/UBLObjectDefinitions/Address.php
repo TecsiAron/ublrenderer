@@ -24,13 +24,13 @@ use XMLReader;
 
 class Address extends UBLDeserializable
 {
-    public ?string $streetName = null;
-    public ?string $additionalStreetName = null;
-    public ?string $buildingNumber = null;
-    public ?string $cityName = null;
-    public ?string $postalZone = null;
-    public ?string $countrySubentity = null;
-    public ?Country $country = null;
+    public ?string $StreetName = null;
+    public ?string $AdditionalStreetName = null;
+    public ?string $BuildingNumber = null;
+    public ?string $CityName = null;
+    public ?string $PostalZone = null;
+    public ?string $CountrySubentity = null;
+    public ?Country $Country = null;
 
     public static function XMLDeserialize(Reader $reader, ?Address $instance = null): self
     {
@@ -48,32 +48,32 @@ class Address extends UBLDeserializable
                 switch ($reader->localName)
                 {
                     case "StreetName":
-                        $instance->streetName = $reader->readString();
+                        $instance->StreetName = $reader->readString();
                         $reader->next();
                         break;
                     case "AdditionalStreetName":
-                        $instance->additionalStreetName = $reader->readString();
+                        $instance->AdditionalStreetName = $reader->readString();
                         $reader->next();
                         break;
                     case "BuildingNumber":
-                        $instance->buildingNumber = $reader->readString();
+                        $instance->BuildingNumber = $reader->readString();
                         $reader->next();
                         break;
                     case "CityName":
-                        $instance->cityName = $reader->readString();
+                        $instance->CityName = $reader->readString();
                         $reader->next();
                         break;
                     case "PostalZone":
-                        $instance->postalZone = $reader->readString();
+                        $instance->PostalZone = $reader->readString();
                         $reader->next();
                         break;
                     case "CountrySubentity":
-                        $instance->countrySubentity = $reader->readString();
+                        $instance->CountrySubentity = $reader->readString();
                         $reader->next();
                         break;
                     case "Country":
                         $parsed = $reader->parseCurrentElement();
-                        $instance->country = $parsed["value"];
+                        $instance->Country = $parsed["value"];
                         break;
                 }
             }
@@ -118,49 +118,49 @@ class Address extends UBLDeserializable
             $reason = "Instance is not Address";
             return false;
         }
-        if ($instance->streetName !== "Strada")
+        if ($instance->StreetName !== "Strada")
         {
             $reason = "StreetName is not Strada";
             return false;
         }
-        if ($instance->additionalStreetName !== "Strada2")
+        if ($instance->AdditionalStreetName !== "Strada2")
         {
             $reason = "AdditionalStreetName is not Strada2";
             return false;
         }
-        if ($instance->buildingNumber !== "1")
+        if ($instance->BuildingNumber !== "1")
         {
             $reason = "BuildingNumber is not 1";
             return false;
         }
-        if ($instance->cityName !== "Oras")
+        if ($instance->CityName !== "Oras")
         {
             $reason = "CityName is not Oras";
             return false;
         }
-        if ($instance->postalZone !== "123456")
+        if ($instance->PostalZone !== "123456")
         {
             $reason = "PostalZone is not 123456";
             return false;
         }
-        if ($instance->countrySubentity !== "Judet")
+        if ($instance->CountrySubentity !== "Judet")
         {
             $reason = "CountrySubentity is not Judet";
             return false;
         }
-        if (!Country::TestDefaultValues($instance->country, $reason))
+        if (!Country::TestDefaultValues($instance->Country, $reason))
         {
             return false;
         }
         return true;
     }
 
-    public function getCountyName():?string
+    public function GetCountyName():?string
     {
-        if(!isset($this->countrySubentity))
+        if(!isset($this->CountrySubentity))
         {
             return null;
         }
-        return CountyMap::GetCounty($this->countrySubentity);
+        return CountyMap::GetCounty($this->CountrySubentity);
     }
 }

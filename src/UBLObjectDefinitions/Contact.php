@@ -23,10 +23,10 @@ use XMLReader;
 
 class Contact extends UBLDeserializable
 {
-    public ?string $name = null;
-    public ?string $telephone = null;
-    public ?string $telefax = null;
-    public ?string $electronicMail = null;
+    public ?string $Name = null;
+    public ?string $Telephone = null;
+    public ?string $Telefax = null;
+    public ?string $ElectronicMail = null;
 
     public static function XMLDeserialize(Reader $reader): self
     {
@@ -41,19 +41,19 @@ class Contact extends UBLDeserializable
                 switch ($reader->localName)
                 {
                     case "Name":
-                        $instance->name = $reader->readString();
+                        $instance->Name = $reader->readString();
                         $reader->next();
                         break;
                     case "Telephone":
-                        $instance->telephone = $reader->readString();
+                        $instance->Telephone = $reader->readString();
                         $reader->next();
                         break;
                     case "Telefax":
-                        $instance->telefax = $reader->readString();
+                        $instance->Telefax = $reader->readString();
                         $reader->next();
                         break;
                     case "ElectronicMail":
-                        $instance->electronicMail = $reader->readString();
+                        $instance->ElectronicMail = $reader->readString();
                         $reader->next();
                         break;
                 }
@@ -94,22 +94,22 @@ class Contact extends UBLDeserializable
             $reason = "Instance is not Contact";
             return false;
         }
-        if ($instance->name !== "John Doe")
+        if ($instance->Name !== "John Doe")
         {
             $reason = "Name is not John Doe";
             return false;
         }
-        if ($instance->telephone !== "123456789")
+        if ($instance->Telephone !== "123456789")
         {
             $reason = "Telephone is not 123456789";
             return false;
         }
-        if ($instance->telefax !== "987654321")
+        if ($instance->Telefax !== "987654321")
         {
             $reason = "Telefax is not 987654321";
             return false;
         }
-        if ($instance->electronicMail !== "mymail@mymail.ro")
+        if ($instance->ElectronicMail !== "mymail@mymail.ro")
         {
             $reason = "ElectronicMail is not mymail@mymail.ro";
             return false;

@@ -23,9 +23,9 @@ use XMLReader;
 
 class AttachedFile extends UBLDeserializable
 {
-    public ?string $filePath = null;
-    public ?string $externalReference = null;
-    public ?string $externalReferenceMimeType = null;
+    public ?string $FilePath = null;
+    public ?string $ExternalReference = null;
+    public ?string $ExternalReferenceMimeType = null;
 
 
     public static function XMLDeserialize(Reader $reader): self
@@ -41,15 +41,15 @@ class AttachedFile extends UBLDeserializable
                 switch ($reader->localName)
                 {
                     case "FilePath":
-                        $instance->filePath = $reader->readString();
+                        $instance->FilePath = $reader->readString();
                         $reader->next();
                         break;
                     case "ExternalReference":
                         $parsed = $reader->parseCurrentElement();
-                        $instance->externalReference = $parsed["value"];
+                        $instance->ExternalReference = $parsed["value"];
                         if (isset($parsed["attributes"]["mimeCode"]))
                         {
-                            $instance->externalReferenceMimeType = $parsed["attributes"]["mimeCode"];
+                            $instance->ExternalReferenceMimeType = $parsed["attributes"]["mimeCode"];
                         }
                         break;
                 }
@@ -88,12 +88,12 @@ class AttachedFile extends UBLDeserializable
             $reason = "Instance is not of type AttachedFile";
             return false;
         }
-        if ($instance->filePath !== "file.txt")
+        if ($instance->FilePath !== "file.txt")
         {
             $reason = "FilePath is not 'file.txt'";
             return false;
         }
-        if ($instance->externalReference !== "http://example.com/file.txt")
+        if ($instance->ExternalReference !== "http://example.com/file.txt")
         {
             $reason = "ExternalReference is not 'http://example.com/file.txt'";
             return false;

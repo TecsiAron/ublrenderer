@@ -24,9 +24,9 @@ use XMLReader;
 
 class InvoicePeriod extends UBLDeserializable
 {
-    public ?DateTime $startDate = null;
-    public ?DateTime $endDate = null;
-    public ?string $descriptionCode = null;
+    public ?DateTime $StartDate = null;
+    public ?DateTime $EndDate = null;
+    public ?string $DescriptionCode = null;
 
     public static function XMLDeserialize(Reader $reader): self
     {
@@ -41,15 +41,15 @@ class InvoicePeriod extends UBLDeserializable
                 switch ($reader->localName)
                 {
                     case "StartDate":
-                        $instance->startDate = DateTime::createFromFormat("Y-m-d", $reader->readString());
+                        $instance->StartDate = DateTime::createFromFormat("Y-m-d", $reader->readString());
                         $reader->next();
                         break;
                     case "EndDate":
-                        $instance->endDate = DateTime::createFromFormat("Y-m-d", $reader->readString());
+                        $instance->EndDate = DateTime::createFromFormat("Y-m-d", $reader->readString());
                         $reader->next();
                         break;
                     case "DescriptionCode":
-                        $instance->descriptionCode = $reader->readString();
+                        $instance->DescriptionCode = $reader->readString();
                         $reader->next();
                         break;
                 }
@@ -89,17 +89,17 @@ class InvoicePeriod extends UBLDeserializable
             $reason = "Instance is not of type InvoicePeriod";
             return false;
         }
-        if ($instance->startDate->format("Y-m-d") != "2021-01-01")
+        if ($instance->StartDate->format("Y-m-d") != "2021-01-01")
         {
             $reason = "Start date is not 2021-01-01";
             return false;
         }
-        if ($instance->endDate->format("Y-m-d") != "2021-01-01")
+        if ($instance->EndDate->format("Y-m-d") != "2021-01-01")
         {
             $reason = "End date is not 2021-01-01";
             return false;
         }
-        if ($instance->descriptionCode != "1")
+        if ($instance->DescriptionCode != "1")
         {
             $reason = "Description code is not 1";
             return false;

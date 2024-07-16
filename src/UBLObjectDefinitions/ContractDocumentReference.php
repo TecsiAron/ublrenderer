@@ -23,7 +23,7 @@ use XMLReader;
 
 class ContractDocumentReference extends UBLDeserializable
 {
-    public ?string $id = null;
+    public ?string $ID = null;
 
     public static function XMLDeserialize(Reader $reader): self
     {
@@ -38,7 +38,7 @@ class ContractDocumentReference extends UBLDeserializable
                 switch ($reader->localName)
                 {
                     case "ID":
-                        $instance->id = $reader->readString();
+                        $instance->ID = $reader->readString();
                         $reader->next(); // Move past the current text node
                         break;
                 }
@@ -75,7 +75,7 @@ class ContractDocumentReference extends UBLDeserializable
             $reason = "Instance is not ContractDocumentReference";
             return false;
         }
-        if ($instance->id !== "10")
+        if ($instance->ID !== "10")
         {
             $reason = "ID is not 10";
             return false;

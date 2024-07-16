@@ -19,6 +19,7 @@ namespace EdituraEDU\UBLRenderer\UBLObjectDefinitions;
 
 enum PaymentMeansCode: string
 {
+    //todo refactor to match coding standards
     case InstrumentNotDefined = '1';
     case AutomatedClearingHouseCredit = '2';
     case AutomatedClearingHouseDebit = '3';

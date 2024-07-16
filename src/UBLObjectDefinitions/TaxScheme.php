@@ -23,10 +23,10 @@ use XMLReader;
 
 class TaxScheme extends UBLDeserializable
 {
-    public ?string $id = null;
-    public ?string $name = null;
-    public ?string $taxTypeCode = null;
-    public ?string $currencyCode = null;
+    public ?string $ID = null;
+    public ?string $Name = null;
+    public ?string $TaxTypeCode = null;
+    public ?string $CurrencyCode = null;
 
     public static function XMLDeserialize(Reader $reader): self
     {
@@ -40,19 +40,19 @@ class TaxScheme extends UBLDeserializable
                 switch ($reader->localName)
                 {
                     case "ID":
-                        $instance->id = $reader->readString();
+                        $instance->ID = $reader->readString();
                         $reader->next();
                         break;
                     case "Name":
-                        $instance->name = $reader->readString();
+                        $instance->Name = $reader->readString();
                         $reader->next();
                         break;
                     case "TaxTypeCode":
-                        $instance->taxTypeCode = $reader->readString();
+                        $instance->TaxTypeCode = $reader->readString();
                         $reader->next();
                         break;
                     case "CurrencyCode":
-                        $instance->currencyCode = $reader->readString();
+                        $instance->CurrencyCode = $reader->readString();
                         $reader->next();
                         break;
                 }
@@ -78,22 +78,22 @@ class TaxScheme extends UBLDeserializable
             $reason = "Failed to parse TaxScheme, wrong instance type";
             return false;
         }
-        if ($instance->id != "US")
+        if ($instance->ID != "US")
         {
             $reason = "Failed to parse ID";
             return false;
         }
-        if ($instance->name != "United States")
+        if ($instance->Name != "United States")
         {
             $reason = "Failed to parse Name";
             return false;
         }
-        if ($instance->taxTypeCode != "VAT")
+        if ($instance->TaxTypeCode != "VAT")
         {
             $reason = "Failed to parse TaxTypeCode";
             return false;
         }
-        if ($instance->currencyCode != "USD")
+        if ($instance->CurrencyCode != "USD")
         {
             $reason = "Failed to parse CurrencyCode";
             return false;

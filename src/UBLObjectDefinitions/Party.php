@@ -23,17 +23,26 @@ use XMLReader;
 
 class Party extends UBLDeserializable
 {
-    public ?string $name = null;
-    public ?string $partyIdentificationId = null;
-    public ?string $partyIdentificationSchemeId = null;
-    public ?string $partyIdentificationSchemeName = null;
-    public ?PostalAddress $postalAddress = null;
+    public ?string $Name = null;
+    public ?string $PartyIdentificationId = null;
+    /**
+     * @deprecated
+     */
+    public ?string $PartyIdentificationSchemeId = null;
+    /**
+     * @deprecated
+     */
+    public ?string $PartyIdentificationSchemeName = null;
+    public ?PostalAddress $PostalAddress = null;
 
-    public ?Contact $contact = null;
-    public ?PartyTaxScheme $partyTaxScheme = null;
-    public ?LegalEntity $legalEntity = null;
-    public ?string $endpointID = null;
-    public ?string $endpointID_schemeID = null;
+    public ?Contact $Contact = null;
+    public ?PartyTaxScheme $PartyTaxScheme = null;
+    public ?LegalEntity $LegalEntity = null;
+    public ?string $EndpointID = null;
+    /**
+     * @deprecated
+     */
+    public ?string $EndpointID_schemeID = null;
 
     public static function XMLDeserialize(Reader $reader): self
     {
@@ -50,32 +59,32 @@ class Party extends UBLDeserializable
                 {
 
                     case "EndpointID":
-                        $instance->endpointID = $reader->readString();
+                        $instance->EndpointID = $reader->readString();
                         $reader->next(); // Move past the current text node
                         break;
                     case "PartyIdentification":
                         $parsed = $reader->parseCurrentElement();
-                        $instance->partyIdentificationId = $parsed["value"][0]["value"];
+                        $instance->PartyIdentificationId = $parsed["value"][0]["value"];
                         break;
                     case "PostalAddress":
                         $parsed = $reader->parseCurrentElement();
-                        $instance->postalAddress = $parsed["value"];
+                        $instance->PostalAddress = $parsed["value"];
                         break;
                     case "Contact":
                         $parsed = $reader->parseCurrentElement();
-                        $instance->contact = $parsed["value"];
+                        $instance->Contact = $parsed["value"];
                         break;
                     case "PartyTaxScheme":
                         $parsed = $reader->parseCurrentElement();
-                        $instance->partyTaxScheme = $parsed["value"];
+                        $instance->PartyTaxScheme = $parsed["value"];
                         break;
                     case "PartyLegalEntity":
                         $parsed = $reader->parseCurrentElement();
-                        $instance->legalEntity = $parsed["value"];
+                        $instance->LegalEntity = $parsed["value"];
                         break;
                     case "PartyName":
                         $parsed = $reader->parseCurrentElement();
-                        $instance->name = $parsed["value"][0]["value"];
+                        $instance->Name = $parsed["value"][0]["value"];
                         break;
                 }
             }
@@ -119,62 +128,62 @@ class Party extends UBLDeserializable
             $reason = "Instance is not Party";
             return false;
         }
-        if ($instance->name != "Seller SRL")
+        if ($instance->Name != "Seller SRL")
         {
             $reason = "Failed to parse name";
             return false;
         }
-        if ($instance->endpointID != "endpointID")
+        if ($instance->EndpointID != "endpointID")
         {
             $reason = "Failed to parse endpointID";
             return false;
         }
-        if ($instance->partyIdentificationId != "partyIdentificationId")
+        if ($instance->PartyIdentificationId != "partyIdentificationId")
         {
             $reason = "Failed to parse partyIdentificationId";
             return false;
         }
-        if (!Address::TestDefaultValues($instance->postalAddress, $reason))
+        if (!Address::TestDefaultValues($instance->PostalAddress, $reason))
         {
             return false;
         }
-        if (!Contact::TestDefaultValues($instance->contact, $reason))
+        if (!Contact::TestDefaultValues($instance->Contact, $reason))
         {
             return false;
         }
-        if (!PartyTaxScheme::TestDefaultValues($instance->partyTaxScheme, $reason))
+        if (!PartyTaxScheme::TestDefaultValues($instance->PartyTaxScheme, $reason))
         {
             return false;
         }
-        if (!LegalEntity::TestDefaultValues($instance->legalEntity, $reason))
+        if (!LegalEntity::TestDefaultValues($instance->LegalEntity, $reason))
         {
             return false;
         }
         return true;
     }
 
-    public function getCIF():?string
+    public function GetCIF():?string
     {
-        if(isset($this->partyIdentificationId))
+        if(isset($this->PartyIdentificationId))
         {
-            return $this->partyIdentificationId;
+            return $this->PartyIdentificationId;
         }
-        if(isset($this->partyTaxScheme->companyId))
+        if(isset($this->PartyTaxScheme->CompanyId))
         {
-            return $this->partyTaxScheme->companyId;
+            return $this->PartyTaxScheme->CompanyId;
         }
         return null;
     }
 
-    public function getRegistrationNumber():?string
+    public function GetRegistrationNumber():?string
     {
-        if(isset($this->legalEntity->companyId) && $this->IsValidRegNumber($this->legalEntity->companyId))
+        if(isset($this->LegalEntity->CompanyID) && $this->IsValidRegNumber($this->LegalEntity->CompanyID))
         {
-            return $this->legalEntity->companyId;
+            return $this->LegalEntity->CompanyID;
         }
-        if(isset($this->legalEntity->companyLegalForm) && $this->IsValidRegNumber($this->legalEntity->companyLegalForm))
+        if(isset($this->LegalEntity->CompanyLegalForm) && $this->IsValidRegNumber($this->LegalEntity->CompanyLegalForm))
         {
-            return $this->legalEntity->companyLegalForm;
+            return $this->LegalEntity->CompanyLegalForm;
         }
         return null;
     }

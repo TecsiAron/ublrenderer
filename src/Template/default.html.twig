@@ -50,36 +50,36 @@
         <td class="header-party header-seller">
             <!-- seller -->
             <div class="header-line header-buyer-line">Furnizor:</div>
-            <div class="header-line header-buyer-line">{{ invoice.getAccountingSupplierParty().name }}</div>
-            <div class="header-line header-buyer-line">CIF: {{ invoice.getAccountingSupplierParty().getCIF() }}</div>
-            <div class="header-line header-buyer-line">Nr. Reg. Com.: {{ invoice.getAccountingSupplierParty().getRegistrationNumber() }}</div>
+            <div class="header-line header-buyer-line">{{ invoice.GetAccountingSupplierParty().Name }}</div>
+            <div class="header-line header-buyer-line">CIF: {{ invoice.GetAccountingSupplierParty().GetCIF() }}</div>
+            <div class="header-line header-buyer-line">Nr. Reg. Com.: {{ invoice.GetAccountingSupplierParty().GetRegistrationNumber() }}</div>
             <div class="header-line header-buyer-line">Sediu:</div>
-            <div class="header-line header-buyer-line">Județul: {{ invoice.getAccountingSupplierParty().postalAddress.getCountyName() }}</div>
-            <div class="header-line header-buyer-line">Localitatea: {{ invoice.getAccountingSupplierParty().postalAddress.cityName }}</div>
-            {% if invoice.getAccountingSupplierParty().postalAddress.postalZone is defined
-                and invoice.getAccountingSupplierParty().postalAddress.postalZone is not empty %}
-                <div class="header-line header-buyer-line">Cod poștal: {{ invoice.getAccountingSupplierParty().postalAddress.postalZone }}</div>
+            <div class="header-line header-buyer-line">Județul: {{ invoice.GetAccountingSupplierParty().PostalAddress.GetCountyName() }}</div>
+            <div class="header-line header-buyer-line">Localitatea: {{ invoice.GetAccountingSupplierParty().PostalAddress.CityName }}</div>
+            {% if invoice.GetAccountingSupplierParty().PostalAddress.PostalZone is defined
+                and invoice.GetAccountingSupplierParty().PostalAddress.PostalZone is not empty %}
+                <div class="header-line header-buyer-line">Cod poștal: {{ invoice.GetAccountingSupplierParty().PostalAddress.PostalZone }}</div>
             {% endif %}
             <div class="header-line header-buyer-line">Adresa:</div>
-            <div class="header-line header-buyer-line">{{ invoice.getAccountingSupplierParty().postalAddress.streetName }}</div>
-            {% if invoice.getAccountingSupplierParty().postalAddress.additionalStreetName is defined
-                and invoice.getAccountingSupplierParty().postalAddress.additionalStreetName is not empty %}
-            <div class="header-line header-buyer-line">{{ invoice.getAccountingSupplierParty().postalAddress.additionalStreetName }}</div>
+            <div class="header-line header-buyer-line">{{ invoice.GetAccountingSupplierParty().PostalAddress.StreetName }}</div>
+            {% if invoice.GetAccountingSupplierParty().PostalAddress.AdditionalStreetName is defined
+                and invoice.GetAccountingSupplierParty().PostalAddress.AdditionalStreetName is not empty %}
+            <div class="header-line header-buyer-line">{{ invoice.GetAccountingSupplierParty().PostalAddress.AdditionalStreetName }}</div>
             {% endif %}
             {% if invoice.hasSupplierAccountInfo() %}
                 {% if invoice.paymentMeans.payeeFinancialAccount.name is defined
                     and invoice.paymentMeans.payeeFinancialAccount.name is not empty %}
-                    <div class="header-line header-buyer-line">Banca: {{ invoice.paymentMeans.payeeFinancialAccount.name }}</div>
+                    <div class="header-line header-buyer-line">Banca: {{ invoice.PaymentMeans.PayeeFinancialAccount.Name }}</div>
                 {% endif %}
                 {% if invoice.paymentMeans.payeeFinancialAccount.id is defined
                     and invoice.paymentMeans.payeeFinancialAccount.id is not empty %}
-                    <div class="header-line header-buyer-line">Cont: {{ invoice.paymentMeans.payeeFinancialAccount.id }}</div>
+                    <div class="header-line header-buyer-line">Cont: {{ invoice.PaymentMeans.PayeeFinancialAccount.ID }}</div>
                 {% endif %}
             {% endif %}
         </td>
         <td class="header-info">
             <div class="header-line header-info-line">Factură:</div>
-            <div class="header-line header-info-line">Nr. {{ invoice.getId() }}</div>
+            <div class="header-line header-info-line">Nr. {{ invoice.GetID() }}</div>
             <div class="header-line header-info-line">din</div>
             <div class="header-line header-info-line">{{ invoice.issueDate.format("Y-m-d") }}</div>
             <br>
@@ -88,20 +88,20 @@
         <td class="header-party header-buyer">
             <!-- buyer -->
             <div class="header-line header-buyer-line">Cumpărător:</div>
-            <div class="header-line header-buyer-line">{{ invoice.getAccountingCustomerParty().name }}</div>
-            <div class="header-line header-buyer-line">CIF: {{ invoice.getAccountingCustomerParty().getCIF() }}</div>
-            <div class="header-line header-buyer-line">Nr. Reg. Com.: {{ invoice.getAccountingCustomerParty().getRegistrationNumber() }}</div>
+            <div class="header-line header-buyer-line">{{ invoice.GetAccountingCustomerParty().Name }}</div>
+            <div class="header-line header-buyer-line">CIF: {{ invoice.GetAccountingCustomerParty().GetCIF() }}</div>
+            <div class="header-line header-buyer-line">Nr. Reg. Com.: {{ invoice.GetAccountingCustomerParty().GetRegistrationNumber() }}</div>
             <div class="header-line header-buyer-line">Sediu:</div>
-            <div class="header-line header-buyer-line">Județul: {{ invoice.getAccountingCustomerParty().postalAddress.getCountyName() }}</div>
-            <div class="header-line header-buyer-line">Localitatea: {{ invoice.getAccountingCustomerParty().postalAddress.cityName }}</div>
-            {% if invoice.getAccountingCustomerParty().postalAddress.postalZone is defined
-                and invoice.getAccountingCustomerParty().postalAddress.postalZone is not empty %}
-                <div class="header-line header-buyer-line">Cod poștal: {{ invoice.getAccountingCustomerParty().postalAddress.postalZone }}</div>
+            <div class="header-line header-buyer-line">Județul: {{ invoice.GetAccountingCustomerParty().PostalAddress.GetCountyName() }}</div>
+            <div class="header-line header-buyer-line">Localitatea: {{ invoice.GetAccountingCustomerParty().PostalAddress.CityName }}</div>
+            {% if invoice.GetAccountingCustomerParty().postalAddress.postalZone is defined
+                and invoice.GetAccountingCustomerParty().postalAddress.postalZone is not empty %}
+                <div class="header-line header-buyer-line">Cod poștal: {{ invoice.GetAccountingCustomerParty().PostalAddress.PostalZone }}</div>
             {% endif %}
-            <div class="header-line header-buyer-line">Adresa: {{ invoice.getAccountingCustomerParty().postalAddress.streetName }}</div>
-            {% if invoice.getAccountingCustomerParty().postalAddress.additionalStreetName is defined
-                and invoice.getAccountingCustomerParty().postalAddress.additionalStreetName is not empty %}
-            <div class="header-line header-buyer-line">{{ invoice.getAccountingCustomerParty().postalAddress.additionalStreetName }}</div>
+            <div class="header-line header-buyer-line">Adresa: {{ invoice.GetAccountingCustomerParty().PostalAddress.StreetName }}</div>
+            {% if invoice.GetAccountingCustomerParty().postalAddress.additionalStreetName is defined
+                and invoice.GetAccountingCustomerParty().postalAddress.additionalStreetName is not empty %}
+            <div class="header-line header-buyer-line">{{ invoice.GetAccountingCustomerParty().PostalAddress.AdditionalStreetName }}</div>
             {% endif %}
         </td>
     </tr>
@@ -114,25 +114,31 @@
             <th>Nr. Crt</th>
             <th>Denumire</th>
             <th>UM</th>
-            {% if invoice.hasAnyItemIDs() %}
+            {% if invoice.HasAnyItemIDs() %}
             <th>Cod</th>
             {% endif %}
             <th>Cotă TVA</th>
             <th>Cantitate</th>
-            <th>Preț unitar</th>
-            <th>Valoare</th>
+            <th>Preț unitar<br>(fără TVA)</th>
+            <th>Valoare<br>(fără TVA)</th>
             <th>TVA</th>
         </tr>
     </thead>
     {% for line in invoice.invoiceLines %}
         <tr class="invoice-line">
-            <td>{{ loop.index }}</td>
-            <td>{{ line.item.name }}</td>
-            <td>{{ line.getUnitCode() }}</td>
-            {% if invoice.hasAnyItemIDs() %}
-            <td>{{ line.item.getItemIDs("<br>") }}</td>
+            <td>{{ invoice.GetLineNumber(line) }}</td>
+            <td>{{ line.Item.Name }}</td>
+            <td>{{ line.GetUnitCode() }}</td>
+            {% if invoice.HasAnyItemIDs() %}
+            <td>{{ line.GetItemIDs("<br>") }}</td>
             {% endif %}
-            <td>{{ line.getVATRate() }}</td>
+            <td>{{ line.GetVATRate() }}</td>
+            <td>{{ line.InvoicedQuantity }}</td>
+            <td>{{ line.GetNoVATUnitValue }}</td>
+            <td>{{ line.GetNoVATValue() }}</td>
+
+
+
         </tr>
     {% endfor %}
 </table>

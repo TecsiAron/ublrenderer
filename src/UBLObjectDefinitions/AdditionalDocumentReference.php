@@ -23,11 +23,11 @@ use XMLReader;
 
 class AdditionalDocumentReference extends UBLDeserializable
 {
-    public ?string $id = null;
-    public ?string $documentType = null;
-    public ?string $documentTypeCode = null;
-    public ?string $documentDescription = null;
-    public ?AttachedFile $attachment = null;
+    public ?string $ID = null;
+    public ?string $DocumentType = null;
+    public ?string $DocumentTypeCode = null;
+    public ?string $DocumentDescription = null;
+    public ?AttachedFile $Attachment = null;
 
     public static function XMLDeserialize(Reader $reader): self
     {
@@ -42,24 +42,24 @@ class AdditionalDocumentReference extends UBLDeserializable
                 switch ($reader->localName)
                 {
                     case "ID":
-                        $instance->id = $reader->readString();
+                        $instance->ID = $reader->readString();
                         $reader->next();
                         break;
                     case "DocumentType":
-                        $instance->documentType = $reader->readString();
+                        $instance->DocumentType = $reader->readString();
                         $reader->next();
                         break;
                     case "DocumentTypeCode":
-                        $instance->documentTypeCode = $reader->readString();
+                        $instance->DocumentTypeCode = $reader->readString();
                         $reader->next();
                         break;
                     case "DocumentDescription":
-                        $instance->documentDescription = $reader->readString();
+                        $instance->DocumentDescription = $reader->readString();
                         $reader->next();
                         break;
                     case "Attachment":
                         $parsed = $reader->parseCurrentElement();
-                        $instance->attachment = $parsed["value"];
+                        $instance->Attachment = $parsed["value"];
                         break;
                 }
             }
@@ -100,27 +100,27 @@ class AdditionalDocumentReference extends UBLDeserializable
             $reason = "Instance is not of type AdditionalDocumentReference";
             return false;
         }
-        if ($instance->id != "1")
+        if ($instance->ID != "1")
         {
             $reason = "ID is not 1";
             return false;
         }
-        if ($instance->documentType != "Invoice")
+        if ($instance->DocumentType != "Invoice")
         {
             $reason = "DocumentType is not Invoice";
             return false;
         }
-        if ($instance->documentTypeCode != "380")
+        if ($instance->DocumentTypeCode != "380")
         {
             $reason = "DocumentTypeCode is not 380";
             return false;
         }
-        if ($instance->documentDescription != "Invoice")
+        if ($instance->DocumentDescription != "Invoice")
         {
             $reason = "DocumentDescription is not Invoice";
             return false;
         }
-        if (!AttachedFile::TestDefaultValues($instance->attachment, $reason))
+        if (!AttachedFile::TestDefaultValues($instance->Attachment, $reason))
         {
             return false;
         }

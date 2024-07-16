@@ -24,13 +24,13 @@ use XMLReader;
 
 class PaymentMeans extends UBLDeserializable
 {
-    public ?PaymentMeansCode $paymentMeansCode = null;
-    public ?string $paymentMeansCodeName = null;
-    public ?DateTime $paymentDueDate = null;
-    public ?string $instructionId = null;
-    public ?string $instructionNote = null;
-    public ?string $paymentId = null;
-    public ?PayeeFinancialAccount $payeeFinancialAccount;
+    public ?PaymentMeansCode $PaymentMeansCode = null;
+    public ?string $PaymentMeansCodeName = null;
+    public ?DateTime $PaymentDueDate = null;
+    public ?string $InstructionId = null;
+    public ?string $InstructionNote = null;
+    public ?string $PaymentID = null;
+    public ?PayeeFinancialAccount $PayeeFinancialAccount;
 
     public static function XMLDeserialize(Reader $reader): self
     {
@@ -46,30 +46,30 @@ class PaymentMeans extends UBLDeserializable
                 {
                     case "PaymentMeansCode":
                         $parsed = $reader->parseCurrentElement();
-                        $instance->paymentMeansCode = PaymentMeansCode::tryFrom(strtolower($parsed["value"])) ?? PaymentMeansCode::MutuallyDefined;
+                        $instance->PaymentMeansCode = PaymentMeansCode::tryFrom(strtolower($parsed["value"])) ?? PaymentMeansCode::MutuallyDefined;
                         if (isset($parsed["attributes"]["name"]))
                         {
-                            $instance->paymentMeansCodeName = $parsed["attributes"]["name"];
+                            $instance->PaymentMeansCodeName = $parsed["attributes"]["name"];
                         }
                         break;
                     case "PaymentDueDate":
-                        $instance->paymentDueDate = DateTime::createFromFormat("Y-m-d", $reader->readString());
+                        $instance->PaymentDueDate = DateTime::createFromFormat("Y-m-d", $reader->readString());
                         $reader->next();
                         break;
                     case "InstructionID":
-                        $instance->instructionId = $reader->readString();
+                        $instance->InstructionId = $reader->readString();
                         $reader->next();
                         break;
                     case "InstructionNote":
-                        $instance->instructionNote = $reader->readString();
+                        $instance->InstructionNote = $reader->readString();
                         $reader->next();
                         break;
                     case "PaymentID":
-                        $instance->paymentId = $reader->readString();
+                        $instance->PaymentID = $reader->readString();
                         $reader->next();
                         break;
                     case "PayeeFinancialAccount":
-                        $instance->payeeFinancialAccount = $reader->parseCurrentElement()["value"];
+                        $instance->PayeeFinancialAccount = $reader->parseCurrentElement()["value"];
                         break;
                 }
             }
@@ -111,42 +111,42 @@ class PaymentMeans extends UBLDeserializable
             $reason = "Instance is not of type PaymentMeans";
             return false;
         }
-        if ($instance->paymentMeansCode != PaymentMeansCode::MutuallyDefined)
+        if ($instance->PaymentMeansCode != PaymentMeansCode::MutuallyDefined)
         {
             $reason = "PaymentMeansCode is not MutuallyDefined";
             return false;
         }
-        if ($instance->paymentMeansCodeName !== "test")
+        if ($instance->PaymentMeansCodeName !== "test")
         {
             $reason = "PaymentMeansCodeName is not test";
             return false;
         }
-        if ($instance->paymentDueDate == null)
+        if ($instance->PaymentDueDate == null)
         {
             $reason = "PaymentDueDate is null";
             return false;
         }
-        if ($instance->paymentDueDate->format("Y-m-d") !== "2021-01-01")
+        if ($instance->PaymentDueDate->format("Y-m-d") !== "2021-01-01")
         {
             $reason = "PaymentDueDate is not 2021-01-01";
             return false;
         }
-        if ($instance->instructionId !== "1")
+        if ($instance->InstructionId !== "1")
         {
             $reason = "InstructionId is not 1";
             return false;
         }
-        if ($instance->instructionNote !== "Payment due in 30 days")
+        if ($instance->InstructionNote !== "Payment due in 30 days")
         {
             $reason = "InstructionNote is not Payment due in 30 days";
             return false;
         }
-        if ($instance->paymentId !== "1")
+        if ($instance->PaymentID !== "1")
         {
             $reason = "PaymentId is not 1";
             return false;
         }
-        if (!PayeeFinancialAccount::TestDefaultValues($instance->payeeFinancialAccount, $reason))
+        if (!PayeeFinancialAccount::TestDefaultValues($instance->PayeeFinancialAccount, $reason))
         {
             return false;
         }

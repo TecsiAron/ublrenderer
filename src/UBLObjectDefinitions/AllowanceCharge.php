@@ -23,16 +23,16 @@ use XMLReader;
 
 class AllowanceCharge extends UBLDeserializable
 {
-    public bool $chargeIndicator = false;
-    public ?string $allowanceChargeReasonCode = null;
-    public ?string $allowanceChargeReason = null;
-    public ?string $multiplierFactorNumeric = null;
-    public ?string $baseAmount = null;
-    public ?string $amount = null;
-    public ?string $amountCurrency;
-    public ?string $baseAmountCurrency;
-    public ?TaxTotal $taxTotal = null;
-    public ?TaxCategory $taxCategory = null;
+    public bool $ChargeIndicator = false;
+    public ?string $AllowanceChargeReasonCode = null;
+    public ?string $AllowanceChargeReason = null;
+    public ?string $MultiplierFactorNumeric = null;
+    public ?string $BaseAmount = null;
+    public ?string $Amount = null;
+    public ?string $AmountCurrency;
+    public ?string $BaseAmountCurrency;
+    public ?TaxTotal $TaxTotal = null;
+    public ?TaxCategory $TaxCategory = null;
 
     public static function XMLDeserialize(Reader $reader): self
     {
@@ -47,44 +47,44 @@ class AllowanceCharge extends UBLDeserializable
                 switch ($reader->localName)
                 {
                     case "ChargeIndicator":
-                        $instance->chargeIndicator = $reader->readString() === 'true';
+                        $instance->ChargeIndicator = $reader->readString() === 'true';
                         $reader->next(); // Move past the current text node
                         break;
                     case "AllowanceChargeReasonCode":
-                        $instance->allowanceChargeReasonCode = $reader->readString();
+                        $instance->AllowanceChargeReasonCode = $reader->readString();
                         $reader->next();
                         break;
                     case "AllowanceChargeReason":
-                        $instance->allowanceChargeReason = $reader->readString();
+                        $instance->AllowanceChargeReason = $reader->readString();
                         $reader->next();
                         break;
                     case "MultiplierFactorNumeric":
-                        $instance->multiplierFactorNumeric = $reader->readString();
+                        $instance->MultiplierFactorNumeric = $reader->readString();
                         $reader->next();
                         break;
                     case "BaseAmount":
                         $parsed = $reader->parseCurrentElement();
-                        $instance->baseAmount = $parsed["value"];
+                        $instance->BaseAmount = $parsed["value"];
                         if (isset($parsed["attributes"]["currencyID"]))
                         {
-                            $instance->baseAmountCurrency = $parsed["attributes"]["currencyID"];
+                            $instance->BaseAmountCurrency = $parsed["attributes"]["currencyID"];
                         }
                         break;
                     case "Amount":
                         $parsed = $reader->parseCurrentElement();
-                        $instance->amount = $parsed["value"];
+                        $instance->Amount = $parsed["value"];
                         if (isset($parsed["attributes"]["currencyID"]))
                         {
-                            $instance->amountCurrency = $parsed["attributes"]["currencyID"];
+                            $instance->AmountCurrency = $parsed["attributes"]["currencyID"];
                         }
                         break;
                     case "TaxTotal":
                         $parsed = $reader->parseCurrentElement();
-                        $instance->taxTotal = $parsed["value"];
+                        $instance->TaxTotal = $parsed["value"];
                         break;
                     case "TaxCategory":
                         $parsed = $reader->parseCurrentElement();
-                        $instance->taxCategory = $parsed["value"];
+                        $instance->TaxCategory = $parsed["value"];
                         break;
                 }
             }
@@ -128,52 +128,52 @@ class AllowanceCharge extends UBLDeserializable
             $reason = "Instance is not of type AllowanceCharge";
             return false;
         }
-        if ($instance->chargeIndicator !== false)
+        if ($instance->ChargeIndicator !== false)
         {
             $reason = "ChargeIndicator is not false";
             return false;
         }
-        if ($instance->allowanceChargeReasonCode !== "string")
+        if ($instance->AllowanceChargeReasonCode !== "string")
         {
             $reason = "AllowanceChargeReasonCode is not 'string'";
             return false;
         }
-        if ($instance->allowanceChargeReason !== "string")
+        if ($instance->AllowanceChargeReason !== "string")
         {
             $reason = "AllowanceChargeReason is not 'string'";
             return false;
         }
-        if ($instance->multiplierFactorNumeric !== "0.00")
+        if ($instance->MultiplierFactorNumeric !== "0.00")
         {
             $reason = "MultiplierFactorNumeric is not 0.00";
             return false;
         }
-        if ($instance->baseAmount !== "0.00")
+        if ($instance->BaseAmount !== "0.00")
         {
             $reason = "BaseAmount is not 0.00";
             return false;
         }
-        if ($instance->amount !== "0.00")
+        if ($instance->Amount !== "0.00")
         {
             $reason = "Amount is not 0.00";
             return false;
         }
-        if ($instance->amountCurrency !== "CAD")
+        if ($instance->AmountCurrency !== "CAD")
         {
             $reason = "AmountCurrency is not CAD";
             return false;
         }
-        if ($instance->baseAmountCurrency !== "USD")
+        if ($instance->BaseAmountCurrency !== "USD")
         {
             $reason = "BaseAmountCurrency is not USD";
             return false;
         }
-        if (!TaxTotal::TestDefaultValues($instance->taxTotal, $reason))
+        if (!TaxTotal::TestDefaultValues($instance->TaxTotal, $reason))
         {
             $reason = "TaxTotal failed with reason: " . $reason;
             return false;
         }
-        if (!TaxCategory::TestDefaultValues($instance->taxCategory, $reason))
+        if (!TaxCategory::TestDefaultValues($instance->TaxCategory, $reason))
         {
             $reason = "TaxCategory failed with reason: " . $reason;
             return false;

@@ -24,15 +24,15 @@ use XMLReader;
 
 class ItemPrice extends UBLDeserializable
 {
-    public ?string $priceAmount = null;
-    public ?string $priceCurrencyID = null;
-    public ?string $baseQuantity = null;
-    public ?string $unitCode = null;
-    public ?string $unitCodeListId = null;
+    public ?string $PriceAmount = null;
+    public ?string $PriceCurrencyID = null;
+    public ?string $BaseQuantity = null;
+    public ?string $UnitCode = null;
+    public ?string $UnitCodeListID = null;
     /**
-     * @var AllowanceCharge[] $allowanceCharge
+     * @var AllowanceCharge[] $AllowanceCharge
      */
-    public array $allowanceCharge = [];
+    public array $AllowanceCharge = [];
 
     public static function XMLDeserialize(Reader $reader): self
     {
@@ -47,26 +47,26 @@ class ItemPrice extends UBLDeserializable
                 {
                     case "PriceAmount":
                         $parsed = $reader->parseCurrentElement();
-                        $instance->priceAmount = $parsed["value"];
+                        $instance->PriceAmount = $parsed["value"];
                         if (isset($parsed["attributes"]["currencyID"]))
                         {
-                            $instance->priceCurrencyID = $parsed["attributes"]["currencyID"];
+                            $instance->PriceCurrencyID = $parsed["attributes"]["currencyID"];
                         }
                         break;
                     case "BaseQuantity":
                         $parsed = $reader->parseCurrentElement();
-                        $instance->baseQuantity = $parsed["value"];
+                        $instance->BaseQuantity = $parsed["value"];
                         if ($parsed["attributes"]["unitCode"] !== null)
                         {
-                            $instance->unitCode = $parsed["attributes"]["unitCode"];
+                            $instance->UnitCode = $parsed["attributes"]["unitCode"];
                         }
                         break;
                     case "AllowanceCharge":
-                        if (!isset($instance->allowanceCharge))
+                        if (!isset($instance->AllowanceCharge))
                         {
-                            $instance->allowanceCharge = [];
+                            $instance->AllowanceCharge = [];
                         }
-                        $instance->allowanceCharge[] = AllowanceCharge::XMLDeserialize($reader);
+                        $instance->AllowanceCharge[] = AllowanceCharge::XMLDeserialize($reader);
                         break;
                 }
             }
@@ -105,32 +105,32 @@ class ItemPrice extends UBLDeserializable
             $reason = "Instance is not ItemPrice";
             return false;
         }
-        if ($instance->priceAmount !== "100")
+        if ($instance->PriceAmount !== "100")
         {
             $reason = "PriceAmount is not 100";
             return false;
         }
-        if ($instance->priceCurrencyID !== "RON")
+        if ($instance->PriceCurrencyID !== "RON")
         {
             $reason = "PriceCurrencyID is not RON";
             return false;
         }
-        if ($instance->baseQuantity !== "1")
+        if ($instance->BaseQuantity !== "1")
         {
             $reason = "BaseQuantity is not 1";
             return false;
         }
-        if ($instance->unitCode !== "C62")
+        if ($instance->UnitCode !== "C62")
         {
             $reason = "UnitCode is not C62(unit)";
             return false;
         }
-        if (count($instance->allowanceCharge) != 2)
+        if (count($instance->AllowanceCharge) != 2)
         {
             $reason = "AllowanceCharge count is not 2";
             return false;
         }
-        if (!AllowanceCharge::TestDefaultValues($instance->allowanceCharge[0], $reason))
+        if (!AllowanceCharge::TestDefaultValues($instance->AllowanceCharge[0], $reason))
         {
             return false;
         }

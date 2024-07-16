@@ -23,9 +23,9 @@ use XMLReader;
 
 class PayeeFinancialAccount extends UBLDeserializable
 {
-    public ?string $id = null;
-    public ?string $name = null;
-    public ?string $financialInstitutionBranchID = null;
+    public ?string $ID = null;
+    public ?string $Name = null;
+    public ?string $FinancialInstitutionBranchID = null;
 
     public static function XMLDeserialize(Reader $reader): self
     {
@@ -40,16 +40,16 @@ class PayeeFinancialAccount extends UBLDeserializable
                 switch ($reader->localName)
                 {
                     case "ID":
-                        $instance->id = $reader->readString();
+                        $instance->ID = $reader->readString();
                         $reader->next();
                         break;
                     case "Name":
-                        $instance->name = $reader->readString();
+                        $instance->Name = $reader->readString();
                         $reader->next();
                         break;
                     case "FinancialInstitutionBranch":
                         $parsed = $reader->parseCurrentElement();
-                        $instance->financialInstitutionBranchID = $parsed["value"][0]["value"];
+                        $instance->FinancialInstitutionBranchID = $parsed["value"][0]["value"];
                         break;
                 }
             }
@@ -90,17 +90,17 @@ class PayeeFinancialAccount extends UBLDeserializable
             $reason = "Instance is not of type PayeeFinancialAccount";
             return false;
         }
-        if ($instance->id !== "1")
+        if ($instance->ID !== "1")
         {
             $reason = "ID is not 1";
             return false;
         }
-        if ($instance->name !== "John Doe")
+        if ($instance->Name !== "John Doe")
         {
             $reason = "Name is not John Doe";
             return false;
         }
-        if ($instance->financialInstitutionBranchID !== "2")
+        if ($instance->FinancialInstitutionBranchID !== "2")
         {
             $reason = "FinancialInstitutionBranch ID is not 2";
             return false;

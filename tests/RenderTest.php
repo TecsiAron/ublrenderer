@@ -36,7 +36,7 @@ class RenderTest extends TestCase
         }
         catch (Exception $e)
         {
-            $this->fail($e->getMessage());
+            $this->fail($e->getMessage()."\n".$e->getTraceAsString());
         }
         $this->assertNotEmpty($html);
         try

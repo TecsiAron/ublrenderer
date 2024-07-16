@@ -23,9 +23,9 @@ use XMLReader;
 
 class PartyTaxScheme extends UBLDeserializable
 {
-    public ?string $registrationName = null;
-    public ?string $companyId = null;
-    public ?TaxScheme $taxScheme = null;
+    public ?string $RegistrationName = null;
+    public ?string $CompanyId = null;
+    public ?TaxScheme $TaxScheme = null;
 
     public static function XMLDeserialize(Reader $reader): self
     {
@@ -39,16 +39,16 @@ class PartyTaxScheme extends UBLDeserializable
                 switch ($reader->localName)
                 {
                     case "RegistrationName":
-                        $instance->registrationName = $reader->readString();
+                        $instance->RegistrationName = $reader->readString();
                         $reader->next(); // Move past the current text node.
                         break;
                     case "CompanyID":
-                        $instance->companyId = $reader->readString();
+                        $instance->CompanyId = $reader->readString();
                         $reader->next();
                         break;
                     case "TaxScheme":
                         $parsed = $reader->parseCurrentElement();
-                        $instance->taxScheme = $parsed["value"];
+                        $instance->TaxScheme = $parsed["value"];
                         break;
                 }
             }
@@ -86,17 +86,17 @@ class PartyTaxScheme extends UBLDeserializable
             $reason = "Failed to parse PartyTaxScheme, wrong instance type";
             return false;
         }
-        if ($instance->registrationName != "United States")
+        if ($instance->RegistrationName != "United States")
         {
             $reason = "Failed to parse RegistrationName";
             return false;
         }
-        if ($instance->companyId != "US")
+        if ($instance->CompanyId != "US")
         {
             $reason = "Failed to parse CompanyID";
             return false;
         }
-        if (!TaxScheme::TestDefaultValues($instance->taxScheme, $reason))
+        if (!TaxScheme::TestDefaultValues($instance->TaxScheme, $reason))
         {
             return false;
         }

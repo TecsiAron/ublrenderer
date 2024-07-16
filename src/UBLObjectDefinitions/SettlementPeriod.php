@@ -24,8 +24,8 @@ use XMLReader;
 
 class SettlementPeriod extends UBLDeserializable
 {
-    public ?DateTime $startDate = null;
-    public ?DateTime $endDate = null;
+    public ?DateTime $StartDate = null;
+    public ?DateTime $EndDate = null;
 
     public static function XMLDeserialize(Reader $reader): self
     {
@@ -40,11 +40,11 @@ class SettlementPeriod extends UBLDeserializable
                 switch ($reader->localName)
                 {
                     case "StartDate":
-                        $instance->startDate = DateTime::createFromFormat("Y-m-d", $reader->readString());
+                        $instance->StartDate = DateTime::createFromFormat("Y-m-d", $reader->readString());
                         $reader->next();
                         break;
                     case "EndDate":
-                        $instance->endDate = DateTime::createFromFormat("Y-m-d", $reader->readString());
+                        $instance->EndDate = DateTime::createFromFormat("Y-m-d", $reader->readString());
                         $reader->next();
                         break;
                 }
@@ -85,13 +85,13 @@ class SettlementPeriod extends UBLDeserializable
             return false;
         }
 
-        if ($instance->startDate->format("Y-m-d") != "2021-01-01")
+        if ($instance->StartDate->format("Y-m-d") != "2021-01-01")
         {
             $reason = "Start date is not 2021-01-01";
             return false;
         }
 
-        if ($instance->endDate->format("Y-m-d") != "2021-01-01")
+        if ($instance->EndDate->format("Y-m-d") != "2021-01-01")
         {
             $reason = "End date is not 2021-01-01";
             return false;

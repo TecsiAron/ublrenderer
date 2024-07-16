@@ -23,12 +23,12 @@ use XMLReader;
 
 class TaxCategory extends UBLDeserializable
 {
-    public ?string $id = null;
-    public ?string $name = null;
-    public ?string $percent = null;
-    public ?TaxScheme $taxScheme = null;
-    public ?string $taxExemptionReason = null;
-    public ?string $taxExemptionReasonCode = null;
+    public ?string $ID = null;
+    public ?string $Name = null;
+    public ?string $Percent = null;
+    public ?TaxScheme $TaxScheme = null;
+    public ?string $TaxExemptionReason = null;
+    public ?string $TaxExemptionReasonCode = null;
 
     public static function XMLDeserialize(Reader $reader): self
     {
@@ -43,27 +43,27 @@ class TaxCategory extends UBLDeserializable
                 switch ($reader->localName)
                 {
                     case "ID":
-                        $instance->id = $reader->readString();
+                        $instance->ID = $reader->readString();
                         $reader->next(); // Move past the current text node
                         break;
                     case "Name":
-                        $instance->name = $reader->readString();
+                        $instance->Name = $reader->readString();
                         $reader->next();
                         break;
                     case "Percent":
-                        $instance->percent = $reader->readString();
+                        $instance->Percent = $reader->readString();
                         $reader->next();
                         break;
                     case "TaxScheme":
                         $parsed = $reader->parseCurrentElement();
-                        $instance->taxScheme = $parsed["value"];
+                        $instance->TaxScheme = $parsed["value"];
                         break;
                     case "TaxExemptionReason":
-                        $instance->taxExemptionReason = $reader->readString();
+                        $instance->TaxExemptionReason = $reader->readString();
                         $reader->next();
                         break;
                     case "TaxExemptionReasonCode":
-                        $instance->taxExemptionReasonCode = $reader->readString();
+                        $instance->TaxExemptionReasonCode = $reader->readString();
                         $reader->next();
                         break;
                 }
@@ -106,32 +106,32 @@ class TaxCategory extends UBLDeserializable
             $reason = "Failed to parse TaxCategory, wrong instance type";
             return false;
         }
-        if ($instance->id != "US")
+        if ($instance->ID != "US")
         {
             $reason = "Failed to parse ID";
             return false;
         }
-        if ($instance->name != "United States")
+        if ($instance->Name != "United States")
         {
             $reason = "Failed to parse Name";
             return false;
         }
-        if ($instance->percent != "0.00")
+        if ($instance->Percent != "0.00")
         {
             $reason = "Failed to parse Percent";
             return false;
         }
-        if ($instance->taxExemptionReason != "Exempt")
+        if ($instance->TaxExemptionReason != "Exempt")
         {
             $reason = "Failed to parse TaxExemptionReason";
             return false;
         }
-        if ($instance->taxExemptionReasonCode != "EX")
+        if ($instance->TaxExemptionReasonCode != "EX")
         {
             $reason = "Failed to parse TaxExemptionReasonCode";
             return false;
         }
-        if (!TaxScheme::TestDefaultValues($instance->taxScheme, $reason))
+        if (!TaxScheme::TestDefaultValues($instance->TaxScheme, $reason))
         {
             return false;
         }
