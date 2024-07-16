@@ -17,6 +17,7 @@
 
 namespace EdituraEDU\UBLRenderer;
 
+use EdituraEDU\UBLRenderer\UBLObjectDefinitions\PaymentMeansCode;
 use Exception;
 
 class MappingsManager
@@ -39,6 +40,7 @@ class MappingsManager
     }
     private array $UnitCodes=[];
     private array $AllowanceChargeReasonCodes=[];
+    private array $PaymentMeansCodes=[];
 
     private function __construct(?string $json)
     {
@@ -54,6 +56,10 @@ class MappingsManager
         if(isset($mappings["AllowanceChargeReasonCodes"]))
         {
             $this->AllowanceChargeReasonCodes = $mappings["AllowanceChargeReasonCodes"];
+        }
+        if(isset($mappings["PaymentMeansCodes"]))
+        {
+            $this->PaymentMeansCodes = $mappings["PaymentMeansCodes"];
         }
     }
 
@@ -83,6 +89,20 @@ class MappingsManager
             throw new Exception("Unit code $unitCode has no mapping");
         }
         return strlen($this->UnitCodes[$unitCode]) <= $maxLen;
+    }
+
+    public function PaymentMeansCodeHasMapping(string $paymentMeansCode): bool
+    {
+        return isset($this->PaymentMeansCodes[$paymentMeansCode]);
+    }
+
+    public function GetPaymentMeansCodeMapping(string $paymentMeansCode): string
+    {
+        if(!$this->PaymentMeansCodeHasMapping($paymentMeansCode))
+        {
+            throw new Exception("Payment means code $paymentMeansCode has no mapping");
+        }
+        return $this->PaymentMeansCodes[$paymentMeansCode];
     }
 
     public function GetUnitCodeMapping(string $unitCode): string
