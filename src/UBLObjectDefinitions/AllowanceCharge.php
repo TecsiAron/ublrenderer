@@ -17,6 +17,7 @@
 
 namespace EdituraEDU\UBLRenderer\UBLObjectDefinitions;
 
+use EdituraEDU\UBLRenderer\MappingsManager;
 use Exception;
 use Sabre\Xml\Reader;
 use XMLReader;
@@ -95,6 +96,58 @@ class AllowanceCharge extends UBLDeserializable
         }
 
         return $instance;
+    }
+
+    /**
+     * Converts the object to a string representation
+     * Will return null if MultiplierFactorNumeric, Amount and BaseAmount are not set!
+     * @return string|null
+     * @throws Exception
+     */
+    public function ToString():?string
+    {
+        if(isset($this->AllowanceChargeReason))
+        {
+            $name = $this->AllowanceChargeReason;
+        }
+        else if(isset($this->AllowanceChargeReasonCode)
+            && MappingsManager::GetInstance()->AllowanceChargeReasonCodeHasMapping($this->AllowanceChargeReasonCode))
+        {
+            $name= MappingsManager::GetInstance()->GetAllowanceChargeReasonCodeMapping($this->AllowanceChargeReasonCode);
+        }
+        else
+        {
+            $name=MappingsManager::GetInstance()->GetAllowanceChargeReasonCodeMapping("UNKNOWN");
+        }
+        $isValid=false;
+        if(isset($this->MultiplierFactorNumeric) && !empty($this->MultiplierFactorNumeric))
+        {
+            $percent = str_ends_with($this->MultiplierFactorNumeric, "%")? $this->MultiplierFactorNumeric : $this->MultiplierFactorNumeric . "%";
+            $name= $name . " (" . $percent.")";
+            $isValid=true;
+        }
+        $hasValue=false;
+        if(isset($this->Amount))
+        {
+            $value = isset($this->Amount) ? $this->Amount : "0.00";
+            $currency = $this->GetCurrency($this->AmountCurrency);
+            $hasValue=true;
+            $isValid=true;
+        }
+        else if(isset($this->BaseAmount))
+        {
+            $value = isset($this->BaseAmount) ? $this->BaseAmount : "0.00";
+            $currency = $this->GetCurrency($this->BaseAmountCurrency);
+            $hasValue=true;
+            $isValid=true;
+        }
+        if(!$isValid)
+            return null;
+        if($hasValue)
+        {
+            return $name . ": " . $value . " " . $currency;
+        }
+        return $name;
     }
 
     public static function GetNamespace(): string
