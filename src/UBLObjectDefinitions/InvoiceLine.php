@@ -48,8 +48,6 @@ class InvoiceLine extends UBLDeserializable
     public ?string $AccountingCostCode = null;
     public ?string $AccountingCost = null;
 
-    private TaxSubTotal $TaxSubTotal;
-
     public static function XMLDeserialize(Reader $reader): UBLDeserializable
     {
         $instance = new self();
