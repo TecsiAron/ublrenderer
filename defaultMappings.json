@@ -1,4 +1,27 @@
 {
+  "AllowanceChargeReasonCodes":
+  {
+    "41":"Bonus pentru finalizarea lucrărilor înainte de termen",
+    "42":"Alt bonus",
+    "60":"Reducere acordată de producător consumatorului",
+    "62":"Datorită status-ului de militar",
+    "63":"Datorită unui accident de muncă",
+    "64":"Acord special",
+    "65":"Discount datorită unei erori de producție",
+    "66":"Discount datorită deschiderii unui nou magazin",
+    "67":"Discount pentru mostră",
+    "68":"Discount pentru un produs la sfârsit de gamă",
+    "70":"Discount pentru INCOTERM",
+    "71":"Deducere pentru depășirea volumului de vânzare",
+    "88":"Deducere pentru un consum mai mare de material",
+    "95":"Discount",
+    "100":"Rebat special",
+    "102":"Discount pe termen lung",
+    "103":"Discount temporar",
+    "104":"Discount standard",
+    "105":"Discount Per cifra de afaceri anuală",
+    "UNKNOWN": "Discount necunoscut"
+  },
   "UnitCodes": {
     "C62":"BUC",
     "C63":"Parsec",
