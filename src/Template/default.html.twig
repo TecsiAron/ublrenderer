@@ -3,7 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <title>Factură</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <style>
+        body
+        {
+            margin: 0.5em;
+        }
         .header-table
         {
             width: 100%;
@@ -40,6 +45,7 @@
         {
             border:1px solid black;
             text-align: center;
+            padding: 0.2em;
         }
     </style>
 </head>
@@ -64,7 +70,7 @@
             <div class="header-line header-buyer-line">{{ invoice.GetAccountingSupplierParty().PostalAddress.StreetName }}</div>
             {% if invoice.GetAccountingSupplierParty().PostalAddress.AdditionalStreetName is defined
                 and invoice.GetAccountingSupplierParty().PostalAddress.AdditionalStreetName is not empty %}
-            <div class="header-line header-buyer-line">{{ invoice.GetAccountingSupplierParty().PostalAddress.AdditionalStreetName }}</div>
+                <div class="header-line header-buyer-line">{{ invoice.GetAccountingSupplierParty().PostalAddress.AdditionalStreetName }}</div>
             {% endif %}
             {% if invoice.hasSupplierAccountInfo() %}
                 {% if invoice.paymentMeans.payeeFinancialAccount.name is defined
@@ -78,12 +84,11 @@
             {% endif %}
         </td>
         <td class="header-info">
+            <!-- invoice info -->
             <div class="header-line header-info-line">Factură:</div>
             <div class="header-line header-info-line">Nr. {{ invoice.GetID() }}</div>
             <div class="header-line header-info-line">din</div>
             <div class="header-line header-info-line">{{ invoice.issueDate.format("Y-m-d") }}</div>
-            <br>
-            <!-- invoice info -->
         </td>
         <td class="header-party header-buyer">
             <!-- buyer -->
@@ -94,14 +99,14 @@
             <div class="header-line header-buyer-line">Sediu:</div>
             <div class="header-line header-buyer-line">Județul: {{ invoice.GetAccountingCustomerParty().PostalAddress.GetCountyName() }}</div>
             <div class="header-line header-buyer-line">Localitatea: {{ invoice.GetAccountingCustomerParty().PostalAddress.CityName }}</div>
-            {% if invoice.GetAccountingCustomerParty().postalAddress.postalZone is defined
-                and invoice.GetAccountingCustomerParty().postalAddress.postalZone is not empty %}
+            {% if invoice.GetAccountingCustomerParty().PostalAddress.PostalZone is defined
+                and invoice.GetAccountingCustomerParty().PostalAddress.postalZone is not empty %}
                 <div class="header-line header-buyer-line">Cod poștal: {{ invoice.GetAccountingCustomerParty().PostalAddress.PostalZone }}</div>
             {% endif %}
             <div class="header-line header-buyer-line">Adresa: {{ invoice.GetAccountingCustomerParty().PostalAddress.StreetName }}</div>
-            {% if invoice.GetAccountingCustomerParty().postalAddress.additionalStreetName is defined
-                and invoice.GetAccountingCustomerParty().postalAddress.additionalStreetName is not empty %}
-            <div class="header-line header-buyer-line">{{ invoice.GetAccountingCustomerParty().PostalAddress.AdditionalStreetName }}</div>
+            {% if invoice.GetAccountingCustomerParty().PostalAddress.AdditionalStreetName is defined
+                and invoice.GetAccountingCustomerParty().PostalAddress.AdditionalStreetName is not empty %}
+                <div class="header-line header-buyer-line">{{ invoice.GetAccountingCustomerParty().PostalAddress.AdditionalStreetName }}</div>
             {% endif %}
         </td>
     </tr>
@@ -110,53 +115,53 @@
 <!-- INVLOCE LINES -->
 <table class="invoice-lines-table">
     <thead>
-        <tr class="invoice-header">
-            <th>Nr. Crt</th>
-            <th>Denumire</th>
-            <th>UM</th>
-            {% if invoice.HasAnyItemIDs() %}
+    <tr class="invoice-header">
+        <th>Nr. Crt</th>
+        <th>Denumire</th>
+        <th>UM</th>
+        {% if invoice.HasAnyItemIDs() %}
             <th>Cod</th>
-            {% endif %}
-            <th>Cotă TVA</th>
-            <th>Cantitate</th>
-            <th>Preț unitar<br>(fără TVA)</th>
-            <th>Valoare<br>(fără TVA)</th>
-            <th>TVA<br>(aprox.)</th>
-        </tr>
+        {% endif %}
+        <th>Cotă TVA</th>
+        <th>Cantitate</th>
+        <th>Preț unitar<br>(fără TVA)</th>
+        <th>Valoare<br>(fără TVA)</th>
+        <th>TVA<br>(aprox.)</th>
+    </tr>
     </thead>
     {# @var line \EdituraEDU\UBLRenderer\UBLObjectDefinitions\InvoiceLine #}
     {% for line in invoice.GetInvoiceLines() %}
         <tr class="invoice-line">
-            <td>{{ invoice.GetLineNumber(line) }}</td>
-            <td>{{ line.Item.Name }}</td>
-            <td>{{ line.GetUnitCode() }}</td>
-            {% if invoice.HasAnyItemIDs() %}
-            <td>{{ line.GetItemIDs("<br>") }}</td>
-            {% endif %}
-            <td>{{ line.GetVATRate() }}</td>
-            <td>{{ line.InvoicedQuantity }}</td>
-            <td>{{ line.GetNoVATUnitValue }}</td>
-            <td>{{ line.GetNoVATValue() }}</td>
-            <td>{{ line.GetVATValue() }}</td>
-        </tr>
-        {% if line.HasAllowanceCharges() %}
-            {% for allowance in line.AllAllowanceCharges %}
-            <tr class="invoice-line">
-                <td><!-- No line number --></td>
-                <td> {{ allowance.ToString() }}</td>
-                <td><!-- No unit code --></td>
+        <td>{{ invoice.GetLineNumber(line) }}</td>
+                <td>{{ line.Item.Name }}</td>
+                <td>{{ line.GetUnitCode() }}</td>
                 {% if invoice.HasAnyItemIDs() %}
-                <td><!-- No item ID? --></td>
+                <td>{{ line.GetItemIDs("<br>") }}</td>
                 {% endif %}
-                <td><!-- No vat rate --></td>
-                <td><!-- No quantity--></td>
-                <td><!-- No unit price --></td>
-                <td><!-- No value --></td>
-                <td><!-- No vat value--></td>
+                <td>{{ line.GetVATRate() }}</td>
+                <td>{{ line.InvoicedQuantity }}</td>
+                <td>{{ line.GetNoVATUnitValue }}</td>
+                <td>{{ line.GetNoVATValue() }}</td>
+                <td>{{ line.GetVATValue() }}</td>
             </tr>
-            {% endfor %}
-        {% endif %}
-    {% endfor %}
-</table>
+            {% if line.HasAllowanceCharges() %}
+                {% for allowance in line.AllAllowanceCharges %}
+                <tr class="invoice-line">
+                    <td><!-- No line number --></td>
+                    <td> {{ allowance.ToString() }}</td>
+                    <td><!-- No unit code --></td>
+                    {% if invoice.HasAnyItemIDs() %}
+                    <td><!-- No item ID? --></td>
+                    {% endif %}
+                    <td><!-- No vat rate --></td>
+                    <td><!-- No quantity--></td>
+                    <td><!-- No unit price --></td>
+                    <td><!-- No value --></td>
+                    <td><!-- No vat value--></td>
+                </tr>
+                {% endfor %}
+            {% endif %}
+        {% endfor %}
+    </table>
 </body>
 </html>
