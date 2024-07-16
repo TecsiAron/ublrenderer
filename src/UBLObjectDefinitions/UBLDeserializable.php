@@ -17,6 +17,7 @@
 
 namespace EdituraEDU\UBLRenderer\UBLObjectDefinitions;
 
+use EdituraEDU\UBLRenderer\UBLRenderer;
 use EdituraEDU\UBLRenderer\XMLReaderProvider;
 use Sabre\Xml\Reader;
 
@@ -61,6 +62,19 @@ abstract class UBLDeserializable
             }
         }
         return false;
+    }
+
+    protected function GetCurrency(?string &$currencyVar): string
+    {
+        if ($currencyVar == null)
+        {
+            if(UBLRenderer::GetCurrentInvoice()->GetDocumentCurrencyCode()!==null)
+            {
+                return UBLRenderer::GetCurrentInvoice()->GetDocumentCurrencyCode();
+            }
+            return "RON";
+        }
+        return $currencyVar;
     }
 
     //todo define mandatory non static method CanRender():bool
