@@ -189,11 +189,48 @@
                 {% endfor %}
             {% endif %}
         {% endfor %}
+        {%  if invoice.HasInvoiceLevelAllowanceCharges() %}
+            {% for allowance in invoice.AllowanceCharges %}
+            <tr class="invoice-line">
+                <td><!-- No line number --></td>
+                <td> {{ allowance.ToString() }}</td>
+                <td><!-- No unit code --></td>
+                {% if invoice.HasAnyItemIDs() %}
+                <td><!-- No item ID? --></td>
+                {% endif %}
+                <td><!-- No vat rate --></td>
+                <td><!-- No quantity--></td>
+                <td><!-- No unit price --></td>
+                <td><!-- No value --></td>
+                <td><!-- No vat value--></td>
+            </tr>
+            {% endfor %}
+        {% endif %}
     </table>
     <div class="invoice-total">
         Total fără TVA: {{ invoice.LegalMonetaryTotal.GetTaxExclusiveAmount() }}<br>
         Total TVA: {{ invoice.TaxTotal.GetAmmount() }}<br>
         Total cu TVA: {{ invoice.LegalMonetaryTotal.GetTaxInclusiveAmount() }}<br>
     </div>
+    {%  if invoice.HasNotes() %}
+    <div class="invoice-notes">
+        <h3>Observații:</h3>
+        <ul>
+            {% for note in invoice.GetNotes() %}
+            <li>{{ note }}</li>
+            {% endfor %}
+        </ul>
+    </div>
+    {% endif %}
+    {% if invoice.HasOtherInfo() %}
+    <div>
+        <h3>Alte informații:</h3>
+        <ul>
+            {% for info in invoice.GetOtherInfo() %}
+            <li>{{ info }}</li>
+            {% endfor %}
+        </ul>
+    </div>
+    {% endif %}
 </body>
 </html>

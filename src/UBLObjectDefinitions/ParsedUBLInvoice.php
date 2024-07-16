@@ -18,6 +18,7 @@
 namespace EdituraEDU\UBLRenderer\UBLObjectDefinitions;
 
 use DateTime;
+use EdituraEDU\UBLRenderer\MappingsManager;
 use Exception;
 use Sabre\Xml\Reader;
 use XMLReader;
@@ -286,6 +287,7 @@ class ParsedUBLInvoice extends UBLDeserializable
         {
             return true;
         }
+        return false;
     }
 
     public function GetDueDate():DateTime
@@ -304,6 +306,95 @@ class ParsedUBLInvoice extends UBLDeserializable
         }
         return $this->PaymentTerms->SettlementPeriod->EndDate;
     }
+
+    public function HasNotes()
+    {
+        if(isset($this->Note) && !empty($this->Note))
+        {
+            return true;
+        }
+        $count=count($this->InvoiceLines);
+        for($i=0;$i<$count;$i++)
+        {
+            if(isset($this->InvoiceLines[$i]->Note) && !empty($this->InvoiceLines[$i]->Note))
+            {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * @return string[]
+     */
+    public function GetNotes():array
+    {
+        $result=[];
+        if(isset($this->Note) && !empty($this->Note))
+        {
+            $result[]=$this->Note;
+        }
+        $count=count($this->InvoiceLines);
+        for($i=0;$i<$count;$i++)
+        {
+            if(isset($this->InvoiceLines[$i]->Note) && !empty($this->InvoiceLines[$i]->Note))
+            {
+                $result[]=$this->InvoiceLines[$i]->Note. " (linia ".$this->GetLineNumber($this->InvoiceLines[$i]).")";
+            }
+        }
+        if(count($result)==0)
+        {
+            throw new Exception("No notes found in invoice");
+        }
+        return $result;
+    }
+
+    public function HasInvoiceLevelAllowanceCharges():bool
+    {
+        return isset($this->AllowanceCharges) && !empty($this->AllowanceCharges);
+    }
+
+    public function HasOtherInfo():bool
+    {
+        return (isset($this->OrderReference) && $this->OrderReference->HasValidID())
+            || isset($this->PaymentMeans->PaymentMeansCode)
+            || $this->HasAttachments()
+            || isset($this->ContractDocumentReference);
+    }
+
+    /**
+     * @return string[]
+     */
+    public function GetOtherInfo():array
+    {
+        $result=[];
+        if(isset($this->OrderReference))
+        {
+            if(isset($this->OrderReference->ID) && !empty($this->OrderReference->ID))
+            {
+                $result[]="Comanda: ".$this->OrderReference->ID;
+            }
+            else if(isset($this->OrderReference->SalesOrderID) && !empty($this->OrderReference->SalesOrderID))
+            {
+                $result[]="Comanda: ".$this->OrderReference->SalesOrderID;
+            }
+        }
+        if(isset($this->PaymentMeans->PaymentMeansCode))
+        {
+            $paymentMeans="Modalitatea preferată de plata: ".$this->PaymentMeans->PaymentMeansCode->value;
+            if(MappingsManager::GetInstance()->PaymentMeansCodeHasMapping($this->PaymentMeans->PaymentMeansCode->value))
+            {
+                $paymentMeans.=" (".MappingsManager::GetInstance()->GetPaymentMeansCodeMapping($this->PaymentMeans->PaymentMeansCode->value).")";
+            }
+            $result[]=$paymentMeans;
+        }
+        if($this->HasAttachments())
+        {
+            $result[]="Există documente atașate in fișierul XML";
+        }
+        return $result;
+    }
+
 
     public static function GetTestXML(): string
     {
@@ -706,5 +797,11 @@ class ParsedUBLInvoice extends UBLDeserializable
             return false;
         }
         return true;
+    }
+
+    public function HasAttachments():bool
+    {
+        return (isset($this->AdditionalDocumentReferences) && !empty($this->AdditionalDocumentReferences)) ||
+            isset($this->ContractDocumentReference);
     }
 }

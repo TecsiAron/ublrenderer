@@ -105,4 +105,9 @@ class OrderReference extends UBLDeserializable
         }
         return true;
     }
+
+    public function HasValidID():bool
+    {
+        return (isset($this->ID) && !empty($this->ID)) || (isset($this->SalesOrderId) && !empty($this->SalesOrderId));
+    }
 }
