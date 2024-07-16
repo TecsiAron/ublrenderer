@@ -255,11 +255,11 @@ class ParsedUBLInvoice extends UBLDeserializable
         return $foundSomeDetails;
     }
 
-    public function GetLineNumber(InvoiceLine $line):?int
+    public function GetLineNumber(InvoiceLine $line):int
     {
         if(empty($this->InvoiceLines))
         {
-            return null;
+            throw new Exception("Invoice has no lines");
         }
         $count=count($this->InvoiceLines);
         for($i=0;$i<$count;$i++)
@@ -269,7 +269,40 @@ class ParsedUBLInvoice extends UBLDeserializable
                 return $i+1;
             }
         }
-        return null;
+        throw new Exception("InvoiceLine instance not found in ParsedUBLInvoice::InvoiceLines");
+    }
+
+    public function HasDueDate():bool
+    {
+        if(isset($this->DueDate))
+        {
+            return true;
+        }
+        if(isset($this->PaymentTerms->PaymentDueDate))
+        {
+            return true;
+        }
+        if(isset($this->PaymentTerms->SettlementPeriod->EndDate))
+        {
+            return true;
+        }
+    }
+
+    public function GetDueDate():DateTime
+    {
+        if(!$this->HasDueDate())
+        {
+            throw new Exception("Invoice due date not found");
+        }
+        if(isset($this->DueDate))
+        {
+            return $this->DueDate;
+        }
+        if(isset($this->PaymentTerms->PaymentDueDate))
+        {
+            return $this->PaymentTerms->PaymentDueDate;
+        }
+        return $this->PaymentTerms->SettlementPeriod->EndDate;
     }
 
     public static function GetTestXML(): string

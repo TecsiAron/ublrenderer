@@ -17,6 +17,7 @@
 
 namespace EdituraEDU\UBLRenderer\UBLObjectDefinitions;
 
+use DateTime;
 use Exception;
 use Sabre\Xml\Reader;
 use XMLReader;
@@ -28,6 +29,8 @@ class PaymentTerms extends UBLDeserializable
     public ?string $Amount = null;
     public ?string $AmountCurrencyID;
     public ?SettlementPeriod $SettlementPeriod;
+
+    public DateTime $PaymentDueDate;
 
     public static function XMLDeserialize(Reader $reader): UBLDeserializable
     {
@@ -61,6 +64,10 @@ class PaymentTerms extends UBLDeserializable
                     case "SettlementPeriod":
                         $instance->SettlementPeriod = $reader->parseCurrentElement()["value"];
                         break;
+                    case "PaymentDueDate":
+                        $instance->PaymentDueDate = new DateTime($reader->readString());
+                        $reader->next();
+                        break;
                 }
             }
 
@@ -83,6 +90,7 @@ class PaymentTerms extends UBLDeserializable
                     <cbc:Note>Payment terms</cbc:Note>
                     <cbc:SettlementDiscountPercent>10</cbc:SettlementDiscountPercent>
                     <cbc:Amount currencyID="RON">100</cbc:Amount>
+                    <cbc:PaymentDueDate>2024-01-01</cbc:PaymentDueDate>
                     ' . SettlementPeriod::GetTestXML() . '
                 </cac:PaymentTerms>';
     }
@@ -117,6 +125,11 @@ class PaymentTerms extends UBLDeserializable
         if ($instance->AmountCurrencyID !== "RON")
         {
             $reason = "AmountCurrencyID is not RON";
+            return false;
+        }
+        if ($instance->PaymentDueDate->format("Y-m-d") !== "2024-01-01")
+        {
+            $reason = "PaymentDueDate is not 2024-01-01";
             return false;
         }
         if (!SettlementPeriod::TestDefaultValues($instance->SettlementPeriod, $reason))

@@ -198,4 +198,22 @@ class LegalMonetaryTotal extends UBLDeserializable
         }
         return true;
     }
+
+    public function GetTaxExclusiveAmount(): ?string
+    {
+        if(!isset($this->TaxExclusiveAmount) || empty($this->TaxExclusiveAmount))
+        {
+            return null;
+        }
+        return $this->TaxExclusiveAmount. " ". $this->GetCurrency($this->TaxExclusiveCurrency);
+    }
+
+    public function GetTaxInclusiveAmount(): ?string
+    {
+        if(!isset($this->TaxInclusiveAmount) || empty($this->TaxInclusiveAmount))
+        {
+            return null;
+        }
+        return $this->TaxInclusiveAmount. " ". $this->GetCurrency($this->TaxInclusiveCurrency);
+    }
 }

@@ -24,6 +24,7 @@ use XMLReader;
 class TaxTotal extends UBLDeserializable
 {
     public ?string $TaxAmount = null;
+    public ?string $TaxAmountCurrency = null;
     /**
      * @var TaxSubTotal[] $TaxSubtotals
      */
@@ -44,8 +45,12 @@ class TaxTotal extends UBLDeserializable
                 switch ($reader->localName)
                 {
                     case "TaxAmount":
-                        $instance->TaxAmount = $reader->readString();
-                        $reader->next();
+                        $parsed= $reader->parseCurrentElement();
+                        $instance->TaxAmount = $reader["value"];
+                        if (isset($parsed["attributes"]["currencyID"]))
+                        {
+                            $instance->TaxAmountCurrency = $parsed["attributes"]["currencyID"];
+                        }
                         break;
                     case "TaxSubtotal":
                         $parsed = $reader->parseCurrentElement();
@@ -104,5 +109,14 @@ class TaxTotal extends UBLDeserializable
             return false;
         }
         return true;
+    }
+
+    public function GetAmmount(): ?string
+    {
+        if(!isset($this->TaxAmount) || empty($this->TaxAmount))
+        {
+            return null;
+        }
+        return $this->TaxAmount. " " . $this->GetCurrency($this->TaxAmountCurrency);
     }
 }
