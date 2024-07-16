@@ -151,7 +151,7 @@ class InvoiceLine extends UBLDeserializable
             $reason = "LineExtensionAmountCurrencyID is not RON";
             return false;
         }
-        if ($instance->unitCode !== UnitCode::UNIT)
+        if ($instance->unitCode !== "C62")
         {
             $reason = "UnitCode is not C62(unit)";
             return false;
@@ -184,6 +184,18 @@ class InvoiceLine extends UBLDeserializable
         if ($instance->accountingCost !== "100")
         {
             $reason = "AccountingCost is not 100";
+            return false;
+        }
+        if(!AllowanceCharge::TestDefaultValues($instance->allowanceCharge[0], $reason))
+        {
+            return false;
+        }
+        if(!ItemPrice::TestDefaultValues($instance->price, $reason))
+        {
+            return false;
+        }
+        if(!InvoiceItem::TestDefaultValues($instance->item, $reason))
+        {
             return false;
         }
         return true;
@@ -219,10 +231,40 @@ class InvoiceLine extends UBLDeserializable
         }
         return MappingsManager::GetInstance()->UnitCodeHasMapping($this->unitCode);
     }
-    public function getMappedQuantityCode(): string
+    public function getUnitCode(): string
     {
-        //todo implement support for configurable mappings
-        return $this->unitCode->value;
+        if($this->HasShortMappedUnitCode())
+        {
+            return $this->GetShortMappedUnitCode();
+        }
+        return $this->unitCode;
+    }
+
+    public function getItemIDs(string $lineBreak=","):string
+    {
+        $ids=[];
+        if(!empty($this->item->sellersItemIdentification))
+        {
+            $ids[]="Vânz: $this->item->sellersItemIdentification";
+        }
+        if(!empty($this->item->buyersItemIdentification))
+        {
+            $ids[]="Cump: $this->item->buyersItemIdentification";
+        }
+        return implode($lineBreak, $ids);
+    }
+
+    public function getVATRate():string
+    {
+        if(!isset($this->item->classifiedTaxCategory->percent))
+        {
+            return "0%";
+        }
+        if(empty($this->item->classifiedTaxCategory->percent))
+        {
+            return "0%";
+        }
+        return $this->item->classifiedTaxCategory->percent."%";
     }
     protected function DeserializeComplete(): void
     {

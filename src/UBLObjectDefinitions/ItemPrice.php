@@ -12,7 +12,7 @@ class ItemPrice extends UBLDeserializable
     public ?string $priceAmount = null;
     public ?string $priceCurrencyID = null;
     public ?string $baseQuantity = null;
-    public UnitCode $unitCode = UnitCode::UNIT;
+    public ?string $unitCode = null;
     public ?string $unitCodeListId = null;
     /**
      * @var AllowanceCharge[] $allowanceCharge
@@ -43,7 +43,7 @@ class ItemPrice extends UBLDeserializable
                         $instance->baseQuantity = $parsed["value"];
                         if ($parsed["attributes"]["unitCode"] !== null)
                         {
-                            $instance->unitCode = UnitCode::tryFrom($parsed["attributes"]["unitCode"]) ?? UnitCode::INVALID;
+                            $instance->unitCode = $parsed["attributes"]["unitCode"];
                         }
                         break;
                     case "AllowanceCharge":
@@ -105,7 +105,7 @@ class ItemPrice extends UBLDeserializable
             $reason = "BaseQuantity is not 1";
             return false;
         }
-        if ($instance->unitCode !== UnitCode::UNIT)
+        if ($instance->unitCode !== "C62")
         {
             $reason = "UnitCode is not C62(unit)";
             return false;

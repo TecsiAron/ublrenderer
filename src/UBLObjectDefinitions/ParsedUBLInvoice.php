@@ -756,7 +756,7 @@ class ParsedUBLInvoice extends UBLDeserializable
             $reason = "InvoiceLines[0] invoicedQuantity is not 46396.67";
             return false;
         }
-        if ($line->unitCode != UnitCode::UNIT)
+        if ($line->unitCode != "C62")
         {
             $reason = "InvoiceLines[0] unitCode is not C62";
             return false;
@@ -881,7 +881,7 @@ class ParsedUBLInvoice extends UBLDeserializable
             $reason = "InvoiceLines[0] price baseQuantity is not 1";
             return false;
         }
-        if ($line->price->unitCode != UnitCode::UNIT)
+        if ($line->price->unitCode != "C62")
         {
             $reason = "InvoiceLines[0] price baseQuantityUnitCode is not C62";
             return false;
