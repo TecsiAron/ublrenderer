@@ -50,4 +50,9 @@ class HTMLFileWriter extends InvoiceWriter
     {
         return $this->Path;
     }
+
+    public function GetWarnings(): array
+    {
+        return [];
+    }
 }

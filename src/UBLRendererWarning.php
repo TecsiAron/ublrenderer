@@ -17,14 +17,8 @@
 
 namespace EdituraEDU\UBLRenderer;
 
-use EdituraEDU\UBLRenderer\UBLObjectDefinitions\ParsedUBLInvoice;
-
-interface IInvoiceWriter
+class UBLRendererWarning
 {
-    public function WriteContent(string $hmlContent, ParsedUBLInvoice $invoice): void;
-
-    /**
-     * @return UBLRendererWarning[]
-     */
-    public function GetWarnings(): array;
+    public string $Description;
+    public string $Metadata;
 }
