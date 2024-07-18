@@ -20,28 +20,43 @@ namespace EdituraEDU\UBLRenderer;
 
 use EdituraEDU\UBLRenderer\UBLObjectDefinitions\ParsedUBLInvoice;
 use Exception;
+use Twig\Environment;
 
 class UBLRenderer
 {
     private string $UBLContent;
     private static ?ParsedUBLInvoice $CurrentInvoice = null;
+    private bool $useDefaultTemplate;
 
-
-    public function __construct(?string $ublContent = null, bool $useDefaultTemplates = true)
+    public function __construct(?string $ublContent = null, bool $useDefaultTemplate = true)
     {
         if(!MappingsManager::$Initialized)
         {
             MappingsManager::Init();
         }
+        $this->useDefaultTemplate = $useDefaultTemplate;
         $this->UBLContent = $ublContent;
     }
 
-    public function CreateHTML(ParsedUBLInvoice $invoice):string
+    public function CreateHTML(ParsedUBLInvoice $invoice, ?Environment $twig=null):string
     {
         /**
          * @var ParsedUBLInvoice $invoice
          * @noinspection PhpRedundantVariableDocTypeInspection
          */
+        if($twig != null && $this->useDefaultTemplate)
+        {
+            throw new Exception("Cannot use custom Twig environment with default template");
+        }
+        if($twig==null && !$this->useDefaultTemplate)
+        {
+            throw new Exception("Cannot use default template when UBLRenderer::useDefaultTemplate is false");
+        }
+        $canRender = $invoice->CanRender();
+        if($canRender!==true)
+        {
+            throw new UBLRenderException("Invoice cannot be rendered", $canRender);
+        }
         self::$CurrentInvoice = $invoice;
         $loader = new \Twig\Loader\FilesystemLoader(dirname(__FILE__) . '/Template');
         $twig = new \Twig\Environment($loader, [
@@ -140,6 +155,19 @@ class UBLRenderer
 
         $zip->close();
         throw new Exception("Invalid ZIP file format: could not find valid signature file (semnatura_*.xml)!");
+    }
+
+    private function Dedup(array $reasons):array
+    {
+        $deduped=[];
+        foreach ($reasons as $reason)
+        {
+            if(!in_array($reason, $deduped))
+            {
+                $deduped[]=$reason;
+            }
+        }
+        return $deduped;
     }
 
 }

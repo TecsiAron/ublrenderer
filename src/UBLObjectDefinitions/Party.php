@@ -188,6 +188,33 @@ class Party extends UBLDeserializable
         return null;
     }
 
+    public function CanRender(): true|array
+    {
+        $toCheck=[$this->GetCIF(),$this->GetRegistrationNumber(), $this->Name];
+        $addressValidation=$this->PostalAddress->CanRender();
+        if($addressValidation===true)
+        {
+            if (!$this->ContainsNull($toCheck))
+            {
+                return true;
+            }
+        }
+        $results=[];
+        if(is_array($addressValidation))
+        {
+            $results=$addressValidation;
+        }
+        if($this->GetCIF()==null)
+        {
+            $results[]="[Party] CIF is missing";
+        }
+        if($this->GetRegistrationNumber()==null)
+        {
+            $results[]="[Party] Registration number is missing";
+        }
+        return $results;
+    }
+
     private function IsValidRegNumber(?string $regNumber): bool
     {
         if($regNumber == null)

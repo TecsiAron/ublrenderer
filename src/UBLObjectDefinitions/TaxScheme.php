@@ -116,4 +116,9 @@ class TaxScheme extends UBLDeserializable
                     <cbc:CurrencyCode>USD</cbc:CurrencyCode>
                 </cac:TaxScheme>';
     }
+
+    public function CanRender(): true|array
+    {
+        return true;
+    }
 }

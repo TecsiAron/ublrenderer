@@ -119,4 +119,9 @@ class TaxTotal extends UBLDeserializable
         }
         return $this->TaxAmount. " " . $this->GetCurrency($this->TaxAmountCurrency);
     }
+
+    public function CanRender(): true|array
+    {
+        return true;
+    }
 }

@@ -77,6 +77,8 @@ abstract class UBLDeserializable
         return $currencyVar;
     }
 
+    public abstract function CanRender(): true|array;
+
     //todo define mandatory non static method CanRender():bool
 
     protected function DeserializeComplete(): void {}

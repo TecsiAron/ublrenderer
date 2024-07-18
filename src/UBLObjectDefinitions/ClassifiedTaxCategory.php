@@ -154,5 +154,10 @@ class ClassifiedTaxCategory extends TaxCategory
         return true;
     }
 
+    public function CanRender(): true|array
+    {
+        return true;
+    }
+
 
 }

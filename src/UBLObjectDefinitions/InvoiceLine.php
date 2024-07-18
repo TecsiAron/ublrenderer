@@ -321,12 +321,74 @@ class InvoiceLine extends UBLDeserializable
         return $vatValue." ".$this->GetCurrency($this->LineExtensionAmountCurrencyID);
     }
 
-    public function CanRender():bool
+    public function CanRender():true|array
     {
-        return !$this->ContainsNull([
-            $this->GetNoVATValue(),
-            $this->GetNoVATUnitValue(),
-        ]);
+        $result=[];
+        $allowanceChargeCount=count($this->AllAllowanceCharges);
+        $subComponentsOk=true;
+        if($allowanceChargeCount!=0)
+        {
+            for($i=0; $i<$allowanceChargeCount; $i++)
+            {
+                $validation=$this->AllAllowanceCharges[$i]->CanRender();
+                if($validation!==true)
+                {
+                    $result=array_merge($result,$validation);
+                    $subComponentsOk=false;
+                }
+            }
+
+        }
+        if($this->Item== null)
+        {
+            $result[]="[InvoiceLine] No Item";
+            $subComponentsOk=false;
+        }
+        if($subComponentsOk===true)
+        {
+            if (!$this->ContainsNull([
+                $this->GetNoVATValue(),
+                $this->GetNoVATUnitValue(),
+                $this->GetUnitCode(),
+                $this->Item->Name,
+                $this->GetVATRate(),
+                $this->InvoicedQuantity,
+                $this->GetVATValue()
+            ]))
+            {
+                return true;
+            }
+        }
+        if($this->GetNoVATValue())
+        {
+            $result[]="[InvoiceLine] No VAT Value";
+        }
+        if($this->GetNoVATUnitValue())
+        {
+            $result[]="[InvoiceLine] No VAT Unit Value";
+        }
+        if($this->GetUnitCode())
+        {
+            $result[]="[InvoiceLine] No Unit Code";
+        }
+        if($this->Item!=null && $this->Item->Name == null)
+        {
+            $result[]="[InvoiceLine] No Item Name";
+        }
+        if($this->GetVATRate())
+        {
+            $result[]="[InvoiceLine] No VAT Rate";
+        }
+        if($this->InvoicedQuantity == null)
+        {
+            $result[]="[InvoiceLine] No Invoiced Quantity";
+        }
+        if($this->GetVATValue())
+        {
+            $result[]="[InvoiceLine] No VAT Value";
+        }
+
+        return $result;
     }
     protected function DeserializeComplete(): void
     {

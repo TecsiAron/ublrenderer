@@ -25,10 +25,7 @@ class LegalEntity extends UBLDeserializable
 {
     public ?string $RegistrationName = null;
     public ?string $CompanyID = null;
-    /**
-     * @deprecated  ??
-     */
-    public ?string $CompanyIDAttributes = null;
+    public ?string $CompanyIDAttribute = null;
 
     public ?string $CompanyLegalForm = null;
 
@@ -50,7 +47,7 @@ class LegalEntity extends UBLDeserializable
                         break;
                     case "CompanyID":
                         $instance->CompanyID = trim($reader->readString());
-                        $instance->CompanyIDAttributes = $reader->getAttribute("schemeID");
+                        $instance->CompanyIDAttribute = $reader->getAttribute("schemeID");
                         $reader->next();
                         break;
                     case "CompanyLegalForm":
@@ -104,7 +101,7 @@ class LegalEntity extends UBLDeserializable
             $reason = "CompanyID is not 123456789";
             return false;
         }
-        if ($instance->CompanyIDAttributes !== "RO")
+        if ($instance->CompanyIDAttribute !== "RO")
         {
             $reason = "CompanyID schemeID is not RO";
             return false;
@@ -115,6 +112,11 @@ class LegalEntity extends UBLDeserializable
             $reason = "CompanyLegalForm is not J40/12345/1998";
             return false;
         }
+        return true;
+    }
+
+    public function CanRender(): true|array
+    {
         return true;
     }
 }

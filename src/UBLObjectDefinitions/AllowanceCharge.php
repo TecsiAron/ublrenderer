@@ -233,4 +233,11 @@ class AllowanceCharge extends UBLDeserializable
         }
         return true;
     }
+
+    public function CanRender(): true|array
+    {
+        if($this->ToString()!=null)
+            return true;
+        return ["[AllowanceCharge] Failed to render"];
+    }
 }

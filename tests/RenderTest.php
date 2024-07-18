@@ -32,6 +32,14 @@ class RenderTest extends TestCase
         $this->assertFileDoesNotExist("test_render.html");
         $content= ParsedUBLInvoice::GetTestXML();
         $renderer = new UBLRenderer($content);
+        $invoice=$renderer->ParseUBL();
+        $validation=$invoice->CanRender();
+        $validationFailReason="Validation failed:\n";
+        if(is_array($validation))
+        {
+            $validationFailReason.=implode("\n", $validation);
+        }
+        $this->assertTrue($validation, $validationFailReason);
         try
         {
             $renderer->WriteFiles([new HTMLFileWriter("test_render.html")]);
@@ -41,5 +49,15 @@ class RenderTest extends TestCase
             $this->fail($e->getMessage()."\n".$e->getTraceAsString());
         }
         $this->assertFileExists("test_render.html");
+    }
+
+    public function testNoRender()
+    {
+        $xml = file_get_contents(dirname(__FILE__)."/efactura_sample_invoice_missing_party.xml");
+        $renderer = new UBLRenderer($xml);
+        $invoice=$renderer->ParseUBL();
+        $this->expectException(\EdituraEDU\UBLRenderer\UBLRenderException::class);
+        $this->expectExceptionMessage('Invoice cannot be rendered');
+        $renderer->CreateHTML($invoice);
     }
 }

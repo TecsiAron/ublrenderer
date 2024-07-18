@@ -110,4 +110,9 @@ class OrderReference extends UBLDeserializable
     {
         return (isset($this->ID) && !empty($this->ID)) || (isset($this->SalesOrderId) && !empty($this->SalesOrderId));
     }
+
+    public function CanRender(): true|array
+    {
+        return true;
+    }
 }

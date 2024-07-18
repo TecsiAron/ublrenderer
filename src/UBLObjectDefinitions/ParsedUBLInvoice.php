@@ -799,6 +799,82 @@ class ParsedUBLInvoice extends UBLDeserializable
         return true;
     }
 
+    public function CanRender(): true|array
+    {
+        $result=[];
+        $subComponentsOK=true;
+        $toCheck=[$this->AccountingCustomerParty,$this->AccountingSupplierParty, $this->ID, $this->IssueDate, $this->InvoiceLines];
+        if($this->AccountingCustomerParty!=null)
+        {
+            $partyResult=$this->AccountingCustomerParty->CanRender();
+            if($partyResult!==true)
+            {
+                $subComponentsOK=false;
+                $result[]=array_merge($result,$partyResult);
+            }
+        }
+        if($this->AccountingSupplierParty!=null)
+        {
+            $partyResult=$this->AccountingSupplierParty->CanRender();
+            if($partyResult!==true)
+            {
+                $subComponentsOK=false;
+                $result[]=array_merge($result,$partyResult);
+            }
+        }
+        if($this->InvoiceLines!=null)
+        {
+            $lineCount = count($this->InvoiceLines);
+            for($i=0; $i<$lineCount; $i++)
+            {
+                $lineResult=$this->InvoiceLines[$i]->CanRender();
+                if($lineResult!==true)
+                {
+                    $subComponentsOK=false;
+                    $result[]=array_merge($result,$lineResult);
+                }
+            }
+        }
+        else
+        {
+            $lineCount=0;
+        }
+        if($this->LegalMonetaryTotal==null)
+        {
+            $result[]="[ParsedUBLInvoice]No monetary total";
+            $subComponentsOK=false;
+        }
+        else
+        {
+            $validationResult=$this->LegalMonetaryTotal->CanRender();
+            if($validationResult!==true)
+            {
+                $subComponentsOK=false;
+                $result[]=array_merge($result,$validationResult);
+            }
+        }
+        if($subComponentsOK===true)
+        {
+            if (!$this->ContainsNull($toCheck) || $lineCount==0)
+            {
+                return true;
+            }
+        }
+        if($lineCount==0)
+        {
+            $result[]="[ParsedUBLInvoice] No invoice lines";
+        }
+        if($this->AccountingCustomerParty==null)
+        {
+            $result[]="[ParsedUBLInvoice]No seller party info";
+        }
+        if($this->AccountingSupplierParty==null)
+        {
+            $result[]="[ParsedUBLInvoice]No buyer party info";
+        }
+        return $result;
+    }
+
     public function HasAttachments():bool
     {
         return (isset($this->AdditionalDocumentReferences) && !empty($this->AdditionalDocumentReferences)) ||

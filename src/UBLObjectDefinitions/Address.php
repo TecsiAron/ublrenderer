@@ -155,12 +155,48 @@ class Address extends UBLDeserializable
         return true;
     }
 
+    public function CanRender(): true|array
+    {
+        $toCheck=[
+            $this->StreetName,
+            $this->CityName,
+            $this->PostalZone,
+            $this->GetCountyName()
+        ];
+        if(!$this->ContainsNull($toCheck))
+        {
+            return true;
+        }
+        $results=[];
+        if($this->StreetName==null)
+        {
+            $results[]="[Address] StreetName is null";
+        }
+        if($this->CityName==null)
+        {
+            $results[]="[Address] CityName is null";
+        }
+        if($this->PostalZone==null)
+        {
+            $results[]="[Address] PostalZone is null";
+        }
+        if($this->CountrySubentity==null)
+        {
+            $results[]="[Address] CountrySubentity is null";
+        }
+        return $results;
+    }
+
     public function GetCountyName():?string
     {
-        if(!isset($this->CountrySubentity))
+        if(trim(strtolower($this->Country->IdentificationCode))=="ro")
         {
-            return null;
+            if (!isset($this->CountrySubentity))
+            {
+                return null;
+            }
+            return CountyMap::GetCounty($this->CountrySubentity);
         }
-        return CountyMap::GetCounty($this->CountrySubentity);
+        return $this->CountrySubentity??"";
     }
 }

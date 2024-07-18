@@ -107,4 +107,9 @@ class PayeeFinancialAccount extends UBLDeserializable
         }
         return true;
     }
+
+    public function CanRender(): true|array
+    {
+        return true;
+    }
 }
