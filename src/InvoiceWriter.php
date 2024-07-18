@@ -23,12 +23,12 @@ abstract class  InvoiceWriter implements IInvoiceWriter
 {
     /**
      * If $path is null, the path will be  dirname(__FILE__)."/../output/<invoice_id>"
-     * Extension should be added by the calling writer
      * @param string|null $path
      * @param ParsedUBLInvoice $invoice
+     * @param string $extension Without the dot
      * @return string
      */
-    protected function NormalizePath(?string $path, ParsedUBLInvoice $invoice): string
+    protected function NormalizePath(?string $path, ParsedUBLInvoice $invoice, string $extension): string
     {
         if($path==null)
         {
@@ -40,7 +40,7 @@ abstract class  InvoiceWriter implements IInvoiceWriter
             {
                 $path.=PATH_SEPARATOR;
             }
-            $path.=$invoice->ID;
+            $path.=$invoice->ID.".".$extension;
         }
         return $path;
     }

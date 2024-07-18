@@ -38,7 +38,7 @@ class HTMLFileWriter extends InvoiceWriter
     }
     public function WriteContent(string $hmlContent, ParsedUBLInvoice $invoice): void
     {
-        $this->Path=$this->NormalizePath($this->Path, $invoice).".html";
+        $this->Path=$this->NormalizePath($this->Path, $invoice, 'html');
         file_put_contents($this->Path, $hmlContent);
     }
 
