@@ -21,4 +21,10 @@ class UBLRendererWarning
 {
     public string $Description;
     public string $Metadata;
+
+    public function __construct(string $Description, string $Metadata)
+    {
+        $this->Description = $Description;
+        $this->Metadata = $Metadata;
+    }
 }
