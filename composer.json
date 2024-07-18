@@ -1,6 +1,6 @@
 {
   "name": "tecsiaron/ublrenderer",
-  "description": "UBL 2 HTML and PDF renderer (PHP)",
+  "description": "UBL 2 HTML renderer (PHP)",
   "type": "library",
   "require": {
     "sabre/xml": "^4.0",
