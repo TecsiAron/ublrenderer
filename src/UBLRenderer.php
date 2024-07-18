@@ -105,7 +105,7 @@ class UBLRenderer
         for($i=0; $i<$zip->count(); $i++)
         {
             $filename = $zip->getNameIndex($i);
-            if(str_starts_with("semnatura_", $filename) && str_ends_with(".xml", $filename))
+            if(str_starts_with( $filename,"semnatura_",) && str_ends_with($filename, ".xml"))
             {
                 $invoiceFileName=trim(explode("_", $filename)[1]);
                 $content=$zip->getFromName($invoiceFileName);
