@@ -21,5 +21,5 @@ use EdituraEDU\UBLRenderer\UBLObjectDefinitions\ParsedUBLInvoice;
 
 interface IInvoiceWriter
 {
-    function WriteContent(string $hmlContent, ParsedUBLInvoice $invoice): void;
+    public function WriteContent(string $hmlContent, ParsedUBLInvoice $invoice): void;
 }
