@@ -14,7 +14,7 @@
  *     See the License for the specific language governing permissions and
  *     limitations under the License.
  */
-require_once dirname(__FILE__)."/../vendor/autoload.php";
+include $_composer_autoload_path ?? __DIR__ . '/../vendor/autoload.php';
 $showHelp = false;
 if ($argv[1] == "help" || sizeof($argv) != 3)
 {
