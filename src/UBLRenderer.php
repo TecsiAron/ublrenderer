@@ -25,6 +25,8 @@ class UBLRenderer
 {
     private string $UBLContent;
     private static ?ParsedUBLInvoice $CurrentInvoice = null;
+
+
     public function __construct(string $ublContent, bool $useDefaultTemplates = true)
     {
         if(!MappingsManager::$Initialized)
@@ -60,7 +62,6 @@ class UBLRenderer
          * @noinspection PhpRedundantVariableDocTypeInspection
          */
         $invoice=ParsedUBLInvoice::XMLDeserialize($reader);
-        self::$CurrentInvoice = $invoice;
         return $invoice;
     }
 
@@ -68,23 +69,34 @@ class UBLRenderer
      * @param IInvoiceWriter[] $writer
      * @return void
      */
-    public function WriteFiles(array $writer)
+    public function WriteFiles(array $writers)
     {
         $invoice = $this->ParseUBL();
         $html = $this->CreateHTML($invoice);
-        foreach ($writer as $w)
+        foreach ($writers as $w)
         {
             $w->WriteContent($html, $invoice);
         }
     }
 
-    public function WriteFile(IInvoiceWriter $writer)
+    /**
+     * Writes the parsed invoice to a file using the specified writer (by default HTMLFileWriter with no params)
+     * @param IInvoiceWriter $writer
+     * @return void
+     */
+    public function WriteFile(IInvoiceWriter $writer = new HTMLFileWriter())
     {
         $invoice = $this->ParseUBL();
         $html = $this->CreateHTML($invoice);
         $writer->WriteContent($html, $invoice);
     }
 
+    /**
+     * FOR INTERNAL USE ONLY, $CurrentInvoice is only set during rendering and is unset immediately after
+     * Use ParseUBL() and/or CreateHTML() if you need a reference to the invoice!
+     * @return ParsedUBLInvoice
+     * @throws Exception
+     */
     public static function GetCurrentInvoice(): ParsedUBLInvoice
     {
         if(self::$CurrentInvoice == null)
@@ -94,6 +106,13 @@ class UBLRenderer
         return self::$CurrentInvoice;
     }
 
+    /**
+     * Tries to load the UBL file from a standard ANAF ZIP archive.
+     * Assumes 2 files in the the zip out of witch one is names semnatura_<index_here>.xml and the UBL being names <same_index_here>.xml
+     * @param string $zipPath
+     * @return string
+     * @throws Exception
+     */
     public static function LoadUBLFromZip(string $zipPath): string
     {
         $zip = new \ZipArchive();
