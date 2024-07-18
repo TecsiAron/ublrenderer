@@ -19,42 +19,31 @@ namespace EdituraEDU\UBLRenderer;
 
 
 
+use EdituraEDU\UBLRenderer\InvoiceWriter;
 use EdituraEDU\UBLRenderer\UBLObjectDefinitions\ParsedUBLInvoice;
 
-class HTMLFileWriter implements IInvoiceWriter
+class HTMLFileWriter extends InvoiceWriter
 {
 
-    private string $Path;
+    private ?string $Path;
 
     /**
-     * If path does not have a file name, it will be generated based on the invoice id
+     * If path is null or is a directory InvoiceWriter::NormalizePath will be used to generate the path
+     * @see InvoiceWriter::NormalizePath
      * @param string|null $path if null dirname(__FILE__)."/../output/<invoice_id>.html will be used"
      */
     public function __construct(?string $path=null)
     {
-        if($path==null)
-        {
-            $path = dirname(__FILE__)."/../output/";
-        }
         $this->Path = $path;
     }
     public function WriteContent(string $hmlContent, ParsedUBLInvoice $invoice): void
     {
-        $path=$this->Path;
-        if(is_dir($this->Path))
-        {
-            if(!str_ends_with($path, PATH_SEPARATOR))
-            {
-                $path.=PATH_SEPARATOR;
-            }
-            $path.=$invoice->ID.".html";
-            $this->Path = $path;
-        }
+        $this->Path=$this->NormalizePath($this->Path, $invoice);
         file_put_contents($this->Path, $hmlContent);
     }
 
     /**
-     * Might be different from path specified in the constructor, check the constructor docs for more details
+     * Might be different from path specified in the constructor, check the constructor and InvoiceWriter:: NormalizePath docs for more details
      * @return string
      */
     public function GetPath(): string
