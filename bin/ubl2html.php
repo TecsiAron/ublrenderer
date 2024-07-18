@@ -36,7 +36,7 @@ else
     }
     if (substr($inputFile, -4) == ".zip")
     {
-        $xml = \EdituraEDU\UBLRenderer\UBLRenderer::LoadUBLFromZip($inputFile);
+        $xml = \EdituraEDU\UBLRenderer\UBLRenderer::LoadUBLFromZip($inputFile)->ubl;
     }
     else
     {

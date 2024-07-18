@@ -27,7 +27,7 @@ class UBLRenderer
     private static ?ParsedUBLInvoice $CurrentInvoice = null;
 
 
-    public function __construct(string $ublContent, bool $useDefaultTemplates = true)
+    public function __construct(?string $ublContent = null, bool $useDefaultTemplates = true)
     {
         if(!MappingsManager::$Initialized)
         {
@@ -110,10 +110,10 @@ class UBLRenderer
      * Tries to load the UBL file from a standard ANAF ZIP archive.
      * Assumes 2 files in the the zip out of witch one is names semnatura_<index_here>.xml and the UBL being names <same_index_here>.xml
      * @param string $zipPath
-     * @return string
+     * @return ParsedUBLZIP
      * @throws Exception
      */
-    public static function LoadUBLFromZip(string $zipPath): string
+    public static function LoadUBLFromZip(string $zipPath): ParsedUBLZIP
     {
         $zip = new \ZipArchive();
         $zip->open($zipPath);
@@ -132,7 +132,9 @@ class UBLRenderer
                 {
                     throw new Exception("Invalid ZIP file format: could not read invoice file!");
                 }
-                return $content;
+                $signature=$zip->getFromName($filename);
+                $zip->close();
+                return new ParsedUBLZIP($content, $signature);
             }
         }
 

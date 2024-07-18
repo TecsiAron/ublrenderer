@@ -23,7 +23,7 @@ class ZipTest extends TestCase
     public function testZip()
     {
         $this->CreateZip();
-        $xml = \EdituraEDU\UBLRenderer\UBLRenderer::LoadUBLFromZip("test.zip");
+        $xml = \EdituraEDU\UBLRenderer\UBLRenderer::LoadUBLFromZip("test.zip")->ubl;
         $this->assertEquals($xml, ParsedUBLInvoice::GetTestXML());
         @unlink("test.zip");
         $this->assertFileDoesNotExist("test.zip", "Failed to delete test.zip");
