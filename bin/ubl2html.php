@@ -46,6 +46,7 @@ else
     try
     {
         $renderer->WriteFiles([new \EdituraEDU\UBLRenderer\HTMLFileWriter($outputFile)]);
+        echo "Written to $outputFile".PHP_EOL;
     }
     catch (Exception $e)
     {
