@@ -18,6 +18,7 @@
 namespace EdituraEDU\UBLRenderer;
 
 
+use DOMDocument;
 use EdituraEDU\UBLRenderer\UBLObjectDefinitions\ParsedUBLInvoice;
 use Exception;
 use Twig\Environment;
@@ -70,8 +71,12 @@ class UBLRenderer
 
     public function ParseUBL(): ParsedUBLInvoice
     {
+        $document=new DOMDocument();
+        $document->preserveWhiteSpace = false;
+        $document->formatOutput = true;
+        $document->loadXML($this->UBLContent);
         $reader = XMLReaderProvider::CreateReader();
-        $reader->xml($this->UBLContent);
+        $reader->xml($document->saveXML());
         /**
          * @var ParsedUBLInvoice $invoice
          * @noinspection PhpRedundantVariableDocTypeInspection
