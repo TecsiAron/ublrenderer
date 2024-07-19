@@ -160,7 +160,6 @@ class Address extends UBLDeserializable
         $toCheck=[
             $this->StreetName,
             $this->CityName,
-            $this->PostalZone,
             $this->GetCountyName()
         ];
         if(!$this->ContainsNull($toCheck))
@@ -176,15 +175,20 @@ class Address extends UBLDeserializable
         {
             $results[]="[Address] CityName is null";
         }
-        if($this->PostalZone==null)
-        {
-            $results[]="[Address] PostalZone is null";
-        }
         if($this->CountrySubentity==null)
         {
             $results[]="[Address] CountrySubentity is null";
         }
         return $results;
+    }
+
+    public function HasZipCode():bool
+    {
+        if(!isset($this->PostalZone) || empty($this->PostalZone))
+        {
+            return false;
+        }
+        return true;
     }
 
     public function GetCountyName():?string
