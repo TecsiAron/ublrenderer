@@ -41,11 +41,11 @@ class PayeeFinancialAccount extends UBLDeserializable
                 {
                     case "ID":
                         $instance->ID = $reader->readString();
-                        $reader->next();
+                        //$reader->next();
                         break;
                     case "Name":
                         $instance->Name = $reader->readString();
-                        $reader->next();
+                        //$reader->next();
                         break;
                     case "FinancialInstitutionBranch":
                         $parsed = $reader->parseCurrentElement();

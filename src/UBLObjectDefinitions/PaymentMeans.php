@@ -54,19 +54,19 @@ class PaymentMeans extends UBLDeserializable
                         break;
                     case "PaymentDueDate":
                         $instance->PaymentDueDate = DateTime::createFromFormat("Y-m-d", $reader->readString());
-                        $reader->next();
+                        //$reader->next();
                         break;
                     case "InstructionID":
                         $instance->InstructionId = $reader->readString();
-                        $reader->next();
+                        //$reader->next();
                         break;
                     case "InstructionNote":
                         $instance->InstructionNote = $reader->readString();
-                        $reader->next();
+                        //$reader->next();
                         break;
                     case "PaymentID":
                         $instance->PaymentID = $reader->readString();
-                        $reader->next();
+                        //$reader->next();
                         break;
                     case "PayeeFinancialAccount":
                         $instance->PayeeFinancialAccount = $reader->parseCurrentElement()["value"];

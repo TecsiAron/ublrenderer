@@ -41,11 +41,11 @@ class TaxSubTotal extends UBLDeserializable
                 {
                     case "TaxableAmount":
                         $instance->TaxableAmount = $reader->readString();
-                        $reader->next(); // Move past the current text node
+                        //$reader->next(); // Move past the current text node
                         break;
                     case "TaxAmount":
                         $instance->TaxAmount = $reader->readString();
-                        $reader->next();
+                        //$reader->next();
                         break;
                     case "TaxCategory":
                         $parsed = $reader->parseCurrentElement();
@@ -53,7 +53,7 @@ class TaxSubTotal extends UBLDeserializable
                         break;
                     case "Percent":
                         $instance->Percent = $reader->readString();
-                        $reader->next();
+                        //$reader->next();
                         break;
                 }
             }

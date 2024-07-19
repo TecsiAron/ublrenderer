@@ -71,39 +71,39 @@ class ParsedUBLInvoice extends UBLDeserializable
                 {
                     case "UBLVersionID":
                         $instance->UBLVersionID = $reader->readString();
-                        $reader->next();
+                        //$reader->next();
                         break;
                     case "CustomizationID":
                         $instance->CustomizationID = $reader->readString();
-                        $reader->next();
+                        //$reader->next();
                         break;
                     case "ID":
                         $instance->ID = $reader->readString();
-                        $reader->next();
+                        //$reader->next();
                         break;
                     case "CopyIndicator":
                         $instance->CopyIndicator = $reader->readString() === 'true';
-                        $reader->next();
+                        //$reader->next();
                         break;
                     case "IssueDate":
                         $instance->IssueDate = DateTime::createFromFormat("Y-m-d", $reader->readString());
-                        $reader->next();
+                        //$reader->next();
                         break;
                     case "InvoiceTypeCode":
                         $instance->InvoiceTypeCode = InvoiceTypeCode::tryFrom($reader->readString()) ?? InvoiceTypeCode::INVALID;
-                        $reader->next();
+                        //$reader->next();
                         break;
                     case "Note":
                         $instance->Note = $reader->readString();
-                        $reader->next();
+                        //$reader->next();
                         break;
                     case "TaxPointDate":
                         $instance->TaxPointDate = DateTime::createFromFormat("Y-m-d", $reader->readString());
-                        $reader->next();
+                        //$reader->next();
                         break;
                     case "DueDate":
                         $instance->DueDate = DateTime::createFromFormat("Y-m-d", $reader->readString());
-                        $reader->next();
+                        //$reader->next();
                         break;
                     case "PaymentTerms":
                         $parsed = $reader->parseCurrentElement();
@@ -124,7 +124,7 @@ class ParsedUBLInvoice extends UBLDeserializable
                         break;
                     case "SupplierAssignedAccountID":
                         $instance->SupplierAssignedAccountID = $reader->readString();
-                        $reader->next();
+                        //$reader->next();
                         break;
                     case "PaymentMeans":
                         $parsed = $reader->parseCurrentElement();
@@ -152,15 +152,15 @@ class ParsedUBLInvoice extends UBLDeserializable
                         break;
                     case "DocumentCurrencyCode":
                         $instance->DocumentCurrencyCode = $reader->readString();
-                        $reader->next();
+                        //$reader->next();
                         break;
                     case "BuyerReference":
                         $instance->BuyerReference = $reader->readString();
-                        $reader->next();
+                        //$reader->next();
                         break;
                     case "AccountingCostCode":
                         $instance->AccountingCostCode = $reader->readString();
-                        $reader->next();
+                        //$reader->next();
                         break;
                     case "InvoicePeriod":
                         $parsed = $reader->parseCurrentElement();

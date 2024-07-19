@@ -43,13 +43,13 @@ class Delivery extends UBLDeserializable
                 {
                     case "ActualDeliveryDate":
                         $instance->ActualDeliveryDate = DateTime::createFromFormat("Y-m-d", $reader->readString());
-                        $reader->next();
+                        //$reader->next();
                         break;
                     case "DeliveryLocation":
                         $parsed = $reader->parseCurrentElement();
                         $instance->DeliveryLocationID = $parsed["value"][0]["value"];
                         $instance->DeliveryLocation = $parsed["value"][1]["value"];
-                        $reader->next();
+                        //$reader->next();
                         break;
                     case "DeliveryParty":
                         $parsed = $reader->parseCurrentElement();

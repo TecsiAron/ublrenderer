@@ -41,6 +41,7 @@ class Party extends UBLDeserializable
     public ?LegalEntity $LegalEntity = null;
     public ?string $EndpointID = null;
 
+    public bool $IsBuyer = false;
     public ?string $ForcedRegistrationNumber = null;
     /**
      * @deprecated
@@ -64,7 +65,7 @@ class Party extends UBLDeserializable
 
                     case "EndpointID":
                         $instance->EndpointID = $reader->readString();
-                        $reader->next(); // Move past the current text node
+                        //$reader->next(); // Move past the current text node
                         break;
                     case "PartyIdentification":
                         $parsed = $reader->parseCurrentElement();

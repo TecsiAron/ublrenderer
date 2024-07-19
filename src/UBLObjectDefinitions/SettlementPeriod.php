@@ -41,11 +41,11 @@ class SettlementPeriod extends UBLDeserializable
                 {
                     case "StartDate":
                         $instance->StartDate = DateTime::createFromFormat("Y-m-d", $reader->readString());
-                        $reader->next();
+                        //$reader->next();
                         break;
                     case "EndDate":
                         $instance->EndDate = DateTime::createFromFormat("Y-m-d", $reader->readString());
-                        $reader->next();
+                        //$reader->next();
                         break;
                 }
             }

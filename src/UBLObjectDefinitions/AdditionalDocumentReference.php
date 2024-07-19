@@ -43,19 +43,19 @@ class AdditionalDocumentReference extends UBLDeserializable
                 {
                     case "ID":
                         $instance->ID = $reader->readString();
-                        $reader->next();
+                        //$reader->next();
                         break;
                     case "DocumentType":
                         $instance->DocumentType = $reader->readString();
-                        $reader->next();
+                        //$reader->next();
                         break;
                     case "DocumentTypeCode":
                         $instance->DocumentTypeCode = $reader->readString();
-                        $reader->next();
+                        //$reader->next();
                         break;
                     case "DocumentDescription":
                         $instance->DocumentDescription = $reader->readString();
-                        $reader->next();
+                        //$reader->next();
                         break;
                     case "Attachment":
                         $parsed = $reader->parseCurrentElement();

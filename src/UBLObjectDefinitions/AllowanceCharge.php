@@ -49,19 +49,19 @@ class AllowanceCharge extends UBLDeserializable
                 {
                     case "ChargeIndicator":
                         $instance->ChargeIndicator = $reader->readString() === 'true';
-                        $reader->next(); // Move past the current text node
+                        //$reader->next(); // Move past the current text node
                         break;
                     case "AllowanceChargeReasonCode":
                         $instance->AllowanceChargeReasonCode = $reader->readString();
-                        $reader->next();
+                        //$reader->next();
                         break;
                     case "AllowanceChargeReason":
                         $instance->AllowanceChargeReason = $reader->readString();
-                        $reader->next();
+                        //$reader->next();
                         break;
                     case "MultiplierFactorNumeric":
                         $instance->MultiplierFactorNumeric = $reader->readString();
-                        $reader->next();
+                        //$reader->next();
                         break;
                     case "BaseAmount":
                         $parsed = $reader->parseCurrentElement();

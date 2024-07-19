@@ -40,7 +40,7 @@ class Country extends UBLDeserializable
                 {
                     case "IdentificationCode":
                         $instance->IdentificationCode = $reader->readString();
-                        $reader->next();
+                        //$reader->next();
                         break;
                 }
             }

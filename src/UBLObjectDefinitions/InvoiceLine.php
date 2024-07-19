@@ -62,7 +62,7 @@ class InvoiceLine extends UBLDeserializable
                 {
                     case "ID":
                         $instance->ID = $reader->readString();
-                        $reader->next();
+                        //$reader->next();
                         break;
                     case "InvoicedQuantity":
                         $parsed = $reader->parseCurrentElement();
@@ -83,7 +83,7 @@ class InvoiceLine extends UBLDeserializable
                         break;
                     case "Note":
                         $instance->Note = $reader->readString();
-                        $reader->next();
+                        //$reader->next();
                         break;
                     case "Item":
                         $instance->Item = $reader->parseCurrentElement()["value"];
@@ -93,11 +93,11 @@ class InvoiceLine extends UBLDeserializable
                         break;
                     case "AccountingCostCode":
                         $instance->AccountingCostCode = $reader->readString();
-                        $reader->next();
+                        //$reader->next();
                         break;
                     case "AccountingCost":
                         $instance->AccountingCost = $reader->readString();
-                        $reader->next();
+                        //$reader->next();
                         break;
                     case "InvoicePeriod":
                         $instance->InvoicePeriod = $reader->parseCurrentElement()["value"];

@@ -41,19 +41,19 @@ class TaxScheme extends UBLDeserializable
                 {
                     case "ID":
                         $instance->ID = $reader->readString();
-                        $reader->next();
+                        //$reader->next();
                         break;
                     case "Name":
                         $instance->Name = $reader->readString();
-                        $reader->next();
+                        //$reader->next();
                         break;
                     case "TaxTypeCode":
                         $instance->TaxTypeCode = $reader->readString();
-                        $reader->next();
+                        //$reader->next();
                         break;
                     case "CurrencyCode":
                         $instance->CurrencyCode = $reader->readString();
-                        $reader->next();
+                        //$reader->next();
                         break;
                 }
             }

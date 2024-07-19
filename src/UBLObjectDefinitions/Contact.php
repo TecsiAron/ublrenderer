@@ -42,19 +42,19 @@ class Contact extends UBLDeserializable
                 {
                     case "Name":
                         $instance->Name = $reader->readString();
-                        $reader->next();
+                        //$reader->next();
                         break;
                     case "Telephone":
                         $instance->Telephone = $reader->readString();
-                        $reader->next();
+                        //$reader->next();
                         break;
                     case "Telefax":
                         $instance->Telefax = $reader->readString();
-                        $reader->next();
+                        //$reader->next();
                         break;
                     case "ElectronicMail":
                         $instance->ElectronicMail = $reader->readString();
-                        $reader->next();
+                        //$reader->next();
                         break;
                 }
             }

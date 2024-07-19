@@ -44,15 +44,15 @@ class TaxCategory extends UBLDeserializable
                 {
                     case "ID":
                         $instance->ID = $reader->readString();
-                        $reader->next(); // Move past the current text node
+                        //$reader->next(); // Move past the current text node
                         break;
                     case "Name":
                         $instance->Name = $reader->readString();
-                        $reader->next();
+                        //$reader->next();
                         break;
                     case "Percent":
                         $instance->Percent = $reader->readString();
-                        $reader->next();
+                        //$reader->next();
                         break;
                     case "TaxScheme":
                         $parsed = $reader->parseCurrentElement();
@@ -60,11 +60,11 @@ class TaxCategory extends UBLDeserializable
                         break;
                     case "TaxExemptionReason":
                         $instance->TaxExemptionReason = $reader->readString();
-                        $reader->next();
+                        //$reader->next();
                         break;
                     case "TaxExemptionReasonCode":
                         $instance->TaxExemptionReasonCode = $reader->readString();
-                        $reader->next();
+                        //$reader->next();
                         break;
                 }
             }

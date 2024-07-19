@@ -46,12 +46,12 @@ class PaymentTerms extends UBLDeserializable
                 {
                     case "Note":
                         $instance->Note = $reader->readString();
-                        $reader->next();
+                        //$reader->next();
                         break;
                     case "SettlementDiscountPercent":
                         $string = trim($reader->readString(), "%");
                         $instance->SettlementDiscountPercent = $string;
-                        $reader->next();
+                        //$reader->next();
                         break;
                     case "Amount":
                         $instance->Amount = $reader->readString();
@@ -59,14 +59,14 @@ class PaymentTerms extends UBLDeserializable
                         {
                             $instance->AmountCurrencyID = $reader->getAttribute("currencyID");
                         }
-                        $reader->next();
+                        //$reader->next();
                         break;
                     case "SettlementPeriod":
                         $instance->SettlementPeriod = $reader->parseCurrentElement()["value"];
                         break;
                     case "PaymentDueDate":
                         $instance->PaymentDueDate = new DateTime($reader->readString());
-                        $reader->next();
+                        //$reader->next();
                         break;
                 }
             }

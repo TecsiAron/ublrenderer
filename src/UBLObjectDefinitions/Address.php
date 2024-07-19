@@ -49,27 +49,27 @@ class Address extends UBLDeserializable
                 {
                     case "StreetName":
                         $instance->StreetName = $reader->readString();
-                        $reader->next();
+                        //$reader->next();
                         break;
                     case "AdditionalStreetName":
                         $instance->AdditionalStreetName = $reader->readString();
-                        $reader->next();
+                        //$reader->next();
                         break;
                     case "BuildingNumber":
                         $instance->BuildingNumber = $reader->readString();
-                        $reader->next();
+                        //$reader->next();
                         break;
                     case "CityName":
                         $instance->CityName = $reader->readString();
-                        $reader->next();
+                        //$reader->next();
                         break;
                     case "PostalZone":
                         $instance->PostalZone = $reader->readString();
-                        $reader->next();
+                        //$reader->next();
                         break;
                     case "CountrySubentity":
                         $instance->CountrySubentity = $reader->readString();
-                        $reader->next();
+                        //$reader->next();
                         break;
                     case "Country":
                         $parsed = $reader->parseCurrentElement();

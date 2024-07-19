@@ -43,16 +43,16 @@ class LegalEntity extends UBLDeserializable
                 {
                     case "RegistrationName":
                         $instance->RegistrationName = $reader->readString();
-                        $reader->next();
+                        //$reader->next();
                         break;
                     case "CompanyID":
                         $instance->CompanyID = trim($reader->readString());
                         $instance->CompanyIDAttribute = $reader->getAttribute("schemeID");
-                        $reader->next();
+                        //$reader->next();
                         break;
                     case "CompanyLegalForm":
                         $instance->CompanyLegalForm = trim($reader->readString());
-                        $reader->next();
+                        //$reader->next();
                         break;
                 }
             }

@@ -39,7 +39,7 @@ class ContractDocumentReference extends UBLDeserializable
                 {
                     case "ID":
                         $instance->ID = $reader->readString();
-                        $reader->next(); // Move past the current text node
+                        //$reader->next(); // Move past the current text node
                         break;
                 }
             }

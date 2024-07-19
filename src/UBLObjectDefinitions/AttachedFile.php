@@ -42,7 +42,7 @@ class AttachedFile extends UBLDeserializable
                 {
                     case "FilePath":
                         $instance->FilePath = $reader->readString();
-                        $reader->next();
+                        //$reader->next();
                         break;
                     case "ExternalReference":
                         $parsed = $reader->parseCurrentElement();

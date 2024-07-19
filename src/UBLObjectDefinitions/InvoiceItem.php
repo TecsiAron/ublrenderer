@@ -47,11 +47,11 @@ class InvoiceItem extends UBLDeserializable
                 {
                     case "Description":
                         $instance->Description = $reader->readString();
-                        $reader->next();
+                        //$reader->next();
                         break;
                     case "Name":
                         $instance->Name = $reader->readString();
-                        $reader->next();
+                        //$reader->next();
                         break;
                     case "BuyersItemIdentification":
                         $parsed = $reader->parseCurrentElement();

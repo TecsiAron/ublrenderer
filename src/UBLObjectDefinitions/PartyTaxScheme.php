@@ -40,11 +40,11 @@ class PartyTaxScheme extends UBLDeserializable
                 {
                     case "RegistrationName":
                         $instance->RegistrationName = $reader->readString();
-                        $reader->next(); // Move past the current text node.
+                        //$reader->next(); // Move past the current text node.
                         break;
                     case "CompanyID":
                         $instance->CompanyId = $reader->readString();
-                        $reader->next();
+                        //$reader->next();
                         break;
                     case "TaxScheme":
                         $parsed = $reader->parseCurrentElement();

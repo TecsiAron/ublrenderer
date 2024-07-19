@@ -42,15 +42,15 @@ class OrderReference extends UBLDeserializable
                 {
                     case "ID":
                         $instance->ID = $reader->readString();
-                        $reader->next();
+                        //$reader->next();
                         break;
                     case "SalesOrderID":
                         $instance->SalesOrderId = $reader->readString();
-                        $reader->next();
+                        //$reader->next();
                         break;
                     case "IssueDate":
                         $instance->IssueDate = DateTime::createFromFormat("Y-m-d", $reader->readString());
-                        $reader->next();
+                        //$reader->next();
                         break;
                 }
             }

@@ -71,12 +71,12 @@ class UBLRenderer
 
     public function ParseUBL(): ParsedUBLInvoice
     {
-        $document=new DOMDocument();
+        /*$document=new DOMDocument();
         $document->preserveWhiteSpace = false;
         $document->formatOutput = true;
-        $document->loadXML($this->UBLContent);
+        $document->loadXML($this->UBLContent);*/
         $reader = XMLReaderProvider::CreateReader();
-        $reader->xml($document->saveXML());
+        $reader->xml($this->UBLContent);
         /**
          * @var ParsedUBLInvoice $invoice
          * @noinspection PhpRedundantVariableDocTypeInspection
