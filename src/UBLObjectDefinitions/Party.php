@@ -52,53 +52,44 @@ class Party extends UBLDeserializable
     public static function XMLDeserialize(Reader $reader): self
     {
         $instance = new self();
-        $depth = $reader->depth;
-        $reader->read(); // Move one child down
-
-        //todo check for entrypointID_schemeID?
-        while ($reader->nodeType != XMLReader::END_ELEMENT || $reader->depth > $depth)
+        $parsedParty = $reader->parseInnerTree();
+        if(!is_array($parsedParty))
         {
-            if ($reader->nodeType == XMLReader::ELEMENT)
+            return $instance;
+        }
+        for($i=0;$i<count($parsedParty);$i++)
+        {
+            $node = $parsedParty[$i];
+            if($node["value"] == null)
             {
-                switch ($reader->localName)
-                {
-
-                    case "EndpointID":
-                        $instance->EndpointID = $reader->readString();
-                        //$reader->next(); // Move past the current text node
-                        break;
-                    case "PartyIdentification":
-                        $parsed = $reader->parseCurrentElement();
-                        $instance->PartyIdentificationId = $parsed["value"][0]["value"];
-                        break;
-                    case "PostalAddress":
-                        $parsed = $reader->parseCurrentElement();
-                        $instance->PostalAddress = $parsed["value"];
-                        break;
-                    case "Contact":
-                        $parsed = $reader->parseCurrentElement();
-                        $instance->Contact = $parsed["value"];
-                        break;
-                    case "PartyTaxScheme":
-                        $parsed = $reader->parseCurrentElement();
-                        $instance->PartyTaxScheme = $parsed["value"];
-                        break;
-                    case "PartyLegalEntity":
-                        $parsed = $reader->parseCurrentElement();
-                        $instance->LegalEntity = $parsed["value"];
-                        break;
-                    case "PartyName":
-                        $parsed = $reader->parseCurrentElement();
-                        $instance->Name = $parsed["value"][0]["value"];
-                        break;
-                }
+                continue;
             }
-            if (!$reader->read())
+            $localName=$instance->getLocalName($node["name"]);
+            switch ($localName)
             {
-                throw new Exception("Unexpected end of XML file while reading Party.");
+                case "EndpointID":
+                    $instance->EndpointID = $node["value"];
+                    break;
+                case "PartyIdentification":
+                    $instance->PartyIdentificationId = $node["value"][0]["value"];
+                    break;
+                case "PostalAddress":
+                    $instance->PostalAddress = $node["value"];
+                    break;
+                case "Contact":
+                    $instance->Contact = $node["value"];
+                    break;
+                case "PartyTaxScheme":
+                    $instance->PartyTaxScheme = $node["value"];
+                    break;
+                case "PartyLegalEntity":
+                    $instance->LegalEntity = $node["value"];
+                    break;
+                case "PartyName":
+                    $instance->Name = $node["value"][0]["value"];
+                    break;
             }
         }
-
         return $instance;
     }
 

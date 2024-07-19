@@ -26,6 +26,7 @@ use EdituraEDU\UBLRenderer\UBLObjectDefinitions\Contact;
 use EdituraEDU\UBLRenderer\UBLObjectDefinitions\ContractDocumentReference;
 use EdituraEDU\UBLRenderer\UBLObjectDefinitions\Country;
 use EdituraEDU\UBLRenderer\UBLObjectDefinitions\Delivery;
+use EdituraEDU\UBLRenderer\UBLObjectDefinitions\DeliveryLocation;
 use EdituraEDU\UBLRenderer\UBLObjectDefinitions\InvoiceItem;
 use EdituraEDU\UBLRenderer\UBLObjectDefinitions\InvoiceLine;
 use EdituraEDU\UBLRenderer\UBLObjectDefinitions\InvoicePeriod;
@@ -66,6 +67,7 @@ class XMLReaderProvider
         ContractDocumentReference::class,
         LegalEntity::class,
         Party::class,
+        DeliveryLocation::class,
         Delivery::class,
         InvoiceItem::class,
         ItemPrice::class,

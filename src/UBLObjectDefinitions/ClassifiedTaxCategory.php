@@ -29,55 +29,47 @@ class ClassifiedTaxCategory extends TaxCategory
     public static function XMLDeserialize(Reader $reader): self
     {
         $instance = new self();
-        $depth = $reader->depth;
-        $reader->read(); // Move one child down
-
-        while ($reader->nodeType != XMLReader::END_ELEMENT || $reader->depth > $depth)
+        $parsedTaxCategory = $reader->parseInnerTree();
+        if(!is_array($parsedTaxCategory))
         {
-            if ($reader->nodeType == XMLReader::ELEMENT)
+            return $instance;
+        }
+        for($i=0;$i<count($parsedTaxCategory);$i++)
+        {
+            $node = $parsedTaxCategory[$i];
+            if($node["value"] == null)
             {
-                switch ($reader->localName)
-                {
-                    case "ID":
-                        $instance->ID = $reader->readString();
-                        //$reader->next(); // Move past the current text node
-                        break;
-                    case "Name":
-                        $instance->Name = $reader->readString();
-                        //$reader->next();
-                        break;
-                    case "Percent":
-                        $instance->Percent = $reader->readString();
-                        //$reader->next();
-                        break;
-                    case "TaxScheme":
-                        $parsed = $reader->parseCurrentElement();
-                        $instance->TaxScheme = $parsed["value"];
-                        break;
-                    case "TaxExemptionReason":
-                        $instance->TaxExemptionReason = $reader->readString();
-                        //$reader->next();
-                        break;
-                    case "TaxExemptionReasonCode":
-                        $instance->TaxExemptionReasonCode = $reader->readString();
-                        //$reader->next();
-                        break;
-                    case "SchemeID":
-                        $instance->SchemeID = $reader->readString();
-                        //$reader->next();
-                        break;
-                    case "SchemeName":
-                        $instance->SchemeName = $reader->readString();
-                        //$reader->next();
-                        break;
-                }
+                continue;
             }
-            if (!$reader->read())
+            $localName=$instance->getLocalName($node["name"]);
+            switch ($localName)
             {
-                throw new Exception("Unexpected end of XML file while reading TaxCategory.");
+                case "ID":
+                    $instance->ID = $node["value"];
+                    break;
+                case "Name":
+                    $instance->Name = $node["value"];
+                    break;
+                case "Percent":
+                    $instance->Percent = $node["value"];
+                    break;
+                case "TaxScheme":
+                    $instance->TaxScheme =  $node["value"];
+                    break;
+                case "TaxExemptionReason":
+                    $instance->TaxExemptionReason = $node["value"];
+                    break;
+                case "TaxExemptionReasonCode":
+                    $instance->TaxExemptionReasonCode = $node["value"];
+                    break;
+                case "SchemeID":
+                    $instance->SchemeID = $node["value"];
+                    break;
+                case "SchemeName":
+                    $instance->SchemeName = $node["value"];
+                    break;
             }
         }
-
         return $instance;
     }
 

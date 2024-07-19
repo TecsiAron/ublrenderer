@@ -31,37 +31,33 @@ class Contact extends UBLDeserializable
     public static function XMLDeserialize(Reader $reader): self
     {
         $instance = new self();
-        $depth = $reader->depth;
-        $reader->read(); // Move one child down
-
-        while ($reader->nodeType != XMLReader::END_ELEMENT || $reader->depth > $depth)
+        $parsedContact = $reader->parseInnerTree();
+        if(!is_array($parsedContact))
         {
-            if ($reader->nodeType == XMLReader::ELEMENT)
+            return $instance;
+        }
+        for($i=0;$i<count($parsedContact);$i++)
+        {
+            $node = $parsedContact[$i];
+            if($node["value"] == null)
             {
-                switch ($reader->localName)
-                {
-                    case "Name":
-                        $instance->Name = $reader->readString();
-                        //$reader->next();
-                        break;
-                    case "Telephone":
-                        $instance->Telephone = $reader->readString();
-                        //$reader->next();
-                        break;
-                    case "Telefax":
-                        $instance->Telefax = $reader->readString();
-                        //$reader->next();
-                        break;
-                    case "ElectronicMail":
-                        $instance->ElectronicMail = $reader->readString();
-                        //$reader->next();
-                        break;
-                }
+                continue;
             }
-
-            if (!$reader->read())
+            $localName=$instance->getLocalName($node["name"]);
+            switch ($localName)
             {
-                throw new Exception("Invalid XML format");
+                case "Name":
+                    $instance->Name = $node["value"];
+                    break;
+                case "Telephone":
+                    $instance->Telephone = $node["value"];
+                    break;
+                case "Telefax":
+                    $instance->Telefax = $node["value"];
+                    break;
+                case "ElectronicMail":
+                    $instance->ElectronicMail = $node["value"];
+                    break;
             }
         }
         return $instance;

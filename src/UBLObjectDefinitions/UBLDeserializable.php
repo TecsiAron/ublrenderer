@@ -77,6 +77,11 @@ abstract class UBLDeserializable
         return $currencyVar;
     }
 
+    protected function getLocalName(string $nameWithNamespace):string
+    {
+        return explode("}", $nameWithNamespace)[1];
+    }
+
     public abstract function CanRender(): true|array;
 
     //todo define mandatory non static method CanRender():bool

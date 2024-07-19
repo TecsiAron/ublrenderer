@@ -24,45 +24,52 @@ use XMLReader;
 class TaxSubTotal extends UBLDeserializable
 {
     public ?string $TaxableAmount = null;
+    public ?string $TaxableCurrency = null;
     public ?string $TaxAmount = null;
+    public ?string $TaxAmountCurrency = null;
     public ?TaxCategory $TaxCategory = null;
     private string $Percent;
 
     public static function XMLDeserialize(Reader $reader): self
     {
         $instance = new TaxSubTotal();
-        $depth = $reader->depth;
-        $reader->read(); // Move one child down
-        while ($reader->nodeType != XMLReader::END_ELEMENT || $reader->depth > $depth)
+        $paredSubTotal = $reader->parseInnerTree();
+        if (!is_array($paredSubTotal))
         {
-            if ($reader->nodeType == XMLReader::ELEMENT)
+            return $instance;
+        }
+        for ($i = 0; $i < sizeof($paredSubTotal); $i++)
+        {
+            $parsed = $paredSubTotal[$i];
+            if ($parsed["value"] == null)
             {
-                switch ($reader->localName)
-                {
-                    case "TaxableAmount":
-                        $instance->TaxableAmount = $reader->readString();
-                        //$reader->next(); // Move past the current text node
-                        break;
-                    case "TaxAmount":
-                        $instance->TaxAmount = $reader->readString();
-                        //$reader->next();
-                        break;
-                    case "TaxCategory":
-                        $parsed = $reader->parseCurrentElement();
-                        $instance->TaxCategory = $parsed["value"];
-                        break;
-                    case "Percent":
-                        $instance->Percent = $reader->readString();
-                        //$reader->next();
-                        break;
-                }
+                continue;
             }
-            if (!$reader->read())
+            $localName = $instance->getLocalName($parsed["name"]);
+            switch ($localName)
             {
-                throw new Exception("Unexpected end of XML file while reading TaxSubTotal.");
+                case "TaxableAmount":
+                    $instance->TaxableAmount = $parsed["value"];
+                    if (isset($parsed["attributes"]["currencyID"]))
+                    {
+                        $instance->TaxableCurrency = $parsed["attributes"]["currencyID"];
+                    }
+                    break;
+                case "TaxAmount":
+                    $instance->TaxAmount = $parsed["value"];
+                    if (isset($parsed["attributes"]["currencyID"]))
+                    {
+                        $instance->TaxAmountCurrency = $parsed["attributes"]["currencyID"];
+                    }
+                    break;
+                case "TaxCategory":
+                    $instance->TaxCategory = $parsed["value"];
+                    break;
+                case "Percent":
+                    $instance->Percent = $parsed["value"];
+                    break;
             }
         }
-
         return $instance;
     }
 

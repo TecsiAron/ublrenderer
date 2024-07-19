@@ -25,42 +25,32 @@ use XMLReader;
 class Delivery extends UBLDeserializable
 {
     public ?DateTime $ActualDeliveryDate = null;
-    private ?Address $DeliveryLocation = null;
-    public ?string $DeliveryLocationID = null;
+    public DeliveryLocation $DeliveryLocation;
     private ?string $DeliveryPartyName = null;
 
     public static function XMLDeserialize(Reader $reader): UBLDeserializable
     {
         $instance = new self();
-        $depth = $reader->depth;
-        $reader->read(); // Move one child down
-
-        while ($reader->nodeType != XMLReader::END_ELEMENT || $reader->depth > $depth)
+        $parsedDelivery = $reader->parseInnerTree();
+        if (!is_array($parsedDelivery))
         {
-            if ($reader->nodeType == XMLReader::ELEMENT)
+            return $instance;
+        }
+        for ($i = 0; $i < count($parsedDelivery); $i++)
+        {
+            $parsed = $parsedDelivery[$i];
+            $localName = $instance->getLocalName($parsed["name"]);
+            switch ($localName)
             {
-                switch ($reader->localName)
-                {
-                    case "ActualDeliveryDate":
-                        $instance->ActualDeliveryDate = DateTime::createFromFormat("Y-m-d", $reader->readString());
-                        //$reader->next();
-                        break;
-                    case "DeliveryLocation":
-                        $parsed = $reader->parseCurrentElement();
-                        $instance->DeliveryLocationID = $parsed["value"][0]["value"];
-                        $instance->DeliveryLocation = $parsed["value"][1]["value"];
-                        //$reader->next();
-                        break;
-                    case "DeliveryParty":
-                        $parsed = $reader->parseCurrentElement();
-                        $instance->DeliveryPartyName = $parsed["value"][0]["value"][0]["value"];
-                        break;
-                }
-            }
-
-            if (!$reader->read())
-            {
-                throw new Exception("Invalid XML format");
+                case "ActualDeliveryDate":
+                    $instance->ActualDeliveryDate = DateTime::createFromFormat("Y-m-d", $parsed["value"]);
+                    break;
+                case "DeliveryLocation":
+                    $instance->DeliveryLocation = $parsed["value"];
+                    break;
+                case "DeliveryParty":
+                    $instance->DeliveryPartyName = $parsed["value"][0]["value"][0]["value"];
+                    break;
             }
         }
         return $instance;
@@ -75,10 +65,7 @@ class Delivery extends UBLDeserializable
     {
         return '<cac:Delivery ' . self::NS_DEFINTIONS . '>
                     <cbc:ActualDeliveryDate>2021-01-01</cbc:ActualDeliveryDate>
-                    <cac:DeliveryLocation>
-                        <cbc:ID>1</cbc:ID>
-                        ' . Address::GetTestXML() . '
-                    </cac:DeliveryLocation>
+                    '.DeliveryLocation::GetTestXML().'
                     <cac:DeliveryParty>
                         <cac:PartyName>
                             <cbc:Name>Test</cbc:Name>
@@ -104,19 +91,13 @@ class Delivery extends UBLDeserializable
             $reason = "ActualDeliveryDate is not 2021-01-01";
             return false;
         }
-        if (Address::TestDefaultValues($instance->DeliveryLocation, $reason) === false)
-        {
-            $reason = "Failed to parse DeliveryLocation";
-            return false;
-        }
         if ($instance->DeliveryPartyName !== "Test")
         {
             $reason = "Failed to parse DeliveryPartyName";
             return false;
         }
-        if ($instance->DeliveryLocationID !== "1")
+        if (!DeliveryLocation::TestDefaultValues($instance->DeliveryLocation, $reason))
         {
-            $reason = "Failed to parse DeliveryLocationID";
             return false;
         }
         return true;

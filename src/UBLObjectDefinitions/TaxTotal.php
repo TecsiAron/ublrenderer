@@ -33,34 +33,31 @@ class TaxTotal extends UBLDeserializable
     public static function XMLDeserialize(Reader $reader): self
     {
         $instance = new TaxTotal();
-        $depth = $reader->depth;
-        $testXML = self::GetTestXML();
-        $cLark = $reader->getClark();
-        $reader->read(); // Move one child down
-        //TODO check if currencyID is needed
-        while ($reader->nodeType != XMLReader::END_ELEMENT || $reader->depth > $depth)
+        $parsedTaxTotal = $reader->parseInnerTree();
+        if (!is_array($parsedTaxTotal))
         {
-            if ($reader->nodeType == XMLReader::ELEMENT)
+            return $instance;
+        }
+        for ($i = 0; $i < sizeof($parsedTaxTotal); $i++)
+        {
+            $parsed = $parsedTaxTotal[$i];
+            if ($parsed["value"] == null)
             {
-                switch ($reader->localName)
-                {
-                    case "TaxAmount":
-                        $parsed= $reader->parseCurrentElement();
-                        $instance->TaxAmount = $parsed["value"];
-                        if (isset($parsed["attributes"]["currencyID"]))
-                        {
-                            $instance->TaxAmountCurrency = $parsed["attributes"]["currencyID"];
-                        }
-                        break;
-                    case "TaxSubtotal":
-                        $parsed = $reader->parseCurrentElement();
-                        $instance->TaxSubtotals[] = $parsed["value"];
-                        break;
-                }
+                continue;
             }
-            if (!$reader->read())
+            $localName = $instance->getLocalName($parsed["name"]);
+            switch ($localName)
             {
-                throw new Exception("Unexpected end of XML file while reading TaxTotal.");
+                case "TaxAmount":
+                    $instance->TaxAmount = $parsed["value"];
+                    if (isset($parsed["attributes"]["currencyID"]))
+                    {
+                        $instance->TaxAmountCurrency = $parsed["attributes"]["currencyID"];
+                    }
+                    break;
+                case "TaxSubtotal":
+                    $instance->TaxSubtotals[] = $parsed["value"];
+                    break;
             }
         }
 

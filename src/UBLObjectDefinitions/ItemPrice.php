@@ -37,43 +37,42 @@ class ItemPrice extends UBLDeserializable
     public static function XMLDeserialize(Reader $reader): self
     {
         $instance = new self();
-        $depth = $reader->depth;
-        $reader->read(); // Move one child down
-        while ($reader->nodeType != XMLReader::END_ELEMENT || $reader->depth > $depth)
+        $parsedItemPrice = $reader->parseInnerTree();
+        if(!is_array($parsedItemPrice))
         {
-            if ($reader->nodeType == XMLReader::ELEMENT)
+            return $instance;
+        }
+        for($i=0;$i<count($parsedItemPrice);$i++)
+        {
+            $node = $parsedItemPrice[$i];
+            if($node["value"] == null)
             {
-                switch ($reader->localName)
-                {
-                    case "PriceAmount":
-                        $parsed = $reader->parseCurrentElement();
-                        $instance->PriceAmount = $parsed["value"];
-                        if (isset($parsed["attributes"]["currencyID"]))
-                        {
-                            $instance->PriceCurrencyID = $parsed["attributes"]["currencyID"];
-                        }
-                        break;
-                    case "BaseQuantity":
-                        $parsed = $reader->parseCurrentElement();
-                        $instance->BaseQuantity = $parsed["value"];
-                        if ($parsed["attributes"]["unitCode"] !== null)
-                        {
-                            $instance->UnitCode = $parsed["attributes"]["unitCode"];
-                        }
-                        break;
-                    case "AllowanceCharge":
-                        if (!isset($instance->AllowanceCharge))
-                        {
-                            $instance->AllowanceCharge = [];
-                        }
-                        $instance->AllowanceCharge[] = AllowanceCharge::XMLDeserialize($reader);
-                        break;
-                }
+                continue;
             }
-
-            if (!$reader->read())
+            $localName=$instance->getLocalName($node["name"]);
+            switch ($localName)
             {
-                throw new Exception("Invalid XML format");
+                case "PriceAmount":
+                    $instance->PriceAmount = $node["value"];
+                    if(isset($node["attributes"]["currencyID"]))
+                    {
+                        $instance->PriceCurrencyID = $node["attributes"]["currencyID"];
+                    }
+                    break;
+                case "BaseQuantity":
+                    $instance->BaseQuantity = $node["value"];
+                    if($node["attributes"]["unitCode"] !== null)
+                    {
+                        $instance->UnitCode = $node["attributes"]["unitCode"];
+                    }
+                    break;
+                case "AllowanceCharge":
+                    if(!isset($instance->AllowanceCharge))
+                    {
+                        $instance->AllowanceCharge = [];
+                    }
+                    $instance->AllowanceCharge[] = $node["value"];
+                    break;
             }
         }
         return $instance;

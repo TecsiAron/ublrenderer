@@ -29,25 +29,28 @@ class Country extends UBLDeserializable
     public static function XMLDeserialize(Reader $reader): self
     {
         $instance = new self();
-        $depth = $reader->depth;
-        $reader->read(); // Move one child down
-
-        while ($reader->nodeType != XMLReader::END_ELEMENT || $reader->depth > $depth)
+        $parsedCountry = $reader->parseInnerTree();
+        if (!is_array($parsedCountry))
         {
-            if ($reader->nodeType == XMLReader::ELEMENT)
+            return $instance;
+        }
+        for ($i = 0; $i < sizeof($parsedCountry); $i++)
+        {
+            $parsed = $parsedCountry[$i];
+            if ($parsed["value"] == null)
             {
-                switch ($reader->localName)
-                {
-                    case "IdentificationCode":
-                        $instance->IdentificationCode = $reader->readString();
-                        //$reader->next();
-                        break;
-                }
+                continue;
             }
-
-            if (!$reader->read())
+            $localName = $instance->getLocalName($parsed["name"]);
+            switch ($localName)
             {
-                throw new Exception("Invalid XML format");
+                case "IdentificationCode":
+                    $instance->IdentificationCode = $parsed["value"];
+                    if(isset($parsed["attributes"]["listID"]))
+                    {
+                        $instance->ListID = $parsed["attributes"]["listID"];
+                    }
+                    break;
             }
         }
         return $instance;

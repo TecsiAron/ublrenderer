@@ -33,47 +33,41 @@ class TaxCategory extends UBLDeserializable
     public static function XMLDeserialize(Reader $reader): self
     {
         $instance = new self();
-        $depth = $reader->depth;
-        $reader->read(); // Move one child down
-
-        while ($reader->nodeType != XMLReader::END_ELEMENT || $reader->depth > $depth)
+        $xmlTaxCategory = $reader->parseInnerTree();
+        if (!is_array($xmlTaxCategory))
         {
-            if ($reader->nodeType == XMLReader::ELEMENT)
+            return $instance;
+        }
+        for ($i = 0; $i < sizeof($xmlTaxCategory); $i++)
+        {
+            $parsed = $xmlTaxCategory[$i];
+            if ($parsed["value"] == null)
             {
-                switch ($reader->localName)
-                {
-                    case "ID":
-                        $instance->ID = $reader->readString();
-                        //$reader->next(); // Move past the current text node
-                        break;
-                    case "Name":
-                        $instance->Name = $reader->readString();
-                        //$reader->next();
-                        break;
-                    case "Percent":
-                        $instance->Percent = $reader->readString();
-                        //$reader->next();
-                        break;
-                    case "TaxScheme":
-                        $parsed = $reader->parseCurrentElement();
-                        $instance->TaxScheme = $parsed["value"];
-                        break;
-                    case "TaxExemptionReason":
-                        $instance->TaxExemptionReason = $reader->readString();
-                        //$reader->next();
-                        break;
-                    case "TaxExemptionReasonCode":
-                        $instance->TaxExemptionReasonCode = $reader->readString();
-                        //$reader->next();
-                        break;
-                }
+                continue;
             }
-            if (!$reader->read())
+            $localName = $instance->getLocalName($parsed["name"]);
+            switch ($localName)
             {
-                throw new Exception("Unexpected end of XML file while reading TaxCategory.");
+                case "ID":
+                    $instance->ID = $parsed["value"];
+                    break;
+                case "Name":
+                    $instance->Name = $parsed["value"];
+                    break;
+                case "Percent":
+                    $instance->Percent = $parsed["value"];
+                    break;
+                case "TaxScheme":
+                    $instance->TaxScheme = $parsed["value"];
+                    break;
+                case "TaxExemptionReason":
+                    $instance->TaxExemptionReason = $parsed["value"];
+                    break;
+                case "TaxExemptionReasonCode":
+                    $instance->TaxExemptionReasonCode = $parsed["value"];
+                    break;
             }
         }
-
         return $instance;
     }
 

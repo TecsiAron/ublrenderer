@@ -35,48 +35,43 @@ class PaymentMeans extends UBLDeserializable
     public static function XMLDeserialize(Reader $reader): self
     {
         $instance = new self();
-        $depth = $reader->depth;
-        $reader->read(); // Move one child down
-
-        while ($reader->nodeType != XMLReader::END_ELEMENT || $reader->depth > $depth)
+        $parsedPaymentMeans = $reader->parseInnerTree();
+        if (!is_array($parsedPaymentMeans))
         {
-            if ($reader->nodeType == XMLReader::ELEMENT)
+            return $instance;
+        }
+        for ($i = 0; $i < sizeof($parsedPaymentMeans); $i++)
+        {
+            $parsed = $parsedPaymentMeans[$i];
+            if ($parsed["value"] == null)
             {
-                switch ($reader->localName)
-                {
-                    case "PaymentMeansCode":
-                        $parsed = $reader->parseCurrentElement();
-                        $instance->PaymentMeansCode = PaymentMeansCode::tryFrom(strtolower($parsed["value"])) ?? PaymentMeansCode::MutuallyDefined;
-                        if (isset($parsed["attributes"]["name"]))
-                        {
-                            $instance->PaymentMeansCodeName = $parsed["attributes"]["name"];
-                        }
-                        break;
-                    case "PaymentDueDate":
-                        $instance->PaymentDueDate = DateTime::createFromFormat("Y-m-d", $reader->readString());
-                        //$reader->next();
-                        break;
-                    case "InstructionID":
-                        $instance->InstructionId = $reader->readString();
-                        //$reader->next();
-                        break;
-                    case "InstructionNote":
-                        $instance->InstructionNote = $reader->readString();
-                        //$reader->next();
-                        break;
-                    case "PaymentID":
-                        $instance->PaymentID = $reader->readString();
-                        //$reader->next();
-                        break;
-                    case "PayeeFinancialAccount":
-                        $instance->PayeeFinancialAccount = $reader->parseCurrentElement()["value"];
-                        break;
-                }
+                continue;
             }
-
-            if (!$reader->read())
+            $localName = $instance->getLocalName($parsed["name"]);
+            switch ($localName)
             {
-                throw new Exception("Invalid XML format");
+                case "PaymentMeansCode":
+                    $instance->PaymentMeansCode = PaymentMeansCode::tryFrom(strtolower($parsed["value"])) ?? PaymentMeansCode::MutuallyDefined;
+                    if (isset($parsed["attributes"]["name"]))
+                    {
+                        $instance->PaymentMeansCodeName = $parsed["attributes"]["name"];
+                    }
+                    break;
+                case "PaymentDueDate":
+                    $instance->PaymentDueDate = DateTime::createFromFormat("Y-m-d", $parsed["value"]);
+                    break;
+                case "InstructionID":
+                    $instance->InstructionId = $parsed["value"];
+                    break;
+                case "InstructionNote":
+                    $instance->InstructionNote = $parsed["value"];
+                    break;
+                case "PaymentID":
+                    $instance->PaymentID = $parsed["value"];
+                    break;
+                case "PayeeFinancialAccount":
+                    $instance->PayeeFinancialAccount = $parsed["value"];
+                    break;
             }
         }
         return $instance;

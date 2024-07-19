@@ -30,31 +30,30 @@ class PartyTaxScheme extends UBLDeserializable
     public static function XMLDeserialize(Reader $reader): self
     {
         $instance = new self();
-        $depth = $reader->depth;
-        $reader->read(); // Move one child down
-        while ($reader->nodeType != XMLReader::END_ELEMENT || $reader->depth > $depth)
+        $parsedPartyTaxScheme = $reader->parseInnerTree();
+        if (!is_array($parsedPartyTaxScheme))
         {
-            if ($reader->nodeType == XMLReader::ELEMENT)
+            return $instance;
+        }
+        for ($i = 0; $i < sizeof($parsedPartyTaxScheme); $i++)
+        {
+            $parsed = $parsedPartyTaxScheme[$i];
+            if ($parsed["value"] == null)
             {
-                switch ($reader->localName)
-                {
-                    case "RegistrationName":
-                        $instance->RegistrationName = $reader->readString();
-                        //$reader->next(); // Move past the current text node.
-                        break;
-                    case "CompanyID":
-                        $instance->CompanyId = $reader->readString();
-                        //$reader->next();
-                        break;
-                    case "TaxScheme":
-                        $parsed = $reader->parseCurrentElement();
-                        $instance->TaxScheme = $parsed["value"];
-                        break;
-                }
+                continue;
             }
-            if (!$reader->read())
+            $localName = $instance->getLocalName($parsed["name"]);
+            switch ($localName)
             {
-                throw new Exception("Unexpected end of XML file while reading PartyTaxScheme.");
+                case "RegistrationName":
+                    $instance->RegistrationName = $parsed["value"];
+                    break;
+                case "CompanyID":
+                    $instance->CompanyId = $parsed["value"];
+                    break;
+                case "TaxScheme":
+                    $instance->TaxScheme = $parsed["value"];
+                    break;
             }
         }
         return $instance;

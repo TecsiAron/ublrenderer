@@ -32,34 +32,34 @@ class LegalEntity extends UBLDeserializable
     public static function XMLDeserialize(Reader $reader): self
     {
         $instance = new self();
-        $depth = $reader->depth;
-        $reader->read(); // Move one child down
-
-        while ($reader->nodeType != XMLReader::END_ELEMENT || $reader->depth > $depth)
+        $parsedLegalEntity = $reader->parseInnerTree();
+        if (!is_array($parsedLegalEntity))
         {
-            if ($reader->nodeType == XMLReader::ELEMENT)
+            return $instance;
+        }
+        for ($i = 0; $i < sizeof($parsedLegalEntity); $i++)
+        {
+            $parsed = $parsedLegalEntity[$i];
+            if ($parsed["value"] == null)
             {
-                switch ($reader->localName)
-                {
-                    case "RegistrationName":
-                        $instance->RegistrationName = $reader->readString();
-                        //$reader->next();
-                        break;
-                    case "CompanyID":
-                        $instance->CompanyID = trim($reader->readString());
-                        $instance->CompanyIDAttribute = $reader->getAttribute("schemeID");
-                        //$reader->next();
-                        break;
-                    case "CompanyLegalForm":
-                        $instance->CompanyLegalForm = trim($reader->readString());
-                        //$reader->next();
-                        break;
-                }
+                continue;
             }
-
-            if (!$reader->read())
+            $localName = $instance->getLocalName($parsed["name"]);
+            switch ($localName)
             {
-                throw new Exception("Invalid XML format");
+                case "RegistrationName":
+                    $instance->RegistrationName = $parsed["value"];
+                    break;
+                case "CompanyID":
+                    $instance->CompanyID = $parsed["value"];
+                    if (isset($parsed["attributes"]["schemeID"]))
+                    {
+                        $instance->CompanyIDAttribute = $parsed["attributes"]["schemeID"];
+                    }
+                    break;
+                case "CompanyLegalForm":
+                    $instance->CompanyLegalForm = $parsed["value"];
+                    break;
             }
         }
         return $instance;

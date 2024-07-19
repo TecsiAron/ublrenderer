@@ -30,29 +30,27 @@ class SettlementPeriod extends UBLDeserializable
     public static function XMLDeserialize(Reader $reader): self
     {
         $instance = new self();
-        $depth = $reader->depth;
-        $reader->read(); // Move one child down
-
-        while ($reader->nodeType != XMLReader::END_ELEMENT || $reader->depth > $depth)
+        $parsedSettlementPeriod = $reader->parseInnerTree();
+        if (!is_array($parsedSettlementPeriod))
         {
-            if ($reader->nodeType == XMLReader::ELEMENT)
+            return $instance;
+        }
+        for ($i = 0; $i < sizeof($parsedSettlementPeriod); $i++)
+        {
+            $parsed = $parsedSettlementPeriod[$i];
+            if ($parsed["value"] == null)
             {
-                switch ($reader->localName)
-                {
-                    case "StartDate":
-                        $instance->StartDate = DateTime::createFromFormat("Y-m-d", $reader->readString());
-                        //$reader->next();
-                        break;
-                    case "EndDate":
-                        $instance->EndDate = DateTime::createFromFormat("Y-m-d", $reader->readString());
-                        //$reader->next();
-                        break;
-                }
+                continue;
             }
-
-            if (!$reader->read())
+            $localName = $instance->getLocalName($parsed["name"]);
+            switch ($localName)
             {
-                throw new Exception("Invalid XML format");
+                case "StartDate":
+                    $instance->StartDate = DateTime::createFromFormat("Y-m-d", $parsed["value"]);
+                    break;
+                case "EndDate":
+                    $instance->EndDate = DateTime::createFromFormat("Y-m-d", $parsed["value"]);
+                    break;
             }
         }
         return $instance;

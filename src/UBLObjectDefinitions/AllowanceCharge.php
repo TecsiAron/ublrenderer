@@ -38,63 +38,49 @@ class AllowanceCharge extends UBLDeserializable
     public static function XMLDeserialize(Reader $reader): self
     {
         $instance = new self();
-        $depth = $reader->depth;
-        $reader->read(); // Move one child down
-
-        while ($reader->nodeType != XMLReader::END_ELEMENT || $reader->depth > $depth)
+        $parsedAllowanceCharge = $reader->parseInnerTree();
+        if(!is_array($parsedAllowanceCharge))
         {
-            if ($reader->nodeType == XMLReader::ELEMENT)
+            return $instance;
+        }
+        for($i=0;$i<count($parsedAllowanceCharge);$i++)
+        {
+            $node = $parsedAllowanceCharge[$i];
+            if($node["value"] == null)
             {
-                switch ($reader->localName)
-                {
-                    case "ChargeIndicator":
-                        $instance->ChargeIndicator = $reader->readString() === 'true';
-                        //$reader->next(); // Move past the current text node
-                        break;
-                    case "AllowanceChargeReasonCode":
-                        $instance->AllowanceChargeReasonCode = $reader->readString();
-                        //$reader->next();
-                        break;
-                    case "AllowanceChargeReason":
-                        $instance->AllowanceChargeReason = $reader->readString();
-                        //$reader->next();
-                        break;
-                    case "MultiplierFactorNumeric":
-                        $instance->MultiplierFactorNumeric = $reader->readString();
-                        //$reader->next();
-                        break;
-                    case "BaseAmount":
-                        $parsed = $reader->parseCurrentElement();
-                        $instance->BaseAmount = $parsed["value"];
-                        if (isset($parsed["attributes"]["currencyID"]))
-                        {
-                            $instance->BaseAmountCurrency = $parsed["attributes"]["currencyID"];
-                        }
-                        break;
-                    case "Amount":
-                        $parsed = $reader->parseCurrentElement();
-                        $instance->Amount = $parsed["value"];
-                        if (isset($parsed["attributes"]["currencyID"]))
-                        {
-                            $instance->AmountCurrency = $parsed["attributes"]["currencyID"];
-                        }
-                        break;
-                    case "TaxTotal":
-                        $parsed = $reader->parseCurrentElement();
-                        $instance->TaxTotal = $parsed["value"];
-                        break;
-                    case "TaxCategory":
-                        $parsed = $reader->parseCurrentElement();
-                        $instance->TaxCategory = $parsed["value"];
-                        break;
-                }
+                continue;
             }
-            if (!$reader->read())
+            $localName=$instance->getLocalName($node["name"]);
+            switch ($localName)
             {
-                throw new Exception("Unexpected end of XML file while reading AllowanceCharge.");
+                case "ChargeIndicator":
+                    $instance->ChargeIndicator = $node["value"] === 'true';
+                    break;
+                case "AllowanceChargeReasonCode":
+                    $instance->AllowanceChargeReasonCode = $node["value"];
+                    break;
+                case "AllowanceChargeReason":
+                    $instance->AllowanceChargeReason = $node["value"];
+                    break;
+                case "MultiplierFactorNumeric":
+                    $instance->MultiplierFactorNumeric = $node["value"];
+                    break;
+                case "BaseAmount":
+                    $instance->BaseAmount = $node["value"];
+                    $instance->BaseAmountCurrency = $node["attributes"]["currencyID"];
+                    break;
+                case "Amount":
+                    $instance->Amount = $node["value"];
+                    $instance->AmountCurrency = $node["attributes"]["currencyID"];
+                    break;
+                case "TaxTotal":
+                    $instance->TaxTotal = $node["value"];
+                    break;
+                case "TaxCategory":
+                    $instance->TaxCategory = $node["value"];
+                    break;
             }
         }
-
         return $instance;
     }
 

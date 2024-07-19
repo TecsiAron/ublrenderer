@@ -38,49 +38,42 @@ class Address extends UBLDeserializable
         {
             $instance = new self();
         }
-        $depth = $reader->depth;
-        $reader->read(); // Move one child down
-
-        while ($reader->nodeType != XMLReader::END_ELEMENT || $reader->depth > $depth)
+        $parsedAddress = $reader->parseInnerTree();
+        if (!is_array($parsedAddress))
         {
-            if ($reader->nodeType == XMLReader::ELEMENT)
+            return $instance;
+        }
+        for ($i = 0; $i < sizeof($parsedAddress); $i++)
+        {
+            $parsed = $parsedAddress[$i];
+            if ($parsed["value"] == null)
             {
-                switch ($reader->localName)
-                {
-                    case "StreetName":
-                        $instance->StreetName = $reader->readString();
-                        //$reader->next();
-                        break;
-                    case "AdditionalStreetName":
-                        $instance->AdditionalStreetName = $reader->readString();
-                        //$reader->next();
-                        break;
-                    case "BuildingNumber":
-                        $instance->BuildingNumber = $reader->readString();
-                        //$reader->next();
-                        break;
-                    case "CityName":
-                        $instance->CityName = $reader->readString();
-                        //$reader->next();
-                        break;
-                    case "PostalZone":
-                        $instance->PostalZone = $reader->readString();
-                        //$reader->next();
-                        break;
-                    case "CountrySubentity":
-                        $instance->CountrySubentity = $reader->readString();
-                        //$reader->next();
-                        break;
-                    case "Country":
-                        $parsed = $reader->parseCurrentElement();
-                        $instance->Country = $parsed["value"];
-                        break;
-                }
+                continue;
             }
-
-            if (!$reader->read())
+            $localName = $instance->getLocalName($parsed["name"]);
+            switch ($localName)
             {
-                throw new Exception("Invalid XML format");
+                case "StreetName":
+                    $instance->StreetName = $parsed["value"];
+                    break;
+                case "AdditionalStreetName":
+                    $instance->AdditionalStreetName = $parsed["value"];
+                    break;
+                case "BuildingNumber":
+                    $instance->BuildingNumber = $parsed["value"];
+                    break;
+                case "CityName":
+                    $instance->CityName = $parsed["value"];
+                    break;
+                case "PostalZone":
+                    $instance->PostalZone = $parsed["value"];
+                    break;
+                case "CountrySubentity":
+                    $instance->CountrySubentity = $parsed["value"];
+                    break;
+                case "Country":
+                    $instance->Country = $parsed["value"];
+                    break;
             }
         }
         return $instance;

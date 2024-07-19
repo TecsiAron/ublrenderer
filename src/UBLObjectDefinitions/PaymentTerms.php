@@ -35,45 +35,40 @@ class PaymentTerms extends UBLDeserializable
     public static function XMLDeserialize(Reader $reader): UBLDeserializable
     {
         $instance = new self();
-        $depth = $reader->depth;
-        $reader->read(); // Move one child down
-
-        while ($reader->nodeType != XMLReader::END_ELEMENT || $reader->depth > $depth)
+        $parsedPaymentTerms = $reader->parseInnerTree();
+        if (!is_array($parsedPaymentTerms))
         {
-            if ($reader->nodeType == XMLReader::ELEMENT)
+            return $instance;
+        }
+        for ($i = 0; $i < sizeof($parsedPaymentTerms); $i++)
+        {
+            $parsed = $parsedPaymentTerms[$i];
+            if ($parsed["value"] == null)
             {
-                switch ($reader->localName)
-                {
-                    case "Note":
-                        $instance->Note = $reader->readString();
-                        //$reader->next();
-                        break;
-                    case "SettlementDiscountPercent":
-                        $string = trim($reader->readString(), "%");
-                        $instance->SettlementDiscountPercent = $string;
-                        //$reader->next();
-                        break;
-                    case "Amount":
-                        $instance->Amount = $reader->readString();
-                        if ($reader->hasAttributes)
-                        {
-                            $instance->AmountCurrencyID = $reader->getAttribute("currencyID");
-                        }
-                        //$reader->next();
-                        break;
-                    case "SettlementPeriod":
-                        $instance->SettlementPeriod = $reader->parseCurrentElement()["value"];
-                        break;
-                    case "PaymentDueDate":
-                        $instance->PaymentDueDate = new DateTime($reader->readString());
-                        //$reader->next();
-                        break;
-                }
+                continue;
             }
-
-            if (!$reader->read())
+            $localName = $instance->getLocalName($parsed["name"]);
+            switch ($localName)
             {
-                throw new Exception("Invalid XML format");
+                case "Note":
+                    $instance->Note = $parsed["value"];
+                    break;
+                case "SettlementDiscountPercent":
+                    $instance->SettlementDiscountPercent = $parsed["value"];
+                    break;
+                case "Amount":
+                    $instance->Amount = $parsed["value"];
+                    if (isset($parsed["attributes"]["currencyID"]))
+                    {
+                        $instance->AmountCurrencyID = $parsed["attributes"]["currencyID"];
+                    }
+                    break;
+                case "SettlementPeriod":
+                    $instance->SettlementPeriod = $parsed["value"];
+                    break;
+                case "PaymentDueDate":
+                    $instance->PaymentDueDate =  DateTime::createFromFormat("Y-m-d", $parsed["value"]);
+                    break;
             }
         }
         return $instance;

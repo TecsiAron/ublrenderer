@@ -17,25 +17,26 @@
 
 namespace EdituraEDU\UBLRenderer\UBLObjectDefinitions;
 
-use Exception;
+use EdituraEDU\UBLRenderer\UBLObjectDefinitions\UBLDeserializable;
 use Sabre\Xml\Reader;
-use XMLReader;
 
-class ContractDocumentReference extends UBLDeserializable
+class DeliveryLocation extends UBLDeserializable
 {
+
     public ?string $ID = null;
+    public ?Address $Address = null;
 
     public static function XMLDeserialize(Reader $reader): self
     {
         $instance = new self();
-        $parsedContractDocumentReference = $reader->parseInnerTree();
-        if (!is_array($parsedContractDocumentReference))
+        $parsedDeliveryLocation = $reader->parseInnerTree();
+        if (!is_array($parsedDeliveryLocation))
         {
             return $instance;
         }
-        for ($i = 0; $i < count($parsedContractDocumentReference); $i++)
+        for ($i = 0; $i < count($parsedDeliveryLocation); $i++)
         {
-            $node = $parsedContractDocumentReference[$i];
+            $node = $parsedDeliveryLocation[$i];
             if ($node["value"] == null)
             {
                 continue;
@@ -46,6 +47,9 @@ class ContractDocumentReference extends UBLDeserializable
                 case "ID":
                     $instance->ID = $node["value"];
                     break;
+                case "Address":
+                    $instance->Address = $node["value"];
+                    break;
             }
         }
         return $instance;
@@ -53,14 +57,20 @@ class ContractDocumentReference extends UBLDeserializable
 
     public static function GetNamespace(): string
     {
-        return self::CAC_SCHEMA . "ContractDocumentReference";
+        return self::CAC_SCHEMA . "DeliveryLocation";
+    }
+
+    public function CanRender(): true|array
+    {
+        return true;
     }
 
     public static function GetTestXML(): string
     {
-        return '<cac:ContractDocumentReference ' . self::NS_DEFINTIONS . '>
-                    <cbc:ID>10</cbc:ID>
-        </cac:ContractDocumentReference>';
+        return '<cac:DeliveryLocation '.self::NS_DEFINTIONS.'>
+                        <cbc:ID>1</cbc:ID>
+                        ' . Address::GetTestXML() . '
+                    </cac:DeliveryLocation>';
     }
 
     public static function TestDefaultValues(?UBLDeserializable $instance, string &$reason): bool
@@ -70,20 +80,20 @@ class ContractDocumentReference extends UBLDeserializable
             $reason = "Instance is null";
             return false;
         }
-        if (!($instance instanceof ContractDocumentReference))
+        if (!($instance instanceof DeliveryLocation))
         {
-            $reason = "Instance is not ContractDocumentReference";
+            $reason = "Instance is not DeliveryLocation";
             return false;
         }
-        if ($instance->ID !== "10")
+        if ($instance->ID != "1")
         {
-            $reason = "ID is not 10";
+            $reason = "ID is not 1";
             return false;
         }
-        return true;
-    }
-    public function CanRender(): true|array
-    {
+        if (!Address::TestDefaultValues($instance->Address, $reason))
+        {
+            return false;
+        }
         return true;
     }
 }

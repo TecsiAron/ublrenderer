@@ -30,7 +30,10 @@ class RenderTest extends TestCase
             @unlink("test_render.html");
         }
         $this->assertFileDoesNotExist("test_render.html");
-        $content= ParsedUBLInvoice::GetTestXML();
+        /*$readResult = UBLRenderer::LoadUBLFromZip(dirname(__FILE__)."/../output/RMBU-1501508.zip");
+        $content = $readResult->ubl;*/
+        $content=file_get_contents(dirname(__FILE__)."/../output/4352708358.xml");
+        //$content= ParsedUBLInvoice::GetTestXML();
         $renderer = new UBLRenderer($content);
         $invoice=$renderer->ParseUBL();
         $validation=$invoice->CanRender();
@@ -38,6 +41,7 @@ class RenderTest extends TestCase
         if(is_array($validation))
         {
             $validationFailReason.=implode("\n", $validation);
+            $this->fail($validationFailReason);
         }
         $this->assertTrue($validation, $validationFailReason);
         try

@@ -60,131 +60,113 @@ class ParsedUBLInvoice extends UBLDeserializable
     public static function XMLDeserialize(Reader $reader): self
     {
         $instance = new self();
-        $depth = $reader->depth;
-        $reader->read(); // Move one child down
-
-        while ($reader->nodeType != XMLReader::END_ELEMENT || $reader->depth > $depth)
+        $clark=$reader->getClark();
+        while($clark != "{urn:oasis:names:specification:ubl:schema:xsd:Invoice-2}Invoice")
         {
-            if ($reader->nodeType == XMLReader::ELEMENT)
+            $reader->read();
+            $clark=$reader->getClark();
+            if($reader->nodeType === XMLReader::NONE)
             {
-                switch ($reader->localName)
-                {
-                    case "UBLVersionID":
-                        $instance->UBLVersionID = $reader->readString();
-                        //$reader->next();
-                        break;
-                    case "CustomizationID":
-                        $instance->CustomizationID = $reader->readString();
-                        //$reader->next();
-                        break;
-                    case "ID":
-                        $instance->ID = $reader->readString();
-                        //$reader->next();
-                        break;
-                    case "CopyIndicator":
-                        $instance->CopyIndicator = $reader->readString() === 'true';
-                        //$reader->next();
-                        break;
-                    case "IssueDate":
-                        $instance->IssueDate = DateTime::createFromFormat("Y-m-d", $reader->readString());
-                        //$reader->next();
-                        break;
-                    case "InvoiceTypeCode":
-                        $instance->InvoiceTypeCode = InvoiceTypeCode::tryFrom($reader->readString()) ?? InvoiceTypeCode::INVALID;
-                        //$reader->next();
-                        break;
-                    case "Note":
-                        $instance->Note = $reader->readString();
-                        //$reader->next();
-                        break;
-                    case "TaxPointDate":
-                        $instance->TaxPointDate = DateTime::createFromFormat("Y-m-d", $reader->readString());
-                        //$reader->next();
-                        break;
-                    case "DueDate":
-                        $instance->DueDate = DateTime::createFromFormat("Y-m-d", $reader->readString());
-                        //$reader->next();
-                        break;
-                    case "PaymentTerms":
-                        $parsed = $reader->parseCurrentElement();
-                        $instance->PaymentTerms = $parsed["value"];
-                        break;
-                    case "AccountingSupplierParty":
-                        $parsed = $reader->parseCurrentElement();
-                        $instance->AccountingSupplierParty = $parsed["value"][0]["value"];
-                        break;
-                    case "AccountingCustomerParty":
-                        $parsed = $reader->parseCurrentElement();
-                        $instance->AccountingCustomerParty = $parsed["value"][0]["value"];
-                        $instance->AccountingCustomerParty->IsBuyer = true;
-                        break;
-                    case "PayeeParty":
-                        $parsed = $reader->parseCurrentElement();
-                        $instance->PayeeParty = $parsed["value"][0]["value"];
-                        break;
-                    case "SupplierAssignedAccountID":
-                        $instance->SupplierAssignedAccountID = $reader->readString();
-                        //$reader->next();
-                        break;
-                    case "PaymentMeans":
-                        $parsed = $reader->parseCurrentElement();
-                        $instance->PaymentMeans = $parsed["value"];
-                        break;
-                    case "TaxTotal":
-                        $parsed = $reader->parseCurrentElement();
-                        $instance->TaxTotal = $parsed["value"];
-                        break;
-                    case "LegalMonetaryTotal":
-                        $parsed = $reader->parseCurrentElement();
-                        $instance->LegalMonetaryTotal = $parsed["value"];
-                        break;
-                    case "InvoiceLine":
-                        $parsed = $reader->parseCurrentElement();
-                        $instance->InvoiceLines[] = $parsed["value"];
-                        break;
-                    case "AllowanceCharge":
-                        $parsed = $reader->parseCurrentElement();
-                        $instance->AllowanceCharges[] = $parsed["value"];
-                        break;
-                    case "AdditionalDocumentReference":
-                        $parsed = $reader->parseCurrentElement();
-                        $instance->AdditionalDocumentReferences[] = $parsed["value"];
-                        break;
-                    case "DocumentCurrencyCode":
-                        $instance->DocumentCurrencyCode = $reader->readString();
-                        //$reader->next();
-                        break;
-                    case "BuyerReference":
-                        $instance->BuyerReference = $reader->readString();
-                        //$reader->next();
-                        break;
-                    case "AccountingCostCode":
-                        $instance->AccountingCostCode = $reader->readString();
-                        //$reader->next();
-                        break;
-                    case "InvoicePeriod":
-                        $parsed = $reader->parseCurrentElement();
-                        $instance->InvoicePeriod = $parsed["value"];
-                        break;
-                    case "Delivery":
-                        $parsed = $reader->parseCurrentElement();
-                        $instance->Delivery = $parsed["value"];
-                        break;
-                    case "OrderReference":
-                        $parsed = $reader->parseCurrentElement();
-                        $instance->OrderReference = $parsed["value"];
-                        break;
-                    case "ContractDocumentReference":
-                        $parsed = $reader->parseCurrentElement();
-                        $instance->ContractDocumentReference = $parsed["value"];
-                        break;
-                }
+                throw new Exception("Invalid XML structure for Invoice");
             }
-            if (!$reader->read())
+        }
+        $parsedInvoice = $reader->parseInnerTree();
+        if(!is_array($parsedInvoice))
+        {
+            throw new Exception("Invalid XML structure for Invoice");
+        }
+        for($i=0; $i<count($parsedInvoice); $i++)
+        {
+            $parsed = $parsedInvoice[$i];
+            if($parsed["value"] === null)
             {
-                throw new Exception("Unexpected end of XML file while reading Invoice.");
+                continue;
             }
-            $localName=$reader->localName;
+            $localName=$instance->getLocalName($parsed["name"]);
+            switch ($localName) {
+                case "UBLVersionID":
+                    $instance->UBLVersionID = $parsed["value"];
+                    break;
+                case "CustomizationID":
+                    $instance->CustomizationID = $parsed["value"];
+                    break;
+                case "ID":
+                    $instance->ID = $parsed["value"];
+                    break;
+                case "CopyIndicator":
+                    $instance->CopyIndicator = $parsed["value"] === 'true';
+                    break;
+                case "IssueDate":
+                    $instance->IssueDate = DateTime::createFromFormat("Y-m-d", $parsed["value"]);
+                    break;
+                case "InvoiceTypeCode":
+                    $instance->InvoiceTypeCode = InvoiceTypeCode::tryFrom($parsed["value"]) ?? InvoiceTypeCode::INVALID;
+                    break;
+                case "Note":
+                    $instance->Note = $parsed["value"];
+                    break;
+                case "TaxPointDate":
+                    $instance->TaxPointDate = DateTime::createFromFormat("Y-m-d", $parsed["value"]);
+                    break;
+                case "DueDate":
+                    $instance->DueDate = DateTime::createFromFormat("Y-m-d", $parsed["value"]);
+                    break;
+                case "PaymentTerms":
+                    $instance->PaymentTerms = $parsed["value"];
+                    break;
+                case "AccountingSupplierParty":
+                    $instance->AccountingSupplierParty = $parsed["value"][0]["value"];
+                    break;
+                case "AccountingCustomerParty":
+                    $instance->AccountingCustomerParty = $parsed["value"][0]["value"];
+                    $instance->AccountingCustomerParty->IsBuyer = true;
+                    break;
+                case "PayeeParty":
+                    $instance->PayeeParty = $parsed["value"][0]["value"];
+                    break;
+                case "SupplierAssignedAccountID":
+                    $instance->SupplierAssignedAccountID = $parsed["value"];
+                    break;
+                case "PaymentMeans":
+                    $instance->PaymentMeans = $parsed["value"];
+                    break;
+                case "TaxTotal":
+                    $instance->TaxTotal = $parsed["value"];
+                    break;
+                case "LegalMonetaryTotal":
+                    $instance->LegalMonetaryTotal = $parsed["value"];
+                    break;
+                case "InvoiceLine":
+                    $instance->InvoiceLines[] = $parsed["value"];
+                    break;
+                case "AllowanceCharge":
+                    $instance->AllowanceCharges[] = $parsed["value"];
+                    break;
+                case "AdditionalDocumentReference":
+                    $instance->AdditionalDocumentReferences[] = $parsed["value"];
+                    break;
+                case "DocumentCurrencyCode":
+                    $instance->DocumentCurrencyCode = $parsed["value"];
+                    break;
+                case "BuyerReference":
+                    $instance->BuyerReference = $parsed["value"];
+                    break;
+                case "AccountingCostCode":
+                    $instance->AccountingCostCode = $parsed["value"];
+                    break;
+                case "InvoicePeriod":
+                    $instance->InvoicePeriod = $parsed["value"];
+                    break;
+                case "Delivery":
+                    $instance->Delivery = $parsed["value"];
+                    break;
+                case "OrderReference":
+                    $instance->OrderReference = $parsed["value"];
+                    break;
+                case "ContractDocumentReference":
+                    $instance->ContractDocumentReference = $parsed["value"];
+                    break;
+            }
         }
         $instance->DeserializeComplete();
         return $instance;

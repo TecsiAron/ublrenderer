@@ -31,33 +31,30 @@ class InvoicePeriod extends UBLDeserializable
     public static function XMLDeserialize(Reader $reader): self
     {
         $instance = new self();
-        $depth = $reader->depth;
-        $reader->read(); // Move one child down
-
-        while ($reader->nodeType != XMLReader::END_ELEMENT || $reader->depth > $depth)
+        $parsedInvoicePeriod = $reader->parseInnerTree();
+        if(!is_array($parsedInvoicePeriod))
         {
-            if ($reader->nodeType == XMLReader::ELEMENT)
+            return $instance;
+        }
+        for($i=0;$i<count($parsedInvoicePeriod);$i++)
+        {
+            $node = $parsedInvoicePeriod[$i];
+            if($node["value"] == null)
             {
-                switch ($reader->localName)
-                {
-                    case "StartDate":
-                        $instance->StartDate = DateTime::createFromFormat("Y-m-d", $reader->readString());
-                        //$reader->next();
-                        break;
-                    case "EndDate":
-                        $instance->EndDate = DateTime::createFromFormat("Y-m-d", $reader->readString());
-                        //$reader->next();
-                        break;
-                    case "DescriptionCode":
-                        $instance->DescriptionCode = $reader->readString();
-                        //$reader->next();
-                        break;
-                }
+                continue;
             }
-
-            if (!$reader->read())
+            $localName=$instance->getLocalName($node["name"]);
+            switch ($localName)
             {
-                throw new Exception("Invalid XML format");
+                case "StartDate":
+                    $instance->StartDate = DateTime::createFromFormat("Y-m-d", $node["value"]);
+                    break;
+                case "EndDate":
+                    $instance->EndDate = DateTime::createFromFormat("Y-m-d", $node["value"]);
+                    break;
+                case "DescriptionCode":
+                    $instance->DescriptionCode = $node["value"];
+                    break;
             }
         }
         return $instance;

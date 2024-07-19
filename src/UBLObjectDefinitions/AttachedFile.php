@@ -31,33 +31,31 @@ class AttachedFile extends UBLDeserializable
     public static function XMLDeserialize(Reader $reader): self
     {
         $instance = new self();
-        $depth = $reader->depth;
-        $reader->read(); // Move one child down
-
-        while ($reader->nodeType != XMLReader::END_ELEMENT || $reader->depth > $depth)
+        $parsedAttachedFile = $reader->parseInnerTree();
+        if(!is_array($parsedAttachedFile))
         {
-            if ($reader->nodeType == XMLReader::ELEMENT)
+            return $instance;
+        }
+        for($i=0; $i<count($parsedAttachedFile); $i++)
+        {
+            $parsed = $parsedAttachedFile[$i];
+            if($parsed["value"] === null)
             {
-                switch ($reader->localName)
-                {
-                    case "FilePath":
-                        $instance->FilePath = $reader->readString();
-                        //$reader->next();
-                        break;
-                    case "ExternalReference":
-                        $parsed = $reader->parseCurrentElement();
-                        $instance->ExternalReference = $parsed["value"];
-                        if (isset($parsed["attributes"]["mimeCode"]))
-                        {
-                            $instance->ExternalReferenceMimeType = $parsed["attributes"]["mimeCode"];
-                        }
-                        break;
-                }
+                continue;
             }
-
-            if (!$reader->read())
+            $localName=$instance->getLocalName($parsed["name"]);
+            switch ($localName)
             {
-                throw new Exception("Invalid XML format");
+                case "FilePath":
+                    $instance->FilePath = $parsed["value"];
+                    break;
+                case "ExternalReference":
+                    $instance->ExternalReference = $parsed["value"];
+                    if (isset($parsed["attributes"]["mimeCode"]))
+                    {
+                        $instance->ExternalReferenceMimeType = $parsed["attributes"]["mimeCode"];
+                    }
+                    break;
             }
         }
         return $instance;

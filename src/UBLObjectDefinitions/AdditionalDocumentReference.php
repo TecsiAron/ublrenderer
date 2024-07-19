@@ -32,41 +32,36 @@ class AdditionalDocumentReference extends UBLDeserializable
     public static function XMLDeserialize(Reader $reader): self
     {
         $instance = new self();
-        $depth = $reader->depth;
-        $reader->read(); // Move one child down
-
-        while ($reader->nodeType != XMLReader::END_ELEMENT || $reader->depth > $depth)
+        $parsedAdditionalDocumentReference = $reader->parseInnerTree();
+        if(!is_array($parsedAdditionalDocumentReference))
         {
-            if ($reader->nodeType == XMLReader::ELEMENT)
+            return $instance;
+        }
+        for($i=0; $i<count($parsedAdditionalDocumentReference); $i++)
+        {
+            $parsed = $parsedAdditionalDocumentReference[$i];
+            if($parsed["value"] === null)
             {
-                switch ($reader->localName)
-                {
-                    case "ID":
-                        $instance->ID = $reader->readString();
-                        //$reader->next();
-                        break;
-                    case "DocumentType":
-                        $instance->DocumentType = $reader->readString();
-                        //$reader->next();
-                        break;
-                    case "DocumentTypeCode":
-                        $instance->DocumentTypeCode = $reader->readString();
-                        //$reader->next();
-                        break;
-                    case "DocumentDescription":
-                        $instance->DocumentDescription = $reader->readString();
-                        //$reader->next();
-                        break;
-                    case "Attachment":
-                        $parsed = $reader->parseCurrentElement();
-                        $instance->Attachment = $parsed["value"];
-                        break;
-                }
+                continue;
             }
-
-            if (!$reader->read())
+            $localName=$instance->getLocalName($parsed["name"]);
+            switch ($localName)
             {
-                throw new Exception("Invalid XML format");
+                case "ID":
+                    $instance->ID = $parsed["value"];
+                    break;
+                case "DocumentType":
+                    $instance->DocumentType = $parsed["value"];
+                    break;
+                case "DocumentTypeCode":
+                    $instance->DocumentTypeCode = $parsed["value"];
+                    break;
+                case "DocumentDescription":
+                    $instance->DocumentDescription = $parsed["value"];
+                    break;
+                case "Attachment":
+                    $instance->Attachment = $parsed["value"];
+                    break;
             }
         }
         return $instance;

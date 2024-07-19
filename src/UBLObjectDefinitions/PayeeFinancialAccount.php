@@ -30,33 +30,30 @@ class PayeeFinancialAccount extends UBLDeserializable
     public static function XMLDeserialize(Reader $reader): self
     {
         $instance = new self();
-        $depth = $reader->depth;
-        $reader->read(); // Move one child down
-
-        while ($reader->nodeType != XMLReader::END_ELEMENT || $reader->depth > $depth)
+        $parsedPayeeFinancialAccount = $reader->parseInnerTree();
+        if (!is_array($parsedPayeeFinancialAccount))
         {
-            if ($reader->nodeType == XMLReader::ELEMENT)
+            return $instance;
+        }
+        for ($i = 0; $i < sizeof($parsedPayeeFinancialAccount); $i++)
+        {
+            $parsed = $parsedPayeeFinancialAccount[$i];
+            if ($parsed["value"] == null)
             {
-                switch ($reader->localName)
-                {
-                    case "ID":
-                        $instance->ID = $reader->readString();
-                        //$reader->next();
-                        break;
-                    case "Name":
-                        $instance->Name = $reader->readString();
-                        //$reader->next();
-                        break;
-                    case "FinancialInstitutionBranch":
-                        $parsed = $reader->parseCurrentElement();
-                        $instance->FinancialInstitutionBranchID = $parsed["value"][0]["value"];
-                        break;
-                }
+                continue;
             }
-
-            if (!$reader->read())
+            $localName = $instance->getLocalName($parsed["name"]);
+            switch ($localName)
             {
-                throw new Exception("Invalid XML format");
+                case "ID":
+                    $instance->ID = $parsed["value"];
+                    break;
+                case "Name":
+                    $instance->Name = $parsed["value"];
+                    break;
+                case "FinancialInstitutionBranch":
+                    $instance->FinancialInstitutionBranchID = $parsed["value"][0]["value"];
+                    break;
             }
         }
         return $instance;

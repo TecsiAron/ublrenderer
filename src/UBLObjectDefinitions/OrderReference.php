@@ -31,33 +31,30 @@ class OrderReference extends UBLDeserializable
     public static function XMLDeserialize(Reader $reader): self
     {
         $instance = new self();
-        $depth = $reader->depth;
-        $reader->read(); // Move one child down
-
-        while ($reader->nodeType != XMLReader::END_ELEMENT || $reader->depth > $depth)
+        $parsedOrderReference = $reader->parseInnerTree();
+        if(!is_array($parsedOrderReference))
         {
-            if ($reader->nodeType == XMLReader::ELEMENT)
+            return $instance;
+        }
+        for($i=0;$i<count($parsedOrderReference);$i++)
+        {
+            $node = $parsedOrderReference[$i];
+            if($node["value"] == null)
             {
-                switch ($reader->localName)
-                {
-                    case "ID":
-                        $instance->ID = $reader->readString();
-                        //$reader->next();
-                        break;
-                    case "SalesOrderID":
-                        $instance->SalesOrderId = $reader->readString();
-                        //$reader->next();
-                        break;
-                    case "IssueDate":
-                        $instance->IssueDate = DateTime::createFromFormat("Y-m-d", $reader->readString());
-                        //$reader->next();
-                        break;
-                }
+                continue;
             }
-
-            if (!$reader->read())
+            $localName=$instance->getLocalName($node["name"]);
+            switch ($localName)
             {
-                throw new Exception("Invalid XML format");
+                case "ID":
+                    $instance->ID = $node["value"];
+                    break;
+                case "SalesOrderID":
+                    $instance->SalesOrderId = $node["value"];
+                    break;
+                case "IssueDate":
+                    $instance->IssueDate = DateTime::createFromFormat("Y-m-d", $node["value"]);
+                    break;
             }
         }
         return $instance;

@@ -36,57 +36,46 @@ class InvoiceItem extends UBLDeserializable
     public static function XMLDeserialize(Reader $reader): self
     {
         $instance = new self();
-        $depth = $reader->depth;
-        $reader->read(); // Move one child down
-
-        while ($reader->nodeType != XMLReader::END_ELEMENT || $reader->depth > $depth)
+        $parsedInvoiceItem = $reader->parseInnerTree();
+        if(!is_array($parsedInvoiceItem))
         {
-            if ($reader->nodeType == XMLReader::ELEMENT)
+            return $instance;
+        }
+        for($i=0;$i<count($parsedInvoiceItem);$i++)
+        {
+            $parsed = $parsedInvoiceItem[$i];
+            $localName = $instance->getLocalName($parsed["name"]);
+            switch ($localName)
             {
-                switch ($reader->localName)
-                {
-                    case "Description":
-                        $instance->Description = $reader->readString();
-                        //$reader->next();
-                        break;
-                    case "Name":
-                        $instance->Name = $reader->readString();
-                        //$reader->next();
-                        break;
-                    case "BuyersItemIdentification":
-                        $parsed = $reader->parseCurrentElement();
-                        $instance->BuyersItemIdentification = $parsed["value"][0]["value"];
-                        break;
-                    case "SellersItemIdentification":
-                        $parsed = $reader->parseCurrentElement();
-                        $instance->SellersItemIdentification = $parsed["value"][0]["value"];
-                        break;
-                    case "StandardItemIdentification":
-                        $parsed = $reader->parseCurrentElement();
-                        $instance->StandardItemIdentification = $parsed["value"][0]["value"];
-                        if (isset($parsed["value"][0]["attributes"]["listID"]))
-                        {
-                            $instance->StandardItemIdentificationListID = $parsed["value"][0]["attributes"]["schemeID"];
-                        }
-                        break;
-                    case "CommodityClassification":
-                        $parsed = $reader->parseCurrentElement();
-                        $instance->CommodityClassification = $parsed["value"][0]["value"];
-                        if (isset($parsed["value"][0]["attributes"]["listID"]))
-                        {
-                            $instance->CommodityClassificationListID = $parsed["value"][0]["attributes"]["listID"];
-                        }
-                        break;
-                    case "ClassifiedTaxCategory":
-                        $parsed = $reader->parseCurrentElement();
-                        $instance->ClassifiedTaxCategory = $parsed["value"];
-                        break;
-                }
-            }
-
-            if (!$reader->read())
-            {
-                throw new Exception("Invalid XML format");
+                case "Description":
+                    $instance->Description = $parsed["value"];
+                    break;
+                case "Name":
+                    $instance->Name = $parsed["value"];
+                    break;
+                case "BuyersItemIdentification":
+                    $instance->BuyersItemIdentification = $parsed["value"][0]["value"];
+                    break;
+                case "SellersItemIdentification":
+                    $instance->SellersItemIdentification = $parsed["value"][0]["value"];
+                    break;
+                case "StandardItemIdentification":
+                    $instance->StandardItemIdentification = $parsed["value"][0]["value"];
+                    if (isset($parsed["value"][0]["attributes"]["listID"]))
+                    {
+                        $instance->StandardItemIdentificationListID = $parsed["value"][0]["attributes"]["schemeID"];
+                    }
+                    break;
+                case "CommodityClassification":
+                    $instance->CommodityClassification = $parsed["value"][0]["value"];
+                    if (isset($parsed["value"][0]["attributes"]["listID"]))
+                    {
+                        $instance->CommodityClassificationListID = $parsed["value"][0]["attributes"]["listID"];
+                    }
+                    break;
+                case "ClassifiedTaxCategory":
+                    $instance->ClassifiedTaxCategory = $parsed["value"];
+                    break;
             }
         }
         return $instance;

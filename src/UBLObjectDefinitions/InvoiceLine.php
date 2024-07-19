@@ -51,73 +51,63 @@ class InvoiceLine extends UBLDeserializable
     public static function XMLDeserialize(Reader $reader): UBLDeserializable
     {
         $instance = new self();
-        $depth = $reader->depth;
-        $reader->read(); // Move one child down
-
-        while ($reader->nodeType != XMLReader::END_ELEMENT || $reader->depth > $depth)
+        $parsedInvoiceLine = $reader->parseInnerTree();
+        if (!is_array($parsedInvoiceLine))
         {
-            if ($reader->nodeType == XMLReader::ELEMENT)
+            return $instance;
+        }
+        for ($i = 0; $i < count($parsedInvoiceLine); $i++)
+        {
+            $parsed = $parsedInvoiceLine[$i];
+            $localName = $instance->getLocalName($parsed["name"]);
+            switch ($localName)
             {
-                switch ($reader->localName)
-                {
-                    case "ID":
-                        $instance->ID = $reader->readString();
-                        //$reader->next();
-                        break;
-                    case "InvoicedQuantity":
-                        $parsed = $reader->parseCurrentElement();
-                        $instance->InvoicedQuantity = $parsed["value"];
-                        $instance->UnitCode = $parsed["attributes"]["unitCode"];
-                        if (isset($parsed["attributes"]["unitCodeListID"]))
-                        {
-                            $instance->UnitCodeListId = $parsed["attributes"]["unitCodeListID"];
-                        }
-                        break;
-                    case "LineExtensionAmount":
-                        $parsed = $reader->parseCurrentElement();
-                        $instance->LineExtensionAmount = $parsed["value"];
-                        if (isset($parsed["attributes"]["currencyID"]))
-                        {
-                            $instance->LineExtensionAmountCurrencyID = $parsed["attributes"]["currencyID"];
-                        }
-                        break;
-                    case "Note":
-                        $instance->Note = $reader->readString();
-                        //$reader->next();
-                        break;
-                    case "Item":
-                        $instance->Item = $reader->parseCurrentElement()["value"];
-                        break;
-                    case "Price":
-                        $instance->Price = $reader->parseCurrentElement()["value"];
-                        break;
-                    case "AccountingCostCode":
-                        $instance->AccountingCostCode = $reader->readString();
-                        //$reader->next();
-                        break;
-                    case "AccountingCost":
-                        $instance->AccountingCost = $reader->readString();
-                        //$reader->next();
-                        break;
-                    case "InvoicePeriod":
-                        $instance->InvoicePeriod = $reader->parseCurrentElement()["value"];
-                        break;
-                    case "AllowanceCharge":
-                        if (!isset($instance->AllowanceCharge))
-                        {
-                            $instance->AllowanceCharge = [];
-                        }
-                        $instance->AllowanceCharge[] = $reader->parseCurrentElement()["value"];
-                        break;
-                }
-            }
-
-            if (!$reader->read())
-            {
-                throw new Exception("Invalid XML format");
+                case "ID":
+                    $instance->ID = $parsed["value"];
+                    break;
+                case "InvoicedQuantity":
+                    $instance->InvoicedQuantity = $parsed["value"];
+                    $instance->UnitCode = $parsed["attributes"]["unitCode"];
+                    if (isset($parsed["attributes"]["unitCodeListID"]))
+                    {
+                        $instance->UnitCodeListId = $parsed["attributes"]["unitCodeListID"];
+                    }
+                    break;
+                case "LineExtensionAmount":
+                    $instance->LineExtensionAmount = $parsed["value"];
+                    if (isset($parsed["attributes"]["currencyID"]))
+                    {
+                        $instance->LineExtensionAmountCurrencyID = $parsed["attributes"]["currencyID"];
+                    }
+                    break;
+                case "Note":
+                    $instance->Note = $parsed["value"];
+                    break;
+                case "Item":
+                    $instance->Item = $parsed["value"];
+                    break;
+                case "Price":
+                    $instance->Price = $parsed["value"];
+                    break;
+                case "AccountingCostCode":
+                    $instance->AccountingCostCode = $parsed["value"];
+                    break;
+                case "AccountingCost":
+                    $instance->AccountingCost = $parsed["value"];
+                    break;
+                case "InvoicePeriod":
+                    $instance->InvoicePeriod = $parsed["value"];
+                    break;
+                case "AllowanceCharge":
+                    if (!isset($instance->AllowanceCharge))
+                    {
+                        $instance->AllowanceCharge = [];
+                    }
+                    $instance->AllowanceCharge[] = $parsed["value"];
+                    break;
             }
         }
-        $instance->DeserializeComplete();
+        $instance->DeserializeComplete();;
         return $instance;
     }
 

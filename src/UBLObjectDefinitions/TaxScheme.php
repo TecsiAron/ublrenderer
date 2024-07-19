@@ -31,36 +31,33 @@ class TaxScheme extends UBLDeserializable
     public static function XMLDeserialize(Reader $reader): self
     {
         $instance = new TaxScheme();
-        $depth = $reader->depth;
-        $reader->read();//move one child down
-        while ($reader->nodeType != XMLReader::END_ELEMENT || $reader->depth > $depth)
+        $parsedScheme = $reader->parseInnerTree();
+        if (!is_array($parsedScheme))
         {
-            if ($reader->nodeType == XMLReader::ELEMENT)
+            return $instance;
+        }
+        for ($i = 0; $i < sizeof($parsedScheme); $i++)
+        {
+            $parsed = $parsedScheme[$i];
+            if ($parsed["value"] == null)
             {
-                switch ($reader->localName)
-                {
-                    case "ID":
-                        $instance->ID = $reader->readString();
-                        //$reader->next();
-                        break;
-                    case "Name":
-                        $instance->Name = $reader->readString();
-                        //$reader->next();
-                        break;
-                    case "TaxTypeCode":
-                        $instance->TaxTypeCode = $reader->readString();
-                        //$reader->next();
-                        break;
-                    case "CurrencyCode":
-                        $instance->CurrencyCode = $reader->readString();
-                        //$reader->next();
-                        break;
-                }
+                continue;
             }
-
-            if (!$reader->read())
+            $localName = $instance->getLocalName($parsed["name"]);
+            switch ($localName)
             {
-                throw new Exception("Invalid XML format");
+                case "ID":
+                    $instance->ID = $parsed["value"];
+                    break;
+                case "Name":
+                    $instance->Name = $parsed["value"];
+                    break;
+                case "TaxTypeCode":
+                    $instance->TaxTypeCode = $parsed["value"];
+                    break;
+                case "CurrencyCode":
+                    $instance->CurrencyCode = $parsed["value"];
+                    break;
             }
         }
         return $instance;
