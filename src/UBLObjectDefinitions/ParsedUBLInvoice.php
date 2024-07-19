@@ -116,6 +116,7 @@ class ParsedUBLInvoice extends UBLDeserializable
                     case "AccountingCustomerParty":
                         $parsed = $reader->parseCurrentElement();
                         $instance->AccountingCustomerParty = $parsed["value"][0]["value"];
+                        $instance->AccountingCustomerParty->IsBuyer = true;
                         break;
                     case "PayeeParty":
                         $parsed = $reader->parseCurrentElement();
@@ -183,12 +184,23 @@ class ParsedUBLInvoice extends UBLDeserializable
             {
                 throw new Exception("Unexpected end of XML file while reading Invoice.");
             }
+            $localName=$reader->localName;
         }
-
+        $instance->DeserializeComplete();
         return $instance;
     }
 
-    
+    protected function DeserializeComplete(): void
+    {
+        if(isset($this->AccountingSupplierParty))
+        {
+            if($this->AccountingCustomerParty->GetRegistrationNumber()==null && isset($this->BuyerReference) && !empty($this->BuyerReference))
+            {
+                $this->AccountingCustomerParty->ForcedRegistrationNumber=$this->BuyerReference;
+            }
+        }
+    }
+
 
     public static function GetNamespace(): string
     {
@@ -810,7 +822,7 @@ class ParsedUBLInvoice extends UBLDeserializable
             if($partyResult!==true)
             {
                 $subComponentsOK=false;
-                $result[]=array_merge($result,$partyResult);
+                $result=array_merge($result,$partyResult);
             }
         }
         if($this->AccountingSupplierParty!=null)
@@ -819,7 +831,7 @@ class ParsedUBLInvoice extends UBLDeserializable
             if($partyResult!==true)
             {
                 $subComponentsOK=false;
-                $result[]=array_merge($result,$partyResult);
+                $result=array_merge($result,$partyResult);
             }
         }
         if($this->InvoiceLines!=null)
@@ -831,7 +843,7 @@ class ParsedUBLInvoice extends UBLDeserializable
                 if($lineResult!==true)
                 {
                     $subComponentsOK=false;
-                    $result[]=array_merge($result,$lineResult);
+                    $result=array_merge($result,$lineResult);
                 }
             }
         }
@@ -850,7 +862,7 @@ class ParsedUBLInvoice extends UBLDeserializable
             if($validationResult!==true)
             {
                 $subComponentsOK=false;
-                $result[]=array_merge($result,$validationResult);
+                $result=array_merge($result,$validationResult);
             }
         }
         if($subComponentsOK===true)

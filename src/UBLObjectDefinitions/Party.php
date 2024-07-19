@@ -17,6 +17,7 @@
 
 namespace EdituraEDU\UBLRenderer\UBLObjectDefinitions;
 
+use EdituraEDU\UBLRenderer\UBLRenderer;
 use Exception;
 use Sabre\Xml\Reader;
 use XMLReader;
@@ -39,10 +40,13 @@ class Party extends UBLDeserializable
     public ?PartyTaxScheme $PartyTaxScheme = null;
     public ?LegalEntity $LegalEntity = null;
     public ?string $EndpointID = null;
+
+    public ?string $ForcedRegistrationNumber = null;
     /**
      * @deprecated
      */
     public ?string $EndpointID_schemeID = null;
+
 
     public static function XMLDeserialize(Reader $reader): self
     {
@@ -185,6 +189,10 @@ class Party extends UBLDeserializable
         {
             return $this->LegalEntity->CompanyLegalForm;
         }
+        if(!empty($this->ForcedRegistrationNumber))
+        {
+            return $this->ForcedRegistrationNumber;
+        }
         return null;
     }
 
@@ -202,7 +210,7 @@ class Party extends UBLDeserializable
         $results=[];
         if(is_array($addressValidation))
         {
-            $results=$addressValidation;
+            $results=array_merge($results, $addressValidation);
         }
         if($this->GetCIF()==null)
         {
