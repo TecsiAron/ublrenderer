@@ -168,6 +168,10 @@ class Party extends UBLDeserializable
         {
             return $this->PartyTaxScheme->CompanyId;
         }
+        if(isset($this->LegalEntity->CompanyID) && $this->IsValidCIF($this->LegalEntity->CompanyID))
+        {
+            return $this->LegalEntity->CompanyID;
+        }
         return null;
     }
 
