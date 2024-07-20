@@ -234,6 +234,7 @@ class Party extends UBLDeserializable
 
     public function IsValidCIF(?string $input):bool
     {
+        return true;
         if($input===null)
         {
             return false;

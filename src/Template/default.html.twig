@@ -83,7 +83,7 @@
             <div class="header-line header-buyer-line">CIF: {{ invoice.AccountingSupplierParty.GetCIF() }}</div>
             {% if invoice.AccountingSupplierParty.HasRegistrationNumber() %}
             <div class="header-line header-buyer-line">Nr. Reg. Com.: {{ invoice.AccountingSupplierParty.GetRegistrationNumber() }}</div>
-            {% end if %}
+            {% endif %}
             <div class="header-line header-buyer-line">Sediu:</div>
             <div class="header-line header-buyer-line">Județul: {{ invoice.AccountingSupplierParty.PostalAddress.GetCountyName() }}</div>
             <div class="header-line header-buyer-line">Localitatea: {{ invoice.AccountingSupplierParty.PostalAddress.CityName }}</div>
@@ -126,7 +126,7 @@
             <div class="header-line header-buyer-line">CIF: {{ invoice.AccountingCustomerParty.GetCIF() }}</div>
             {% if invoice.AccountingCustomerParty.HasRegistrationNumber() %}
             <div class="header-line header-buyer-line">Nr. Reg. Com.: {{ invoice.AccountingCustomerParty.GetRegistrationNumber() }}</div>
-            {% end if %}
+            {% endif %}
             <div class="header-line header-buyer-line">Sediu:</div>
             <div class="header-line header-buyer-line">Județul: {{ invoice.AccountingCustomerParty.PostalAddress.GetCountyName() }}</div>
             <div class="header-line header-buyer-line">Localitatea: {{ invoice.AccountingCustomerParty.PostalAddress.CityName }}</div>
