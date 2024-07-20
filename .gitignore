@@ -2,3 +2,4 @@
 tests/.phpunit.result.cache
 **/**/test_render.html
 /output/
+composer.lock
