@@ -79,7 +79,7 @@
         <td class="header-party header-seller">
             <!-- seller -->
             <div class="header-line header-buyer-line">Furnizor:</div>
-            <div class="header-line header-buyer-line">{{ invoice.AccountingSupplierParty.Name }}</div>
+            <div class="header-line header-buyer-line">{{ invoice.AccountingSupplierParty.GetName() }}</div>
             <div class="header-line header-buyer-line">CIF: {{ invoice.AccountingSupplierParty.GetCIF() }}</div>
             {% if invoice.AccountingSupplierParty.HasRegistrationNumber() %}
             <div class="header-line header-buyer-line">Nr. Reg. Com.: {{ invoice.AccountingSupplierParty.GetRegistrationNumber() }}</div>
@@ -122,7 +122,7 @@
         <td class="header-party header-buyer">
             <!-- buyer -->
             <div class="header-line header-buyer-line">Cumpărător:</div>
-            <div class="header-line header-buyer-line">{{ invoice.AccountingCustomerParty.Name }}</div>
+            <div class="header-line header-buyer-line">{{ invoice.AccountingCustomerParty.GetName() }}</div>
             <div class="header-line header-buyer-line">CIF: {{ invoice.AccountingCustomerParty.GetCIF() }}</div>
             {% if invoice.AccountingCustomerParty.HasRegistrationNumber() %}
             <div class="header-line header-buyer-line">Nr. Reg. Com.: {{ invoice.AccountingCustomerParty.GetRegistrationNumber() }}</div>
