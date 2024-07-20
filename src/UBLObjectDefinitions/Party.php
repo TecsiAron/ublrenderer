@@ -181,16 +181,21 @@ class Party extends UBLDeserializable
         {
             return $this->LegalEntity->CompanyLegalForm;
         }
-        if(!empty($this->ForcedRegistrationNumber))
+        if(!empty($this->ForcedRegistrationNumber) && $this->IsValidRegNumber($this->ForcedRegistrationNumber))
         {
             return $this->ForcedRegistrationNumber;
         }
         return null;
     }
 
+    public function HasRegistrationNumber():bool
+    {
+        return $this->GetRegistrationNumber()!=null;
+    }
+
     public function CanRender(): true|array
     {
-        $toCheck=[$this->GetCIF(),$this->GetRegistrationNumber(), $this->Name];
+        $toCheck=[$this->GetCIF(), $this->Name];
         $addressValidation=$this->PostalAddress->CanRender();
         if($addressValidation===true)
         {
@@ -207,10 +212,6 @@ class Party extends UBLDeserializable
         if($this->GetCIF()==null)
         {
             $results[]="[Party] CIF is missing";
-        }
-        if($this->GetRegistrationNumber()==null)
-        {
-            $results[]="[Party] Registration number is missing";
         }
         return $results;
     }
