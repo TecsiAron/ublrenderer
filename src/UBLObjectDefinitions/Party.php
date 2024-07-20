@@ -160,11 +160,11 @@ class Party extends UBLDeserializable
 
     public function GetCIF():?string
     {
-        if(isset($this->PartyIdentificationId))
+        if(isset($this->PartyIdentificationId) && $this->IsValidCIF($this->PartyIdentificationId))
         {
             return $this->PartyIdentificationId;
         }
-        if(isset($this->PartyTaxScheme->CompanyId))
+        if(isset($this->PartyTaxScheme->CompanyId) && $this->IsValidCIF($this->PartyTaxScheme->CompanyId))
         {
             return $this->PartyTaxScheme->CompanyId;
         }
@@ -230,5 +230,44 @@ class Party extends UBLDeserializable
         /** @noinspection RegExpRedundantEscape */
         $regex="/[J|C|F][0-9][0-9][\/ \\ \-\s][0-9]*[\/ \\ \-][0-9]*/i";
         return preg_match($regex, $regNumber) === 1;
+    }
+
+    public function IsValidCIF(?string $input):bool
+    {
+        if($input===null)
+        {
+            return false;
+        }
+        $cif=trim(strtolower($input));
+        if (!is_int($cif))
+        {
+            $cif = strtoupper($cif);
+            if (str_starts_with($cif, 'RO'))
+            {
+                $cif = substr($cif, 2);
+            }
+            $cif = (int)trim($cif);
+        }
+
+        if (strlen($cif) > 10 || strlen($cif) < 2)
+        {
+            return false;
+        }
+        $v = 753217532;
+        $c1 = $cif % 10;
+        $cif = (int)($cif / 10);
+        $t = 0;
+        while ($cif > 0)
+        {
+            $t += ($cif % 10) * ($v % 10);
+            $cif = (int)($cif / 10);
+            $v = (int)($v / 10);
+        }
+        $c2 = $t * 10 % 11;
+        if ($c2 == 10)
+        {
+            $c2 = 0;
+        }
+        return $c1 === $c2;
     }
 }
