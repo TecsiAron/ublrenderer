@@ -18,7 +18,6 @@
 namespace EdituraEDU\UBLRenderer;
 
 
-use DOMDocument;
 use EdituraEDU\UBLRenderer\UBLObjectDefinitions\ParsedUBLInvoice;
 use Exception;
 use Twig\Environment;
