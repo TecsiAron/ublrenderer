@@ -1,0 +1,755 @@
+<!--
+    Copyright [2024] [Tecsi Aron]
+
+    Licensed under the Apache License, Version 2.0 (the "License");
+    you may not use this file except in compliance with the License.
+    You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+    Unless required by applicable law or agreed to in writing, software
+    distributed under the License is distributed on an "AS IS" BASIS,
+    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+    See the License for the specific language governing permissions and
+    limitations under the License.
+-->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Factură</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        body
+        {
+            margin: 0.5em;
+        }
+        .header-table
+        {
+            width: 100%;
+            border-collapse: collapse;
+            border:1px solid black;
+        }
+        .header-info,
+        .header-party
+        {
+            padding: 0.5em;
+            border:1px solid black;
+        }
+        .header-info
+        {
+            width: 15%;
+            text-align: center;
+        }
+        .header-buyer
+        {
+            text-align: right;
+        }
+        .invoice-lines-table
+        {
+            margin-top: 1em;
+            width: 100%;
+            border-collapse: collapse;
+            border:1px solid black;
+        }
+        .invoice-lines-table thead th
+        {
+            border:1px solid black;
+        }
+        .invoice-line td
+        {
+            border:1px solid black;
+            text-align: center;
+            padding: 0.2em;
+        }
+
+        .invoice-total
+        {
+            page-break-before: avoid;
+            margin-top: 1em;
+            text-align: right;
+        }
+
+    </style>
+</head>
+<body>
+<!-- HEADER -->
+<table class="header-table">
+    <tr>
+        <td class="header-party header-seller">
+            <!-- seller -->
+            <div class="header-line header-buyer-line">Furnizor:</div>
+            <div class="header-line header-buyer-line">Seller SRL</div>
+            <div class="header-line header-buyer-line">CIF: RO1234567890</div>
+                        <div class="header-line header-buyer-line">Nr. Reg. Com.: J40/12345/1998</div>
+                        <div class="header-line header-buyer-line">Sediu:</div>
+            <div class="header-line header-buyer-line">Județul: București</div>
+            <div class="header-line header-buyer-line">Localitatea: SECTOR1</div>
+                            <div class="header-line header-buyer-line">Cod poștal: 013329</div>
+                        <div class="header-line header-buyer-line">Adresa:</div>
+            <div class="header-line header-buyer-line">line1</div>
+                                                                            </td>
+        <td class="header-info">
+            <!-- invoice info -->
+            <div class="header-line header-info-line">Factură:</div>
+            <div class="header-line header-info-line">Nr. 6422451356</div>
+            <div class="header-line header-info-line">din</div>
+            <div class="header-line header-info-line">2022-05-31</div>
+                            <div class="header-line header-info-line">Scadentă în data de:</div>
+                <div class="header-line header-info-line">2022-05-31</div>
+                    </td>
+        <td class="header-party header-buyer">
+            <!-- buyer -->
+            <div class="header-line header-buyer-line">Cumpărător:</div>
+            <div class="header-line header-buyer-line">Buyer name</div>
+            <div class="header-line header-buyer-line">CIF: 123456</div>
+                        <div class="header-line header-buyer-line">Nr. Reg. Com.: J02/321/2010</div>
+                        <div class="header-line header-buyer-line">Sediu:</div>
+            <div class="header-line header-buyer-line">Județul: Arad</div>
+            <div class="header-line header-buyer-line">Localitatea: ARAD</div>
+                            <div class="header-line header-buyer-line">Cod poștal: 123456</div>
+                        <div class="header-line header-buyer-line">Adresa: BD DECEBAL NR 1 ET1</div>
+                    </td>
+    </tr>
+</table>
+<!-- END HEADER -->
+<!-- INVLOCE LINES -->
+<table class="invoice-lines-table">
+    <thead>
+    <tr class="invoice-header">
+        <th>Nr. Crt</th>
+        <th>Denumire</th>
+        <th>UM</th>
+                    <th>Cod</th>
+                <th>Cotă TVA</th>
+        <th>Cantitate</th>
+        <th>Preț unitar<br>(fără TVA)</th>
+        <th>Valoare<br>(fără TVA)</th>
+        <th>TVA<br>(aprox.)</th>
+    </tr>
+    </thead>
+                <tr class="invoice-line">
+        <td>1</td>
+                <td>item name</td>
+                <td>BUC</td>
+                                <td>Vânz: 0102</td>
+                                <td>19.00%</td>
+                <td>46396.67</td>
+                <td>7.6453 RON</td>
+                <td>334641.38 RON</td>
+                <td>63581.86 RON</td>
+            </tr>
+                                            <tr class="invoice-line">
+                    <td><!-- No line number --></td>
+                    <td> Discount: 801.98 RON</td>
+                    <td><!-- No unit code --></td>
+                                        <td><!-- No item ID? --></td>
+                                        <td><!-- No vat rate --></td>
+                    <td><!-- No quantity--></td>
+                    <td><!-- No unit price --></td>
+                    <td><!-- No value --></td>
+                    <td><!-- No vat value--></td>
+                </tr>
+                                <tr class="invoice-line">
+                    <td><!-- No line number --></td>
+                    <td> Mutually defined: -19272.48 RON</td>
+                    <td><!-- No unit code --></td>
+                                        <td><!-- No item ID? --></td>
+                                        <td><!-- No vat rate --></td>
+                    <td><!-- No quantity--></td>
+                    <td><!-- No unit price --></td>
+                    <td><!-- No value --></td>
+                    <td><!-- No vat value--></td>
+                </tr>
+                                            <tr class="invoice-line">
+        <td>2</td>
+                <td>item name</td>
+                <td>BUC</td>
+                                <td>Vânz: 0104</td>
+                                <td>19.00%</td>
+                <td>622078.28</td>
+                <td>7.0987 RON</td>
+                <td>4289031.25 RON</td>
+                <td>814915.93 RON</td>
+            </tr>
+                                            <tr class="invoice-line">
+                    <td><!-- No line number --></td>
+                    <td> Discount: 10454.98 RON</td>
+                    <td><!-- No unit code --></td>
+                                        <td><!-- No item ID? --></td>
+                                        <td><!-- No vat rate --></td>
+                    <td><!-- No quantity--></td>
+                    <td><!-- No unit price --></td>
+                    <td><!-- No value --></td>
+                    <td><!-- No vat value--></td>
+                </tr>
+                                <tr class="invoice-line">
+                    <td><!-- No line number --></td>
+                    <td> Mutually defined: -116445.65 RON</td>
+                    <td><!-- No unit code --></td>
+                                        <td><!-- No item ID? --></td>
+                                        <td><!-- No vat rate --></td>
+                    <td><!-- No quantity--></td>
+                    <td><!-- No unit price --></td>
+                    <td><!-- No value --></td>
+                    <td><!-- No vat value--></td>
+                </tr>
+                                            <tr class="invoice-line">
+        <td>3</td>
+                <td>item name</td>
+                <td>BUC</td>
+                                <td>Vânz: 0106</td>
+                                <td>19.00%</td>
+                <td>94104.55</td>
+                <td>7.2813 RON</td>
+                <td>662151.44 RON</td>
+                <td>125808.77 RON</td>
+            </tr>
+                                            <tr class="invoice-line">
+                    <td><!-- No line number --></td>
+                    <td> Discount: 3589.66 RON</td>
+                    <td><!-- No unit code --></td>
+                                        <td><!-- No item ID? --></td>
+                                        <td><!-- No vat rate --></td>
+                    <td><!-- No quantity--></td>
+                    <td><!-- No unit price --></td>
+                    <td><!-- No value --></td>
+                    <td><!-- No vat value--></td>
+                </tr>
+                                <tr class="invoice-line">
+                    <td><!-- No line number --></td>
+                    <td> Mutually defined: -19458.05 RON</td>
+                    <td><!-- No unit code --></td>
+                                        <td><!-- No item ID? --></td>
+                                        <td><!-- No vat rate --></td>
+                    <td><!-- No quantity--></td>
+                    <td><!-- No unit price --></td>
+                    <td><!-- No value --></td>
+                    <td><!-- No vat value--></td>
+                </tr>
+                                            <tr class="invoice-line">
+        <td>4</td>
+                <td>item name</td>
+                <td>BUC</td>
+                                <td>Vânz: 0107</td>
+                                <td>19.00%</td>
+                <td>3764335.51</td>
+                <td>6.9490 RON</td>
+                <td>25444505.23 RON</td>
+                <td>4834455.99 RON</td>
+            </tr>
+                                            <tr class="invoice-line">
+                    <td><!-- No line number --></td>
+                    <td> Discount: 63265.49 RON</td>
+                    <td><!-- No unit code --></td>
+                                        <td><!-- No item ID? --></td>
+                                        <td><!-- No vat rate --></td>
+                    <td><!-- No quantity--></td>
+                    <td><!-- No unit price --></td>
+                    <td><!-- No value --></td>
+                    <td><!-- No vat value--></td>
+                </tr>
+                                <tr class="invoice-line">
+                    <td><!-- No line number --></td>
+                    <td> Mutually defined: -650523.32 RON</td>
+                    <td><!-- No unit code --></td>
+                                        <td><!-- No item ID? --></td>
+                                        <td><!-- No vat rate --></td>
+                    <td><!-- No quantity--></td>
+                    <td><!-- No unit price --></td>
+                    <td><!-- No value --></td>
+                    <td><!-- No vat value--></td>
+                </tr>
+                                            <tr class="invoice-line">
+        <td>5</td>
+                <td>item name</td>
+                <td>BUC</td>
+                                <td>Vânz: 0108</td>
+                                <td>19.00%</td>
+                <td>51772.34</td>
+                <td>7.3995 RON</td>
+                <td>379456.48 RON</td>
+                <td>72096.73 RON</td>
+            </tr>
+                                            <tr class="invoice-line">
+                    <td><!-- No line number --></td>
+                    <td> Discount: 2980.02 RON</td>
+                    <td><!-- No unit code --></td>
+                                        <td><!-- No item ID? --></td>
+                                        <td><!-- No vat rate --></td>
+                    <td><!-- No quantity--></td>
+                    <td><!-- No unit price --></td>
+                    <td><!-- No value --></td>
+                    <td><!-- No vat value--></td>
+                </tr>
+                                <tr class="invoice-line">
+                    <td><!-- No line number --></td>
+                    <td> Mutually defined: -654.54 RON</td>
+                    <td><!-- No unit code --></td>
+                                        <td><!-- No item ID? --></td>
+                                        <td><!-- No vat rate --></td>
+                    <td><!-- No quantity--></td>
+                    <td><!-- No unit price --></td>
+                    <td><!-- No value --></td>
+                    <td><!-- No vat value--></td>
+                </tr>
+                                            <tr class="invoice-line">
+        <td>6</td>
+                <td>item name</td>
+                <td>BUC</td>
+                                <td>Vânz: 0201</td>
+                                <td>19.00%</td>
+                <td>20807.57</td>
+                <td>6.8777 RON</td>
+                <td>137685.72 RON</td>
+                <td>26160.28 RON</td>
+            </tr>
+                                            <tr class="invoice-line">
+                    <td><!-- No line number --></td>
+                    <td> Discount: 757.66 RON</td>
+                    <td><!-- No unit code --></td>
+                                        <td><!-- No item ID? --></td>
+                                        <td><!-- No vat rate --></td>
+                    <td><!-- No quantity--></td>
+                    <td><!-- No unit price --></td>
+                    <td><!-- No value --></td>
+                    <td><!-- No vat value--></td>
+                </tr>
+                                <tr class="invoice-line">
+                    <td><!-- No line number --></td>
+                    <td> Mutually defined: -4664.27 RON</td>
+                    <td><!-- No unit code --></td>
+                                        <td><!-- No item ID? --></td>
+                                        <td><!-- No vat rate --></td>
+                    <td><!-- No quantity--></td>
+                    <td><!-- No unit price --></td>
+                    <td><!-- No value --></td>
+                    <td><!-- No vat value--></td>
+                </tr>
+                                            <tr class="invoice-line">
+        <td>7</td>
+                <td>item name</td>
+                <td>BUC</td>
+                                <td>Vânz: 0203</td>
+                                <td>19.00%</td>
+                <td>217932.24</td>
+                <td>6.4995 RON</td>
+                <td>1371322.68 RON</td>
+                <td>260551.30 RON</td>
+            </tr>
+                                            <tr class="invoice-line">
+                    <td><!-- No line number --></td>
+                    <td> Discount: 3662.64 RON</td>
+                    <td><!-- No unit code --></td>
+                                        <td><!-- No item ID? --></td>
+                                        <td><!-- No vat rate --></td>
+                    <td><!-- No quantity--></td>
+                    <td><!-- No unit price --></td>
+                    <td><!-- No value --></td>
+                    <td><!-- No vat value--></td>
+                </tr>
+                                <tr class="invoice-line">
+                    <td><!-- No line number --></td>
+                    <td> Mutually defined: -41460.64 RON</td>
+                    <td><!-- No unit code --></td>
+                                        <td><!-- No item ID? --></td>
+                                        <td><!-- No vat rate --></td>
+                    <td><!-- No quantity--></td>
+                    <td><!-- No unit price --></td>
+                    <td><!-- No value --></td>
+                    <td><!-- No vat value--></td>
+                </tr>
+                                            <tr class="invoice-line">
+        <td>8</td>
+                <td>item name</td>
+                <td>BUC</td>
+                                <td>Vânz: 0204</td>
+                                <td>19.00%</td>
+                <td>137142.39</td>
+                <td>6.5974 RON</td>
+                <td>875772.03 RON</td>
+                <td>166396.68 RON</td>
+            </tr>
+                                            <tr class="invoice-line">
+                    <td><!-- No line number --></td>
+                    <td> Discount: 2305.01 RON</td>
+                    <td><!-- No unit code --></td>
+                                        <td><!-- No item ID? --></td>
+                                        <td><!-- No vat rate --></td>
+                    <td><!-- No quantity--></td>
+                    <td><!-- No unit price --></td>
+                    <td><!-- No value --></td>
+                    <td><!-- No vat value--></td>
+                </tr>
+                                <tr class="invoice-line">
+                    <td><!-- No line number --></td>
+                    <td> Mutually defined: -26705.29 RON</td>
+                    <td><!-- No unit code --></td>
+                                        <td><!-- No item ID? --></td>
+                                        <td><!-- No vat rate --></td>
+                    <td><!-- No quantity--></td>
+                    <td><!-- No unit price --></td>
+                    <td><!-- No value --></td>
+                    <td><!-- No vat value--></td>
+                </tr>
+                                            <tr class="invoice-line">
+        <td>9</td>
+                <td>item name</td>
+                <td>BUC</td>
+                                <td>Vânz: 0205</td>
+                                <td>19.00%</td>
+                <td>40993.25</td>
+                <td>7.1266 RON</td>
+                <td>282140.46 RON</td>
+                <td>53606.68 RON</td>
+            </tr>
+                                            <tr class="invoice-line">
+                    <td><!-- No line number --></td>
+                    <td> Discount: 1568.00 RON</td>
+                    <td><!-- No unit code --></td>
+                                        <td><!-- No item ID? --></td>
+                                        <td><!-- No vat rate --></td>
+                    <td><!-- No quantity--></td>
+                    <td><!-- No unit price --></td>
+                    <td><!-- No value --></td>
+                    <td><!-- No vat value--></td>
+                </tr>
+                                <tr class="invoice-line">
+                    <td><!-- No line number --></td>
+                    <td> Mutually defined: -8434.52 RON</td>
+                    <td><!-- No unit code --></td>
+                                        <td><!-- No item ID? --></td>
+                                        <td><!-- No vat rate --></td>
+                    <td><!-- No quantity--></td>
+                    <td><!-- No unit price --></td>
+                    <td><!-- No value --></td>
+                    <td><!-- No vat value--></td>
+                </tr>
+                                            <tr class="invoice-line">
+        <td>10</td>
+                <td>item name</td>
+                <td>BUC</td>
+                                <td>Vânz: 0330</td>
+                                <td>19.00%</td>
+                <td>32676.41</td>
+                <td>3.4328 RON</td>
+                <td>105566.28 RON</td>
+                <td>20057.59 RON</td>
+            </tr>
+                                            <tr class="invoice-line">
+                    <td><!-- No line number --></td>
+                    <td> Discount: 548.95 RON</td>
+                    <td><!-- No unit code --></td>
+                                        <td><!-- No item ID? --></td>
+                                        <td><!-- No vat rate --></td>
+                    <td><!-- No quantity--></td>
+                    <td><!-- No unit price --></td>
+                    <td><!-- No value --></td>
+                    <td><!-- No vat value--></td>
+                </tr>
+                                <tr class="invoice-line">
+                    <td><!-- No line number --></td>
+                    <td> Mutually defined: -6057.84 RON</td>
+                    <td><!-- No unit code --></td>
+                                        <td><!-- No item ID? --></td>
+                                        <td><!-- No vat rate --></td>
+                    <td><!-- No quantity--></td>
+                    <td><!-- No unit price --></td>
+                    <td><!-- No value --></td>
+                    <td><!-- No vat value--></td>
+                </tr>
+                                            <tr class="invoice-line">
+        <td>11</td>
+                <td>Vignieta</td>
+                <td>BUC</td>
+                                <td>Vânz: 0452</td>
+                                <td>19.00%</td>
+                <td>2730.01</td>
+                <td>116.6378 RON</td>
+                <td>318422.49 RON</td>
+                <td>60500.27 RON</td>
+            </tr>
+                            <tr class="invoice-line">
+        <td>12</td>
+                <td>item name</td>
+                <td>BUC</td>
+                                <td>Vânz: 0454</td>
+                                <td>19.00%</td>
+                <td>958.00</td>
+                <td>120.6842 RON</td>
+                <td>115615.43 RON</td>
+                <td>21966.93 RON</td>
+            </tr>
+                            <tr class="invoice-line">
+        <td>13</td>
+                <td>item name</td>
+                <td>BUC</td>
+                                <td>Vânz: 0501</td>
+                                <td>19.00%</td>
+                <td>125.00</td>
+                <td>24.0754 RON</td>
+                <td>3009.43 RON</td>
+                <td>571.79 RON</td>
+            </tr>
+                            <tr class="invoice-line">
+        <td>14</td>
+                <td>Taxa Ulei</td>
+                <td>BUC</td>
+                                <td>Vânz: 0520</td>
+                                <td>19.00%</td>
+                <td>35.00</td>
+                <td>0.3857 RON</td>
+                <td>13.50 RON</td>
+                <td>2.56 RON</td>
+            </tr>
+                            <tr class="invoice-line">
+        <td>15</td>
+                <td>item name</td>
+                <td>BUC</td>
+                                <td>Vânz: 0540</td>
+                                <td>19.00%</td>
+                <td>8875.75</td>
+                <td>5.9405 RON</td>
+                <td>52726.75 RON</td>
+                <td>10018.08 RON</td>
+            </tr>
+                            <tr class="invoice-line">
+        <td>16</td>
+                <td>item name</td>
+                <td>BUC</td>
+                                <td>Vânz: 0541</td>
+                                <td>19.00%</td>
+                <td>538.00</td>
+                <td>119.8705 RON</td>
+                <td>64490.35 RON</td>
+                <td>12253.16 RON</td>
+            </tr>
+                            <tr class="invoice-line">
+        <td>17</td>
+                <td>item name</td>
+                <td>BUC</td>
+                                <td>Vânz: 0550</td>
+                                <td>19.00%</td>
+                <td>17.00</td>
+                <td>16.5371 RON</td>
+                <td>281.13 RON</td>
+                <td>53.41 RON</td>
+            </tr>
+                            <tr class="invoice-line">
+        <td>18</td>
+                <td>item name</td>
+                <td>BUC</td>
+                                <td>Vânz: 0552</td>
+                                <td>19.00%</td>
+                <td>639.00</td>
+                <td>20.8761 RON</td>
+                <td>13339.83 RON</td>
+                <td>2534.56 RON</td>
+            </tr>
+                            <tr class="invoice-line">
+        <td>19</td>
+                <td>item name</td>
+                <td>BUC</td>
+                                <td>Vânz: 0632</td>
+                                <td>19.00%</td>
+                <td>1084.00</td>
+                <td>10.8295 RON</td>
+                <td>11739.14 RON</td>
+                <td>2230.43 RON</td>
+            </tr>
+                            <tr class="invoice-line">
+        <td>20</td>
+                <td>item name</td>
+                <td>BUC</td>
+                                <td>Vânz: 0640</td>
+                                <td>19.00%</td>
+                <td>5.00</td>
+                <td>4.1920 RON</td>
+                <td>20.96 RON</td>
+                <td>3.98 RON</td>
+            </tr>
+                            <tr class="invoice-line">
+        <td>21</td>
+                <td>item name</td>
+                <td>BUC</td>
+                                <td>Vânz: 0702</td>
+                                <td>19.00%</td>
+                <td>9.00</td>
+                <td>63.3744 RON</td>
+                <td>570.37 RON</td>
+                <td>108.37 RON</td>
+            </tr>
+                            <tr class="invoice-line">
+        <td>22</td>
+                <td>item name</td>
+                <td>BUC</td>
+                                <td>Vânz: 0710</td>
+                                <td>19.00%</td>
+                <td>198.00</td>
+                <td>13.4467 RON</td>
+                <td>2662.44 RON</td>
+                <td>505.86 RON</td>
+            </tr>
+                            <tr class="invoice-line">
+        <td>23</td>
+                <td>item name</td>
+                <td>BUC</td>
+                                <td>Vânz: 0724</td>
+                                <td>19.00%</td>
+                <td>36.00</td>
+                <td>24.3350 RON</td>
+                <td>876.06 RON</td>
+                <td>166.45 RON</td>
+            </tr>
+                            <tr class="invoice-line">
+        <td>24</td>
+                <td>item name</td>
+                <td>BUC</td>
+                                <td>Vânz: 0810</td>
+                                <td>19.00%</td>
+                <td>382.00</td>
+                <td>16.5029 RON</td>
+                <td>6304.10 RON</td>
+                <td>1197.77 RON</td>
+            </tr>
+                            <tr class="invoice-line">
+        <td>25</td>
+                <td>item name</td>
+                <td>BUC</td>
+                                <td>Vânz: 0812</td>
+                                <td>9.00%</td>
+                <td>18.00</td>
+                <td>14.1472 RON</td>
+                <td>254.65 RON</td>
+                <td>22.91 RON</td>
+            </tr>
+                            <tr class="invoice-line">
+        <td>26</td>
+                <td>Mancare</td>
+                <td>BUC</td>
+                                <td>Vânz: 0820</td>
+                                <td>19.00%</td>
+                <td>1.00</td>
+                <td>14.6100 RON</td>
+                <td>14.61 RON</td>
+                <td>2.77 RON</td>
+            </tr>
+                            <tr class="invoice-line">
+        <td>27</td>
+                <td>item name</td>
+                <td>BUC</td>
+                                <td>Vânz: 0824</td>
+                                <td>9.00%</td>
+                <td>2228.00</td>
+                <td>7.0712 RON</td>
+                <td>15754.58 RON</td>
+                <td>1417.91 RON</td>
+            </tr>
+                            <tr class="invoice-line">
+        <td>28</td>
+                <td>item name</td>
+                <td>BUC</td>
+                                <td>Vânz: 0830</td>
+                                <td>19.00%</td>
+                <td>40.00</td>
+                <td>15.1573 RON</td>
+                <td>606.29 RON</td>
+                <td>115.19 RON</td>
+            </tr>
+                            <tr class="invoice-line">
+        <td>29</td>
+                <td>item name</td>
+                <td>BUC</td>
+                                <td>Vânz: 0832</td>
+                                <td>9.00%</td>
+                <td>1242.00</td>
+                <td>5.5284 RON</td>
+                <td>6866.22 RON</td>
+                <td>617.95 RON</td>
+            </tr>
+                            <tr class="invoice-line">
+        <td>30</td>
+                <td>item name</td>
+                <td>BUC</td>
+                                <td>Vânz: 0851</td>
+                                <td>5.00%</td>
+                <td>64.00</td>
+                <td>7.0114 RON</td>
+                <td>448.73 RON</td>
+                <td>22.43 RON</td>
+            </tr>
+                            <tr class="invoice-line">
+        <td>31</td>
+                <td>item name</td>
+                <td>BUC</td>
+                                <td>Vânz: 0854</td>
+                                <td>19.00%</td>
+                <td>1359.00</td>
+                <td>18.4958 RON</td>
+                <td>25135.83 RON</td>
+                <td>4775.80 RON</td>
+            </tr>
+                            <tr class="invoice-line">
+        <td>32</td>
+                <td>item name</td>
+                <td>BUC</td>
+                                <td>Vânz: 0856</td>
+                                <td>5.00%</td>
+                <td>6.00</td>
+                <td>41.2317 RON</td>
+                <td>247.39 RON</td>
+                <td>12.36 RON</td>
+            </tr>
+                            <tr class="invoice-line">
+        <td>33</td>
+                <td>item name</td>
+                <td>BUC</td>
+                                <td>Vânz: 9000</td>
+                                <td>19.00%</td>
+                <td>2315.00</td>
+                <td>4.5000 RON</td>
+                <td>10417.50 RON</td>
+                <td>1979.32 RON</td>
+            </tr>
+                            <tr class="invoice-line">
+        <td>34</td>
+                <td>item name</td>
+                <td>BUC</td>
+                                <td>Vânz: 9008</td>
+                                <td>19.00%</td>
+                <td>1.00</td>
+                <td>1.1200 RON</td>
+                <td>1.12 RON</td>
+                <td>0.21 RON</td>
+            </tr>
+                            <tr class="invoice-line">
+        <td>35</td>
+                <td>item name</td>
+                <td>BUC</td>
+                                <td>Vânz: 9012</td>
+                                <td>19.00%</td>
+                <td>15629.00</td>
+                <td>13.4297 RON</td>
+                <td>209892.26 RON</td>
+                <td>39879.52 RON</td>
+            </tr>
+                                </table>
+    <div class="invoice-total">
+        Total fără TVA: 34741984.11 RON<br>
+        Total TVA: 6598592.6 RON<br>
+        Total cu TVA: 41340576.71 RON<br>
+    </div>
+        <div class="invoice-notes">
+        <h3>Observații:</h3>
+        <ul>
+                        <li>some text for invoice note</li>
+                    </ul>
+    </div>
+            <div>
+        <h3>Alte informații:</h3>
+        <ul>
+                        <li>Modalitatea preferată de plata: 31 (Transfer de debit)</li>
+                    </ul>
+    </div>
+    </body>
+</html>
