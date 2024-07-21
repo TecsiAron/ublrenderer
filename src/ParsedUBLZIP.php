@@ -16,7 +16,11 @@
  */
 
 namespace EdituraEDU\UBLRenderer;
-
+/**
+ * Class ParsedUBLZIP
+ * Represents a parsed ANAF ZIP file containing the UBL invoice and the signature
+ * @package EdituraEDU\UBLRenderer
+ */
 class ParsedUBLZIP
 {
     public string $ubl;

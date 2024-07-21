@@ -48,8 +48,16 @@ use EdituraEDU\UBLRenderer\UBLObjectDefinitions\TaxSubTotal;
 use EdituraEDU\UBLRenderer\UBLObjectDefinitions\TaxTotal;
 use Sabre\Xml\Reader;
 
+/**
+ * Class XMLReaderProvider
+ * Provides an instance of Sabre\Xml\Reader with the necessary mappings for the UBL objects
+ */
 class XMLReaderProvider
 {
+    /**
+     * List of all classes that need to be mapped to the Sabre\Xml\Reader
+     * Should all be implementers of UBLObjectDefinitions
+     */
     public const CLASSES = [
         PartyTaxScheme::class,
         TaxScheme::class,

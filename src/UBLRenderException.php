@@ -17,11 +17,19 @@
 
 namespace EdituraEDU\UBLRenderer;
 
+use EdituraEDU\UBLRenderer\UBLObjectDefinitions\UBLDeserializable;
 use Exception;
 
+/**
+ * Class UBLRenderException
+ * Special exception class to be thrown when UBLDeserializable CanRender returns false
+ * @see UBLDeserializable::CanRender
+ * @package EdituraEDU\UBLRenderer
+ */
 class UBLRenderException extends Exception
 {
     public array $Reasons;
+
     public function __construct(string $message, array $reasons)
     {
         parent::__construct($message, 0, null);
