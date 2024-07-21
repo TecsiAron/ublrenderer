@@ -224,7 +224,7 @@ class ParsedUBLInvoice extends UBLDeserializable
                 return false;
             }
         }
-        return false;
+        return true;
     }
 
     public function CanShowUnitCodeDetails():bool
@@ -350,6 +350,11 @@ class ParsedUBLInvoice extends UBLDeserializable
 
     public function HasOtherInfo():bool
     {
+        /*$unitCodeCheck=(!$this->AllItemsHaveShortUnitCodeMapped() && $this->CanShowUnitCodeDetails());
+        $orderRefCheck=(isset($this->OrderReference) && $this->OrderReference->HasValidID());
+        $paymentMeansCheck=isset($this->PaymentMeans->PaymentMeansCode);
+        $attachmentsCheck=$this->HasAttachments();
+        $contractDocCheck=isset($this->ContractDocumentReference);*/
         return (isset($this->OrderReference) && $this->OrderReference->HasValidID())
             || isset($this->PaymentMeans->PaymentMeansCode)
             || $this->HasAttachments()
