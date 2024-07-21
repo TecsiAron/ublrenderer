@@ -128,8 +128,6 @@ abstract class UBLDeserializable
      */
     public abstract function CanRender(): true|array;
 
-    //todo define mandatory non static method CanRender():bool
-
     /**
      * Optional, implementers can define and call this method after XMLDeserialize is complete
      * @return void
