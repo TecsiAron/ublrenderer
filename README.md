@@ -52,7 +52,7 @@ else
 	$html=$renderer->CreateHTML(invoice);
 }
 ```
-For PDF support install ublrenderer-pdf and use PDFWriter
+*For PDF support install ublrenderer-pdf and use PDFWriter
 ```PHP
 composer require tecsiaron/ublrenderer-pdf
 ```
