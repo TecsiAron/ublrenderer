@@ -20,6 +20,8 @@ namespace EdituraEDU\UBLRenderer\UBLObjectDefinitions;
 use DateTime;
 use EdituraEDU\UBLRenderer\MappingsManager;
 use Exception;
+use Sabre\Xml\LibXMLException;
+use Sabre\Xml\ParseException;
 use Sabre\Xml\Reader;
 use XMLReader;
 
@@ -57,33 +59,43 @@ class ParsedUBLInvoice extends UBLDeserializable
     public ?OrderReference $OrderReference = null;
     public ?ContractDocumentReference $ContractDocumentReference = null;
 
-    public static function XMLDeserialize(Reader $reader): self
+    /**
+     * This is the only implementation of XMLDeserialize that is called directly
+     * @param Reader $reader
+     * @return ParsedUBLInvoice
+     * @throws LibXMLException
+     * @throws ParseException
+     * @throws Exception if end of XML is reached before Invoice node is found or if Invoice node does not parse to an assoc array
+     * @see UBLDeserializable::XMLDeserialize()
+     */
+    public static function XMLDeserialize(Reader $reader): ParsedUBLInvoice
     {
         $instance = new self();
-        $clark=$reader->getClark();
-        while($clark != "{urn:oasis:names:specification:ubl:schema:xsd:Invoice-2}Invoice")
+        $clark = $reader->getClark();
+        while ($clark != "{urn:oasis:names:specification:ubl:schema:xsd:Invoice-2}Invoice")
         {
             $reader->read();
-            $clark=$reader->getClark();
-            if($reader->nodeType === XMLReader::NONE)
+            $clark = $reader->getClark();
+            if ($reader->nodeType === XMLReader::NONE)
             {
                 throw new Exception("Invalid XML structure for Invoice");
             }
         }
         $parsedInvoice = $reader->parseInnerTree();
-        if(!is_array($parsedInvoice))
+        if (!is_array($parsedInvoice))
         {
             throw new Exception("Invalid XML structure for Invoice");
         }
-        for($i=0; $i<count($parsedInvoice); $i++)
+        for ($i = 0; $i < count($parsedInvoice); $i++)
         {
             $parsed = $parsedInvoice[$i];
-            if($parsed["value"] === null)
+            if ($parsed["value"] === null)
             {
                 continue;
             }
-            $localName=$instance->getLocalName($parsed["name"]);
-            switch ($localName) {
+            $localName = $instance->getLocalName($parsed["name"]);
+            switch ($localName)
+            {
                 case "UBLVersionID":
                     $instance->UBLVersionID = $parsed["value"];
                     break;
@@ -172,13 +184,17 @@ class ParsedUBLInvoice extends UBLDeserializable
         return $instance;
     }
 
+    /**
+     * Checks if AccountingSupplierParty has a valid registration number and if not, tries to set it from the BuyerReference
+     * @return void
+     */
     protected function DeserializeComplete(): void
     {
-        if(isset($this->AccountingSupplierParty))
+        if (isset($this->AccountingSupplierParty))
         {
-            if($this->AccountingCustomerParty->GetRegistrationNumber()==null && isset($this->BuyerReference) && !empty($this->BuyerReference))
+            if ($this->AccountingCustomerParty->GetRegistrationNumber() == null && isset($this->BuyerReference) && !empty($this->BuyerReference))
             {
-                $this->AccountingCustomerParty->ForcedRegistrationNumber=$this->BuyerReference;
+                $this->AccountingCustomerParty->ForcedRegistrationNumber = $this->BuyerReference;
             }
         }
     }
@@ -188,129 +204,30 @@ class ParsedUBLInvoice extends UBLDeserializable
     {
         return "{urn:oasis:names:specification:ubl:schema:xsd:Invoice-2}Invoice";
     }
-    public function HasSupplierAccountInfo():bool
+
+    /**
+     * Checks for PaymentMeans PayeeFinancialAccount
+     * @return bool
+     */
+    public function HasSupplierAccountInfo(): bool
     {
-        return isset($this->PaymentMeans->PayeeFinancialAccount);
+        return isset($this->PaymentMeans->PayeeFinancialAccount) && !empty($this->PaymentMeans->PayeeFinancialAccount->ID);
     }
 
-    public function HasAnyItemIDs():bool
+    /**
+     * Checks if any InvoiceLine has a SellersItemIdentification or BuyersItemIdentification
+     * @return bool
+     */
+    public function HasAnyItemIDs(): bool
     {
-        if(empty($this->InvoiceLines))
+        if (empty($this->InvoiceLines))
         {
             return false;
         }
-        $count=count($this->InvoiceLines);
-        for($i=0;$i<$count;$i++)
+        $count = count($this->InvoiceLines);
+        for ($i = 0; $i < $count; $i++)
         {
-            if(isset($this->InvoiceLines[$i]->Item->SellersItemIdentification) || isset($this->InvoiceLines[$i]->Item->BuyersItemIdentification))
-            {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    public function AllItemsHaveShortUnitCodeMapped():bool
-    {
-        if(empty($this->InvoiceLines))
-        {
-            return false;
-        }
-        $count=count($this->InvoiceLines);
-        for($i=0;$i<$count;$i++)
-        {
-            if(!$this->InvoiceLines[$i]->HasShortMappedUnitCode())
-            {
-                return false;
-            }
-        }
-        return true;
-    }
-
-    public function CanShowUnitCodeDetails():bool
-    {
-        if(empty($this->InvoiceLines))
-        {
-            return false;
-        }
-        if($this->AllItemsHaveShortUnitCodeMapped())
-        {
-            return false;
-        }
-        $count=count($this->InvoiceLines);
-        $foundSomeDetails=false;
-        for($i=0;$i<$count;$i++)
-        {
-            if($this->InvoiceLines[$i]->HasMappedUnitCode())
-            {
-               $foundSomeDetails=true;
-               break;
-            }
-        }
-        return $foundSomeDetails;
-    }
-
-    public function GetLineNumber(InvoiceLine $line):int
-    {
-        if(empty($this->InvoiceLines))
-        {
-            throw new Exception("Invoice has no lines");
-        }
-        $count=count($this->InvoiceLines);
-        for($i=0;$i<$count;$i++)
-        {
-            if($this->InvoiceLines[$i]===$line)
-            {
-                return $i+1;
-            }
-        }
-        throw new Exception("InvoiceLine instance not found in ParsedUBLInvoice::InvoiceLines");
-    }
-
-    public function HasDueDate():bool
-    {
-        if(isset($this->DueDate))
-        {
-            return true;
-        }
-        if(isset($this->PaymentTerms->PaymentDueDate))
-        {
-            return true;
-        }
-        if(isset($this->PaymentTerms->SettlementPeriod->EndDate))
-        {
-            return true;
-        }
-        return false;
-    }
-
-    public function GetDueDate():DateTime
-    {
-        if(!$this->HasDueDate())
-        {
-            throw new Exception("Invoice due date not found");
-        }
-        if(isset($this->DueDate))
-        {
-            return $this->DueDate;
-        }
-        if(isset($this->PaymentTerms->PaymentDueDate))
-        {
-            return $this->PaymentTerms->PaymentDueDate;
-        }
-        return $this->PaymentTerms->SettlementPeriod->EndDate;
-    }
-
-    public function HasNotes()
-    {
-        if(isset($this->Note) && !empty($this->Note))
-        {
-            return true;
-        }
-        $count=count($this->InvoiceLines);
-        for($i=0;$i<$count;$i++)
-        {
-            if(isset($this->InvoiceLines[$i]->Note) && !empty($this->InvoiceLines[$i]->Note))
+            if (isset($this->InvoiceLines[$i]->Item->SellersItemIdentification) || isset($this->InvoiceLines[$i]->Item->BuyersItemIdentification))
             {
                 return true;
             }
@@ -319,36 +236,200 @@ class ParsedUBLInvoice extends UBLDeserializable
     }
 
     /**
-     * @return string[]
+     * Checks if any InvoiceLine have a mapped short (max 4 chars by default) unit code
+     * @return bool
      */
-    public function GetNotes():array
+    public function AllItemsHaveShortUnitCodeMapped(): bool
     {
-        $result=[];
-        if(isset($this->Note) && !empty($this->Note))
+        if (empty($this->InvoiceLines))
         {
-            $result[]=$this->Note;
+            return false;
         }
-        $count=count($this->InvoiceLines);
-        for($i=0;$i<$count;$i++)
+        $count = count($this->InvoiceLines);
+        for ($i = 0; $i < $count; $i++)
         {
-            if(isset($this->InvoiceLines[$i]->Note) && !empty($this->InvoiceLines[$i]->Note))
+            if (!$this->InvoiceLines[$i]->HasShortMappedUnitCode())
             {
-                $result[]=$this->InvoiceLines[$i]->Note. " (linia ".$this->GetLineNumber($this->InvoiceLines[$i]).")";
+                return false;
             }
         }
-        if(count($result)==0)
+        return true;
+    }
+
+    /**
+     * Checks if any InvoiceLine has a mapped unit code
+     * Should be called after AllItemsHaveShortUnitCodeMapped returns false
+     * @return bool
+     */
+    public function CanShowUnitCodeDetails(): bool
+    {
+        if (empty($this->InvoiceLines))
+        {
+            return false;
+        }
+        if ($this->AllItemsHaveShortUnitCodeMapped())
+        {
+            return false;
+        }
+        $count = count($this->InvoiceLines);
+        $foundSomeDetails = false;
+        for ($i = 0; $i < $count; $i++)
+        {
+            if ($this->InvoiceLines[$i]->HasMappedUnitCode())
+            {
+                $foundSomeDetails = true;
+                break;
+            }
+        }
+        return $foundSomeDetails;
+    }
+
+    /**
+     * Since allowance charges do generate a line but should not be counted (causing the loop count to be unusable), this method maps actual InvoiceLine instances to their line number
+     * @param InvoiceLine $line
+     * @return int
+     * @throws Exception if Invoice has no lines or if the line is not found in this instance
+     */
+    public function GetLineNumber(InvoiceLine $line): int
+    {
+        if (empty($this->InvoiceLines))
+        {
+            throw new Exception("Invoice has no lines");
+        }
+        $count = count($this->InvoiceLines);
+        for ($i = 0; $i < $count; $i++)
+        {
+            if ($this->InvoiceLines[$i] === $line)
+            {
+                return $i + 1;
+            }
+        }
+        throw new Exception("InvoiceLine instance not found in ParsedUBLInvoice::InvoiceLines");
+    }
+
+    /**
+     * Checks for due date in:
+     * DueDate
+     * PaymentTerms PaymentDueDate
+     * PaymentTerms SettlementPeriod EndDate
+     * If at least one is found, returns true
+     * @return bool
+     */
+    public function HasDueDate(): bool
+    {
+        if (isset($this->DueDate))
+        {
+            return true;
+        }
+        if (isset($this->PaymentTerms->PaymentDueDate))
+        {
+            return true;
+        }
+        if (isset($this->PaymentTerms->SettlementPeriod->EndDate))
+        {
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * Should only be called after HasDueDate returns true
+     * Returns (in order of priority):
+     * DueDate
+     * PaymentTerms PaymentDueDate
+     * PaymentTerms SettlementPeriod EndDate
+     * @return DateTime
+     * @throws Exception if HasDueDate returns false
+     */
+    public function GetDueDate(): DateTime
+    {
+        if (!$this->HasDueDate())
+        {
+            throw new Exception("Invoice due date not found");
+        }
+        if (isset($this->DueDate))
+        {
+            return $this->DueDate;
+        }
+        if (isset($this->PaymentTerms->PaymentDueDate))
+        {
+            return $this->PaymentTerms->PaymentDueDate;
+        }
+        return $this->PaymentTerms->SettlementPeriod->EndDate;
+    }
+
+    /**
+     * Checks for non-empty notes
+     * @return bool
+     */
+    public function HasNotes()
+    {
+        if (isset($this->Note) && !empty($this->Note))
+        {
+            return true;
+        }
+        $count = count($this->InvoiceLines);
+        for ($i = 0; $i < $count; $i++)
+        {
+            if (isset($this->InvoiceLines[$i]->Note) && !empty($this->InvoiceLines[$i]->Note))
+            {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * Gets all notes from the invoice
+     * @return string[]
+     * @throws Exception if line note is found, but GetLineNumber fails
+     */
+    public function GetNotes(): array
+    {
+        if (!$this->HasNotes())
+        {
+            return [];
+        }
+        $result = [];
+        if (isset($this->Note) && !empty($this->Note))
+        {
+            $result[] = $this->Note;
+        }
+        $count = count($this->InvoiceLines);
+        for ($i = 0; $i < $count; $i++)
+        {
+            if (isset($this->InvoiceLines[$i]->Note) && !empty($this->InvoiceLines[$i]->Note))
+            {
+                $result[] = $this->InvoiceLines[$i]->Note . " (linia " . $this->GetLineNumber($this->InvoiceLines[$i]) . ")";
+            }
+        }
+        if (count($result) == 0)
         {
             throw new Exception("No notes found in invoice");
         }
         return $result;
     }
 
-    public function HasInvoiceLevelAllowanceCharges():bool
+    /**
+     * Checks for invoice level allowance charges (allowance charges in invoice lines are not counted here)
+     * @return bool
+     */
+    public function HasInvoiceLevelAllowanceCharges(): bool
     {
         return isset($this->AllowanceCharges) && !empty($this->AllowanceCharges);
     }
 
-    public function HasOtherInfo():bool
+    /**
+     * Checks for:
+     * Valid OrderReference ID
+     * Valid PaymentMeansCode
+     * Attached files
+     * ContractDocumentReference
+     * Items with long unit codes
+     * Returns true if any of the above is true
+     * @return bool
+     */
+    public function HasOtherInfo(): bool
     {
         /*$unitCodeCheck=(!$this->AllItemsHaveShortUnitCodeMapped() && $this->CanShowUnitCodeDetails());
         $orderRefCheck=(isset($this->OrderReference) && $this->OrderReference->HasValidID());
@@ -363,45 +444,48 @@ class ParsedUBLInvoice extends UBLDeserializable
     }
 
     /**
+     * Gets a string array with additional information about the invoice
+     * HasOtherInfo should be called first to check if there is any additional info to show
      * @return string[]
+     * @throws Exception on MappingsManager errors
      */
-    public function GetOtherInfo():array
+    public function GetOtherInfo(): array
     {
-        $result=[];
-        if(!$this->AllItemsHaveShortUnitCodeMapped() && $this->CanShowUnitCodeDetails())
+        $result = [];
+        if (!$this->AllItemsHaveShortUnitCodeMapped() && $this->CanShowUnitCodeDetails())
         {
-            $lineCount=count($this->InvoiceLines);
-            for($i=0;$i<$lineCount;$i++)
+            $lineCount = count($this->InvoiceLines);
+            for ($i = 0; $i < $lineCount; $i++)
             {
-                if($this->InvoiceLines[$i]->HasMappedUnitCode() && !$this->InvoiceLines[$i]->HasShortMappedUnitCode())
+                if ($this->InvoiceLines[$i]->HasMappedUnitCode() && !$this->InvoiceLines[$i]->HasShortMappedUnitCode())
                 {
-                    $result[]="Unitate de măsură pentru linia ".($i+1).": ".$this->InvoiceLines[$i]->UnitCode." - " . MappingsManager::GetInstance()->GetUnitCodeMapping($this->InvoiceLines[$i]->UnitCode);
+                    $result[] = "Unitate de măsură pentru linia " . ($i + 1) . ": " . $this->InvoiceLines[$i]->UnitCode . " - " . MappingsManager::GetInstance()->GetUnitCodeMapping($this->InvoiceLines[$i]->UnitCode);
                 }
             }
         }
-        if(isset($this->OrderReference))
+        if (isset($this->OrderReference))
         {
-            if(isset($this->OrderReference->ID) && !empty($this->OrderReference->ID))
+            if (isset($this->OrderReference->ID) && !empty($this->OrderReference->ID))
             {
-                $result[]="Comanda: ".$this->OrderReference->ID;
+                $result[] = "Comanda: " . $this->OrderReference->ID;
             }
-            else if(isset($this->OrderReference->SalesOrderID) && !empty($this->OrderReference->SalesOrderID))
+            else if (isset($this->OrderReference->SalesOrderID) && !empty($this->OrderReference->SalesOrderID))
             {
-                $result[]="Comanda: ".$this->OrderReference->SalesOrderID;
+                $result[] = "Comanda: " . $this->OrderReference->SalesOrderID;
             }
         }
-        if(isset($this->PaymentMeans->PaymentMeansCode))
+        if (isset($this->PaymentMeans->PaymentMeansCode))
         {
-            $paymentMeans="Modalitatea preferată de plata: ".$this->PaymentMeans->PaymentMeansCode->value;
-            if(MappingsManager::GetInstance()->PaymentMeansCodeHasMapping($this->PaymentMeans->PaymentMeansCode->value))
+            $paymentMeans = "Modalitatea preferată de plata: " . $this->PaymentMeans->PaymentMeansCode->value;
+            if (MappingsManager::GetInstance()->PaymentMeansCodeHasMapping($this->PaymentMeans->PaymentMeansCode->value))
             {
-                $paymentMeans.=" (".MappingsManager::GetInstance()->GetPaymentMeansCodeMapping($this->PaymentMeans->PaymentMeansCode->value).")";
+                $paymentMeans .= " (" . MappingsManager::GetInstance()->GetPaymentMeansCodeMapping($this->PaymentMeans->PaymentMeansCode->value) . ")";
             }
-            $result[]=$paymentMeans;
+            $result[] = $paymentMeans;
         }
-        if($this->HasAttachments())
+        if ($this->HasAttachments())
         {
-            $result[]="Există documente atașate in fișierul XML";
+            $result[] = "Există documente atașate in fișierul XML";
         }
         return $result;
     }
@@ -810,83 +894,99 @@ class ParsedUBLInvoice extends UBLDeserializable
         return true;
     }
 
+    /**
+     * Checks for:
+     * AccountingCustomerParty
+     * AccountingSupplierParty
+     * ID
+     * IssueDate
+     * InvoiceLines
+     * @see UBLDeserializable::CanRender()
+     * @return true|array
+     */
     public function CanRender(): true|array
     {
-        $result=[];
-        $subComponentsOK=true;
-        $toCheck=[$this->AccountingCustomerParty,$this->AccountingSupplierParty, $this->ID, $this->IssueDate, $this->InvoiceLines];
-        if($this->AccountingCustomerParty!=null)
+        $result = [];
+        $subComponentsOK = true;
+        $toCheck = [$this->AccountingCustomerParty, $this->AccountingSupplierParty, $this->ID, $this->IssueDate, $this->InvoiceLines];
+        if ($this->AccountingCustomerParty != null)
         {
-            $partyResult=$this->AccountingCustomerParty->CanRender();
-            if($partyResult!==true)
+            $partyResult = $this->AccountingCustomerParty->CanRender();
+            if ($partyResult !== true)
             {
-                $subComponentsOK=false;
-                $result=array_merge($result,$partyResult);
+                $subComponentsOK = false;
+                $result = array_merge($result, $partyResult);
             }
         }
-        if($this->AccountingSupplierParty!=null)
+        if ($this->AccountingSupplierParty != null)
         {
-            $partyResult=$this->AccountingSupplierParty->CanRender();
-            if($partyResult!==true)
+            $partyResult = $this->AccountingSupplierParty->CanRender();
+            if ($partyResult !== true)
             {
-                $subComponentsOK=false;
-                $result=array_merge($result,$partyResult);
+                $subComponentsOK = false;
+                $result = array_merge($result, $partyResult);
             }
         }
-        if($this->InvoiceLines!=null)
+        if ($this->InvoiceLines != null)
         {
             $lineCount = count($this->InvoiceLines);
-            for($i=0; $i<$lineCount; $i++)
+            for ($i = 0; $i < $lineCount; $i++)
             {
-                $lineResult=$this->InvoiceLines[$i]->CanRender();
-                if($lineResult!==true)
+                $lineResult = $this->InvoiceLines[$i]->CanRender();
+                if ($lineResult !== true)
                 {
-                    $subComponentsOK=false;
-                    $result=array_merge($result,$lineResult);
+                    $subComponentsOK = false;
+                    $result = array_merge($result, $lineResult);
                 }
             }
         }
         else
         {
-            $lineCount=0;
+            $lineCount = 0;
         }
-        if($this->LegalMonetaryTotal==null)
+        /*if ($this->LegalMonetaryTotal == null)
         {
-            $result[]="[ParsedUBLInvoice]No monetary total";
-            $subComponentsOK=false;
+            $result[] = "[ParsedUBLInvoice]No monetary total";
+            $subComponentsOK = false;
         }
         else
         {
-            $validationResult=$this->LegalMonetaryTotal->CanRender();
-            if($validationResult!==true)
+            $validationResult = $this->LegalMonetaryTotal->CanRender();
+            if ($validationResult !== true)
             {
-                $subComponentsOK=false;
-                $result=array_merge($result,$validationResult);
+                $subComponentsOK = false;
+                $result = array_merge($result, $validationResult);
             }
-        }
-        if($subComponentsOK===true)
+        }*/
+        if ($subComponentsOK === true)
         {
-            if (!$this->ContainsNull($toCheck) || $lineCount==0)
+            if (!$this->ContainsNull($toCheck) || $lineCount == 0)
             {
                 return true;
             }
         }
-        if($lineCount==0)
+        if ($lineCount == 0)
         {
-            $result[]="[ParsedUBLInvoice] No invoice lines";
+            $result[] = "[ParsedUBLInvoice] No invoice lines";
         }
-        if($this->AccountingCustomerParty==null)
+        if ($this->AccountingCustomerParty == null)
         {
-            $result[]="[ParsedUBLInvoice]No seller party info";
+            $result[] = "[ParsedUBLInvoice]No seller party info";
         }
-        if($this->AccountingSupplierParty==null)
+        if ($this->AccountingSupplierParty == null)
         {
-            $result[]="[ParsedUBLInvoice]No buyer party info";
+            $result[] = "[ParsedUBLInvoice]No buyer party info";
         }
         return $result;
     }
 
-    public function HasAttachments():bool
+    /**
+     * Checks for:
+     * AdditionalDocumentReferences
+     * ContractDocumentReference
+     * @return bool
+     */
+    public function HasAttachments(): bool
     {
         return (isset($this->AdditionalDocumentReferences) && !empty($this->AdditionalDocumentReferences)) ||
             isset($this->ContractDocumentReference);
