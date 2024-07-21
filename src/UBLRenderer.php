@@ -21,6 +21,9 @@ namespace EdituraEDU\UBLRenderer;
 use EdituraEDU\UBLRenderer\UBLObjectDefinitions\ParsedUBLInvoice;
 use Exception;
 use Twig\Environment;
+use Twig\Error\LoaderError;
+use Twig\Error\RuntimeError;
+use Twig\Error\SyntaxError;
 
 class UBLRenderer
 {
@@ -28,6 +31,10 @@ class UBLRenderer
     private static ?ParsedUBLInvoice $CurrentInvoice = null;
     private bool $useDefaultTemplate;
 
+    /**
+     * @param string|null $ublContent XML content of the UBL invoice
+     * @param bool $useDefaultTemplate if set to false the CreateHTML method will not use the default template and will have to be called with a custom Twig environment
+     */
     public function __construct(?string $ublContent = null, bool $useDefaultTemplate = true)
     {
         if(!MappingsManager::$Initialized)
@@ -38,6 +45,15 @@ class UBLRenderer
         $this->UBLContent = $ublContent;
     }
 
+    /**
+     * @param ParsedUBLInvoice $invoice
+     * @param Environment|null $twig if the constructor was called with useDefaultTemplate=false, this parameter must be set
+     * @return string HTML content of the invoice
+     * @throws UBLRenderException if ParsedUBLInvoice::CanRender() returns false
+     * @throws LoaderError if the default template cannot be loaded
+     * @throws RuntimeError on Twig runtime errors
+     * @throws SyntaxError on Twig syntax errors
+     */
     public function CreateHTML(ParsedUBLInvoice $invoice, ?Environment $twig=null):string
     {
         /**
@@ -68,6 +84,11 @@ class UBLRenderer
         return $rendered;
     }
 
+    /**
+     * Calls ParsedUBLInvoice::XMLDeserialize() and returns the result
+     * @return ParsedUBLInvoice
+     * @throws Exception on any XML parsing error
+     */
     public function ParseUBL(): ParsedUBLInvoice
     {
         /*$document=new DOMDocument();
@@ -85,8 +106,11 @@ class UBLRenderer
     }
 
     /**
-     * @param IInvoiceWriter[] $writer
+     * Parses the UBL content, creates the HTML and writes it to the specified files using the specified writers
+     * Will not work if constructor was called with useDefaultTemplate=false
+     * @param IInvoiceWriter[] $writers
      * @return void
+     * @throws Exception
      */
     public function WriteFiles(array $writers)
     {
@@ -99,9 +123,11 @@ class UBLRenderer
     }
 
     /**
-     * Writes the parsed invoice to a file using the specified writer (by default HTMLFileWriter with no params)
-     * @param IInvoiceWriter $writer
+     * Parses the UBL content, creates the HTML and writes it to the specified file using the specified writer
+     * Will not work if constructor was called with useDefaultTemplate=false
+     * @param IInvoiceWriter $writer HTMLFileWriter will be used by default
      * @return void
+     * @throws Exception
      */
     public function WriteFile(IInvoiceWriter $writer = new HTMLFileWriter())
     {
@@ -127,7 +153,7 @@ class UBLRenderer
 
     /**
      * Tries to load the UBL file from a standard ANAF ZIP archive.
-     * Assumes 2 files in the the zip out of witch one is names semnatura_<index_here>.xml and the UBL being names <same_index_here>.xml
+     * Assumes 2 files in the zip out of witch one is names semnatura_<index_here>.xml and the UBL being names <same_index_here>.xml
      * @param string $zipPath
      * @return ParsedUBLZIP
      * @throws Exception
@@ -161,6 +187,9 @@ class UBLRenderer
         throw new Exception("Invalid ZIP file format: could not find valid signature file (semnatura_*.xml)!");
     }
 
+    /**
+     * @deprecated
+     */
     private function Dedup(array $reasons):array
     {
         $deduped=[];
