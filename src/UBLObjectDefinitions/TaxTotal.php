@@ -110,7 +110,7 @@ class TaxTotal extends UBLDeserializable
 
     public function GetAmmount(): ?string
     {
-        if(!isset($this->TaxAmount) || empty($this->TaxAmount))
+        if(!isset($this->TaxAmount) || (empty($this->TaxAmount) && $this->TaxAmount!=="0"))
         {
             return null;
         }
