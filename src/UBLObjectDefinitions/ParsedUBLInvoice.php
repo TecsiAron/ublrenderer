@@ -353,7 +353,8 @@ class ParsedUBLInvoice extends UBLDeserializable
         return (isset($this->OrderReference) && $this->OrderReference->HasValidID())
             || isset($this->PaymentMeans->PaymentMeansCode)
             || $this->HasAttachments()
-            || isset($this->ContractDocumentReference);
+            || isset($this->ContractDocumentReference)
+            || (!$this->AllItemsHaveShortUnitCodeMapped() && $this->CanShowUnitCodeDetails());
     }
 
     /**
@@ -362,6 +363,17 @@ class ParsedUBLInvoice extends UBLDeserializable
     public function GetOtherInfo():array
     {
         $result=[];
+        if(!$this->AllItemsHaveShortUnitCodeMapped() && $this->CanShowUnitCodeDetails())
+        {
+            $lineCount=count($this->InvoiceLines);
+            for($i=0;$i<$lineCount;$i++)
+            {
+                if($this->InvoiceLines[$i]->HasMappedUnitCode() && !$this->InvoiceLines[$i]->HasShortMappedUnitCode())
+                {
+                    $result[]="Unitate de măsură pentru linia ".($i+1).": ".$this->InvoiceLines[$i]->UnitCode." - " . MappingsManager::GetInstance()->GetUnitCodeMapping($this->InvoiceLines[$i]->UnitCode);
+                }
+            }
+        }
         if(isset($this->OrderReference))
         {
             if(isset($this->OrderReference->ID) && !empty($this->OrderReference->ID))
