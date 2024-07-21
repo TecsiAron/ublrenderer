@@ -4,7 +4,7 @@ UBLRenderer
 STILL IN TESTING PHASE  
 Should not be used in production  
 PHP Library to convert RO eFactura UBL/ZIP files to HTML/PDF*  
-Requirments:  
+Requirements:  
 - php 8.2 or newer  
 - ext-xmlreader  
 - ext-bcmath  
@@ -31,7 +31,7 @@ $content=UBLRenderer::LoadUBLFromZip("test.zip")->ubl;
 $renderer = new UBLRenderer($content);
 $renderer->WriteFile();
 ```
-In both of th e aboe cases the file will be written to vendor/tecsiaron/ublrenderer/output  
+In both of the above cases the file will be written to vendor/tecsiaron/ublrenderer/output  
 To specify where files are written call WriteFile (or WriteFiles) like this:  
 ```PHP
 $renderer->WriteFiles(new HTMLFileWriter("path_to_output.html"));
