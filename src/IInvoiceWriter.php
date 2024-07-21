@@ -19,11 +19,22 @@ namespace EdituraEDU\UBLRenderer;
 
 use EdituraEDU\UBLRenderer\UBLObjectDefinitions\ParsedUBLInvoice;
 
+/**
+ * Interface IInvoiceWriter to be used in conjunction with UBLRenderer::WriteFile and UBLRenderer::WriteFiles
+ * @see UBLRenderer::WriteFile
+ * @see UBLRenderer::WriteFiles
+ */
 interface IInvoiceWriter
 {
+    /**
+     * Writes the content of the invoice to a file
+     * @param string $hmlContent the html content
+     * @param ParsedUBLInvoice $invoice a reference to the parsed invoice
+     */
     public function WriteContent(string $hmlContent, ParsedUBLInvoice $invoice): void;
 
     /**
+     * Returns the warnings generated during the writing process, empty array if no warnings
      * @return UBLRendererWarning[]
      */
     public function GetWarnings(): array;

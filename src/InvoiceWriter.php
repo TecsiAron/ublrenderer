@@ -19,6 +19,12 @@ namespace EdituraEDU\UBLRenderer;
 
 use EdituraEDU\UBLRenderer\UBLObjectDefinitions\ParsedUBLInvoice;
 
+/**
+ * Utility class to add NormalizePath method to IInvoiceWriter implementations
+ * Preferred to NOT use this abstract class as base for all writers, since not all (potential) writers need the NormalizePath method
+ * @see UBLRenderer::WriteFile
+ * @see UBLRenderer::WriteFiles
+ */
 abstract class  InvoiceWriter implements IInvoiceWriter
 {
     /**
