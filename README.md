@@ -4,6 +4,8 @@ UBLRenderer
 STILL IN TESTING PHASE  
 Should not be used in production  
 PHP Library to convert RO eFactura UBL/ZIP files to HTML/PDF*  
+Check [Sample PDF](https://github.com/TecsiAron/ublrenderer/blob/main/sample_output/sample.pdf) and [Sample HTML](https://github.com/TecsiAron/ublrenderer/blob/main/sample_output/sample.html)  
+Uses Twig for templating and supports user defined templates.  
 Requirements:  
 - php 8.2 or newer  
 - ext-xmlreader  
