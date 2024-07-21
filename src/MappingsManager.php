@@ -113,4 +113,19 @@ class MappingsManager
         }
         return $this->UnitCodes[$unitCode];
     }
+
+    public function AddUnitCodeMapping(string $unitCode, string $unitName): void
+    {
+        $this->UnitCodes[$unitCode] = $unitName;
+    }
+
+    public function AddAllowanceChargeReasonCodeMapping(string $reasonCode, string $reasonName): void
+    {
+        $this->AllowanceChargeReasonCodes[$reasonCode] = $reasonName;
+    }
+
+    public function AddPaymentMeansCodeMapping(string $paymentMeansCode, string $paymentMeansName): void
+    {
+        $this->PaymentMeansCodes[$paymentMeansCode] = $paymentMeansName;
+    }
 }
