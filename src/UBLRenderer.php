@@ -109,16 +109,24 @@ class UBLRenderer
      * Parses the UBL content, creates the HTML and writes it to the specified files using the specified writers
      * Will not work if constructor was called with useDefaultTemplate=false
      * @param IInvoiceWriter[] $writers
+     * @param ParsedUBLInvoice|null $invoice If null ParseUBL() will be called (default value is null)
+     * @param string|null $htmlContent If null CreateHTML() will be called (default value is null)
      * @return void
      * @throws Exception
      */
-    public function WriteFiles(array $writers)
+    public function WriteFiles(array $writers, ?ParsedUBLInvoice $invoice=null,?string $htmlContent=null)
     {
-        $invoice = $this->ParseUBL();
-        $html = $this->CreateHTML($invoice);
+        if($invoice==null)
+        {
+            $invoice = $this->ParseUBL();
+        }
+        if($htmlContent==null)
+        {
+            $htmlContent = $this->CreateHTML($invoice);
+        }
         foreach ($writers as $w)
         {
-            $w->WriteContent($html, $invoice);
+            $w->WriteContent($htmlContent, $invoice);
         }
     }
 
@@ -126,14 +134,22 @@ class UBLRenderer
      * Parses the UBL content, creates the HTML and writes it to the specified file using the specified writer
      * Will not work if constructor was called with useDefaultTemplate=false
      * @param IInvoiceWriter $writer HTMLFileWriter will be used by default
+     * @param ParsedUBLInvoice|null $invoice If null ParseUBL() will be called (default value is null)
+     * @param string|null $htmlContent If null CreateHTML() will be called (default value is null)
      * @return void
      * @throws Exception
      */
-    public function WriteFile(IInvoiceWriter $writer = new HTMLFileWriter())
+    public function WriteFile(IInvoiceWriter $writer = new HTMLFileWriter(), ?ParsedUBLInvoice $invoice=null,?string $htmlContent=null )
     {
-        $invoice = $this->ParseUBL();
-        $html = $this->CreateHTML($invoice);
-        $writer->WriteContent($html, $invoice);
+        if($invoice==null)
+        {
+            $invoice = $this->ParseUBL();
+        }
+        if($htmlContent==null)
+        {
+            $htmlContent = $this->CreateHTML($invoice);
+        }
+        $writer->WriteContent($htmlContent, $invoice);
     }
 
     /**
