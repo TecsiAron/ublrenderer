@@ -26,6 +26,9 @@
       "email": "aron@edituraedu.ro"
     }
   ],
+  "scripts": {
+        "test": "phpunit ./tests/ -c ./tests/phpunit.xml"
+  },
   "minimum-stability": "stable",
   "bin": ["bin/ubl2html.php"]
 }
