@@ -1,5 +1,4 @@
 name: PHP Composer
-
 on:
   push:
     branches: [ "main" ]
@@ -11,12 +10,12 @@ permissions:
 
 jobs:
   build:
-
-    runs-on: ubuntu-latest
-
+    
+    runs-on: ubuntu-20.04
     steps:
     - uses: actions/checkout@v4
-
+      with:
+        php-version: "8.2"
     - name: Validate composer.json and composer.lock
       run: composer validate --strict --no-check-all
 
@@ -25,6 +24,7 @@ jobs:
       uses: actions/cache@v3
       with:
         path: vendor
+        php-version: "8.2"
         key: ${{ runner.os }}-php-${{ hashFiles('**/composer.lock') }}
         restore-keys: |
           ${{ runner.os }}-php-
