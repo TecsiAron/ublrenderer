@@ -148,45 +148,60 @@ class Address extends UBLDeserializable
         return true;
     }
 
+    /**
+     * Checks StreetName, CityName, CountrySubentity and GetCountuName for null values
+     * @return true|array
+     * @see Address::GetCountyName
+     */
     public function CanRender(): true|array
     {
-        $toCheck=[
+        $toCheck = [
             $this->StreetName,
             $this->CityName,
             $this->GetCountyName()
         ];
-        if(!$this->ContainsNull($toCheck))
+        if (!$this->ContainsNull($toCheck))
         {
             return true;
         }
-        $results=[];
-        if($this->StreetName==null)
+        $results = [];
+        if ($this->StreetName == null)
         {
-            $results[]="[Address] StreetName is null";
+            $results[] = "[Address] StreetName is null";
         }
-        if($this->CityName==null)
+        if ($this->CityName == null)
         {
-            $results[]="[Address] CityName is null";
+            $results[] = "[Address] CityName is null";
         }
-        if($this->CountrySubentity==null)
+        if ($this->CountrySubentity == null || $this->GetCountyName() == null)
         {
-            $results[]="[Address] CountrySubentity is null";
+            $results[] = "[Address] CountrySubentity or GetCountyName is null";
         }
         return $results;
     }
 
-    public function HasZipCode():bool
+    /**
+     * Checks if the PostalZone is set to a non-empty string
+     * @return bool
+     */
+    public function HasZipCode(): bool
     {
-        if(!isset($this->PostalZone) || empty($this->PostalZone))
+        if (!isset($this->PostalZone) || empty($this->PostalZone))
         {
             return false;
         }
         return true;
     }
 
-    public function GetCountyName():?string
+    /**
+     * For Romania (Country code RO) it will return the county name using CountyMap
+     * For other countries it will return the CountrySubentity or an empty string
+     * @return string|null
+     * @see CountyMap::GetCounty
+     */
+    public function GetCountyName(): ?string
     {
-        if(trim(strtolower($this->Country->IdentificationCode))=="ro")
+        if (trim(strtolower($this->Country->IdentificationCode)) == "ro")
         {
             if (!isset($this->CountrySubentity))
             {
@@ -194,6 +209,6 @@ class Address extends UBLDeserializable
             }
             return CountyMap::GetCounty($this->CountrySubentity);
         }
-        return $this->CountrySubentity??"";
+        return $this->CountrySubentity ?? "";
     }
 }

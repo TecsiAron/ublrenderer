@@ -32,18 +32,18 @@ class InvoicePeriod extends UBLDeserializable
     {
         $instance = new self();
         $parsedInvoicePeriod = $reader->parseInnerTree();
-        if(!is_array($parsedInvoicePeriod))
+        if (!is_array($parsedInvoicePeriod))
         {
             return $instance;
         }
-        for($i=0;$i<count($parsedInvoicePeriod);$i++)
+        for ($i = 0; $i < count($parsedInvoicePeriod); $i++)
         {
             $node = $parsedInvoicePeriod[$i];
-            if($node["value"] == null)
+            if ($node["value"] == null)
             {
                 continue;
             }
-            $localName=$instance->getLocalName($node["name"]);
+            $localName = $instance->getLocalName($node["name"]);
             switch ($localName)
             {
                 case "StartDate":

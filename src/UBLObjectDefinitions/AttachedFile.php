@@ -32,18 +32,18 @@ class AttachedFile extends UBLDeserializable
     {
         $instance = new self();
         $parsedAttachedFile = $reader->parseInnerTree();
-        if(!is_array($parsedAttachedFile))
+        if (!is_array($parsedAttachedFile))
         {
             return $instance;
         }
-        for($i=0; $i<count($parsedAttachedFile); $i++)
+        for ($i = 0; $i < count($parsedAttachedFile); $i++)
         {
             $parsed = $parsedAttachedFile[$i];
-            if($parsed["value"] === null)
+            if ($parsed["value"] === null)
             {
                 continue;
             }
-            $localName=$instance->getLocalName($parsed["name"]);
+            $localName = $instance->getLocalName($parsed["name"]);
             switch ($localName)
             {
                 case "FilePath":

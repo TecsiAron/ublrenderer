@@ -38,36 +38,36 @@ class ItemPrice extends UBLDeserializable
     {
         $instance = new self();
         $parsedItemPrice = $reader->parseInnerTree();
-        if(!is_array($parsedItemPrice))
+        if (!is_array($parsedItemPrice))
         {
             return $instance;
         }
-        for($i=0;$i<count($parsedItemPrice);$i++)
+        for ($i = 0; $i < count($parsedItemPrice); $i++)
         {
             $node = $parsedItemPrice[$i];
-            if($node["value"] == null)
+            if ($node["value"] == null)
             {
                 continue;
             }
-            $localName=$instance->getLocalName($node["name"]);
+            $localName = $instance->getLocalName($node["name"]);
             switch ($localName)
             {
                 case "PriceAmount":
                     $instance->PriceAmount = $node["value"];
-                    if(isset($node["attributes"]["currencyID"]))
+                    if (isset($node["attributes"]["currencyID"]))
                     {
                         $instance->PriceCurrencyID = $node["attributes"]["currencyID"];
                     }
                     break;
                 case "BaseQuantity":
                     $instance->BaseQuantity = $node["value"];
-                    if($node["attributes"]["unitCode"] !== null)
+                    if ($node["attributes"]["unitCode"] !== null)
                     {
                         $instance->UnitCode = $node["attributes"]["unitCode"];
                     }
                     break;
                 case "AllowanceCharge":
-                    if(!isset($instance->AllowanceCharge))
+                    if (!isset($instance->AllowanceCharge))
                     {
                         $instance->AllowanceCharge = [];
                     }

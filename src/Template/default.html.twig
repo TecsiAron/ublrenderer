@@ -20,51 +20,49 @@
     <title>Factură</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <style>
-        body
-        {
+        body {
             margin: 0.5em;
         }
-        .header-table
-        {
+
+        .header-table {
             width: 100%;
             border-collapse: collapse;
-            border:1px solid black;
+            border: 1px solid black;
         }
+
         .header-info,
-        .header-party
-        {
+        .header-party {
             padding: 0.5em;
-            border:1px solid black;
+            border: 1px solid black;
         }
-        .header-info
-        {
+
+        .header-info {
             width: 15%;
             text-align: center;
         }
-        .header-buyer
-        {
+
+        .header-buyer {
             text-align: right;
         }
-        .invoice-lines-table
-        {
+
+        .invoice-lines-table {
             margin-top: 1em;
             width: 100%;
             border-collapse: collapse;
-            border:1px solid black;
+            border: 1px solid black;
         }
-        .invoice-lines-table thead th
-        {
-            border:1px solid black;
+
+        .invoice-lines-table thead th {
+            border: 1px solid black;
         }
-        .invoice-line td
-        {
-            border:1px solid black;
+
+        .invoice-line td {
+            border: 1px solid black;
             text-align: center;
             padding: 0.2em;
         }
 
-        .invoice-total
-        {
+        .invoice-total {
             page-break-before: avoid;
             margin-top: 1em;
             text-align: right;
@@ -82,7 +80,7 @@
             <div class="header-line header-buyer-line">{{ invoice.AccountingSupplierParty.GetName() }}</div>
             <div class="header-line header-buyer-line">CIF: {{ invoice.AccountingSupplierParty.GetCIF() }}</div>
             {% if invoice.AccountingSupplierParty.HasRegistrationNumber() %}
-            <div class="header-line header-buyer-line">Nr. Reg. Com.: {{ invoice.AccountingSupplierParty.GetRegistrationNumber() }}</div>
+                <div class="header-line header-buyer-line">Nr. Reg. Com.: {{ invoice.AccountingSupplierParty.GetRegistrationNumber() }}</div>
             {% endif %}
             <div class="header-line header-buyer-line">Sediu:</div>
             <div class="header-line header-buyer-line">Județul: {{ invoice.AccountingSupplierParty.PostalAddress.GetCountyName() }}</div>
@@ -114,7 +112,7 @@
             <div class="header-line header-info-line">Nr. {{ invoice.ID }}</div>
             <div class="header-line header-info-line">din</div>
             <div class="header-line header-info-line">{{ invoice.IssueDate.format("Y-m-d") }}</div>
-            {%  if invoice.HasDueDate() %}
+            {% if invoice.HasDueDate() %}
                 <div class="header-line header-info-line">Scadentă în data de:</div>
                 <div class="header-line header-info-line">{{ invoice.GetDueDate().format("Y-m-d") }}</div>
             {% endif %}
@@ -125,7 +123,7 @@
             <div class="header-line header-buyer-line">{{ invoice.AccountingCustomerParty.GetName() }}</div>
             <div class="header-line header-buyer-line">CIF: {{ invoice.AccountingCustomerParty.GetCIF() }}</div>
             {% if invoice.AccountingCustomerParty.HasRegistrationNumber() %}
-            <div class="header-line header-buyer-line">Nr. Reg. Com.: {{ invoice.AccountingCustomerParty.GetRegistrationNumber() }}</div>
+                <div class="header-line header-buyer-line">Nr. Reg. Com.: {{ invoice.AccountingCustomerParty.GetRegistrationNumber() }}</div>
             {% endif %}
             <div class="header-line header-buyer-line">Sediu:</div>
             <div class="header-line header-buyer-line">Județul: {{ invoice.AccountingCustomerParty.PostalAddress.GetCountyName() }}</div>
@@ -163,26 +161,26 @@
     {# @var line \EdituraEDU\UBLRenderer\UBLObjectDefinitions\InvoiceLine #}
     {% for line in invoice.InvoiceLines %}
         <tr class="invoice-line">
-        <td>{{ invoice.GetLineNumber(line) }}</td>
-                <td>{{ line.Item.Name }}</td>
-                <td>{{ line.GetUnitCode() }}</td>
-                {% if invoice.HasAnyItemIDs() %}
+            <td>{{ invoice.GetLineNumber(line) }}</td>
+            <td>{{ line.Item.Name }}</td>
+            <td>{{ line.GetUnitCode() }}</td>
+            {% if invoice.HasAnyItemIDs() %}
                 <td>{{ line.GetItemIDs("<br>") }}</td>
-                {% endif %}
-                <td>{{ line.GetVATRate() }}</td>
-                <td>{{ line.InvoicedQuantity }}</td>
-                <td>{{ line.GetNoVATUnitValue }}</td>
-                <td>{{ line.GetNoVATValue() }}</td>
-                <td>{{ line.GetVATValue() }}</td>
-            </tr>
-            {% if line.HasAllowanceCharges() %}
-                {% for allowance in line.AllAllowanceCharges %}
+            {% endif %}
+            <td>{{ line.GetVATRate() }}</td>
+            <td>{{ line.InvoicedQuantity }}</td>
+            <td>{{ line.GetNoVATUnitValue }}</td>
+            <td>{{ line.GetNoVATValue() }}</td>
+            <td>{{ line.GetVATValue() }}</td>
+        </tr>
+        {% if line.HasAllowanceCharges() %}
+            {% for allowance in line.AllAllowanceCharges %}
                 <tr class="invoice-line">
                     <td><!-- No line number --></td>
                     <td> {{ allowance.ToString() }}</td>
                     <td><!-- No unit code --></td>
                     {% if invoice.HasAnyItemIDs() %}
-                    <td><!-- No item ID? --></td>
+                        <td><!-- No item ID? --></td>
                     {% endif %}
                     <td><!-- No vat rate --></td>
                     <td><!-- No quantity--></td>
@@ -190,17 +188,17 @@
                     <td><!-- No value --></td>
                     <td><!-- No vat value--></td>
                 </tr>
-                {% endfor %}
-            {% endif %}
-        {% endfor %}
-        {%  if invoice.HasInvoiceLevelAllowanceCharges() %}
-            {% for allowance in invoice.AllowanceCharges %}
+            {% endfor %}
+        {% endif %}
+    {% endfor %}
+    {% if invoice.HasInvoiceLevelAllowanceCharges() %}
+        {% for allowance in invoice.AllowanceCharges %}
             <tr class="invoice-line">
                 <td><!-- No line number --></td>
                 <td> {{ allowance.ToString() }}</td>
                 <td><!-- No unit code --></td>
                 {% if invoice.HasAnyItemIDs() %}
-                <td><!-- No item ID? --></td>
+                    <td><!-- No item ID? --></td>
                 {% endif %}
                 <td><!-- No vat rate --></td>
                 <td><!-- No quantity--></td>
@@ -208,33 +206,33 @@
                 <td><!-- No value --></td>
                 <td><!-- No vat value--></td>
             </tr>
-            {% endfor %}
-        {% endif %}
-    </table>
-    <div class="invoice-total">
-        Total fără TVA: {{ invoice.LegalMonetaryTotal.GetTaxExclusiveAmount() }}<br>
-        Total TVA: {{ invoice.TaxTotal.GetAmmount() }}<br>
-        Total cu TVA: {{ invoice.LegalMonetaryTotal.GetTaxInclusiveAmount() }}<br>
-    </div>
-    {%  if invoice.HasNotes() %}
+        {% endfor %}
+    {% endif %}
+</table>
+<div class="invoice-total">
+    Total fără TVA: {{ invoice.LegalMonetaryTotal.GetTaxExclusiveAmount() }}<br>
+    Total TVA: {{ invoice.TaxTotal.GetAmmount() }}<br>
+    Total cu TVA: {{ invoice.LegalMonetaryTotal.GetTaxInclusiveAmount() }}<br>
+</div>
+{% if invoice.HasNotes() %}
     <div class="invoice-notes">
         <h3>Observații:</h3>
         <ul>
             {% for note in invoice.GetNotes() %}
-            <li>{{ note }}</li>
+                <li>{{ note }}</li>
             {% endfor %}
         </ul>
     </div>
-    {% endif %}
-    {% if invoice.HasOtherInfo() %}
+{% endif %}
+{% if invoice.HasOtherInfo() %}
     <div>
         <h3>Alte informații:</h3>
         <ul>
             {% for info in invoice.GetOtherInfo() %}
-            <li>{{ info }}</li>
+                <li>{{ info }}</li>
             {% endfor %}
         </ul>
     </div>
-    {% endif %}
+{% endif %}
 </body>
 </html>

@@ -37,11 +37,11 @@ class InvoiceItem extends UBLDeserializable
     {
         $instance = new self();
         $parsedInvoiceItem = $reader->parseInnerTree();
-        if(!is_array($parsedInvoiceItem))
+        if (!is_array($parsedInvoiceItem))
         {
             return $instance;
         }
-        for($i=0;$i<count($parsedInvoiceItem);$i++)
+        for ($i = 0; $i < count($parsedInvoiceItem); $i++)
         {
             $parsed = $parsedInvoiceItem[$i];
             $localName = $instance->getLocalName($parsed["name"]);

@@ -32,18 +32,18 @@ class Contact extends UBLDeserializable
     {
         $instance = new self();
         $parsedContact = $reader->parseInnerTree();
-        if(!is_array($parsedContact))
+        if (!is_array($parsedContact))
         {
             return $instance;
         }
-        for($i=0;$i<count($parsedContact);$i++)
+        for ($i = 0; $i < count($parsedContact); $i++)
         {
             $node = $parsedContact[$i];
-            if($node["value"] == null)
+            if ($node["value"] == null)
             {
                 continue;
             }
-            $localName=$instance->getLocalName($node["name"]);
+            $localName = $instance->getLocalName($node["name"]);
             switch ($localName)
             {
                 case "Name":

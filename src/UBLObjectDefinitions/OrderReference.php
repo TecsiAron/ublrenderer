@@ -32,18 +32,18 @@ class OrderReference extends UBLDeserializable
     {
         $instance = new self();
         $parsedOrderReference = $reader->parseInnerTree();
-        if(!is_array($parsedOrderReference))
+        if (!is_array($parsedOrderReference))
         {
             return $instance;
         }
-        for($i=0;$i<count($parsedOrderReference);$i++)
+        for ($i = 0; $i < count($parsedOrderReference); $i++)
         {
             $node = $parsedOrderReference[$i];
-            if($node["value"] == null)
+            if ($node["value"] == null)
             {
                 continue;
             }
-            $localName=$instance->getLocalName($node["name"]);
+            $localName = $instance->getLocalName($node["name"]);
             switch ($localName)
             {
                 case "ID":
@@ -103,7 +103,11 @@ class OrderReference extends UBLDeserializable
         return true;
     }
 
-    public function HasValidID():bool
+    /**
+     * Check if the OrderReference has an ID (ID or SalesOrderID) set to a non-empty value
+     * @return bool
+     */
+    public function HasValidID(): bool
     {
         return (isset($this->ID) && !empty($this->ID)) || (isset($this->SalesOrderId) && !empty($this->SalesOrderId));
     }

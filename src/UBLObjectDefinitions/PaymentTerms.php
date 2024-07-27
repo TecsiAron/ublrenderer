@@ -67,7 +67,7 @@ class PaymentTerms extends UBLDeserializable
                     $instance->SettlementPeriod = $parsed["value"];
                     break;
                 case "PaymentDueDate":
-                    $instance->PaymentDueDate =  DateTime::createFromFormat("Y-m-d", $parsed["value"]);
+                    $instance->PaymentDueDate = DateTime::createFromFormat("Y-m-d", $parsed["value"]);
                     break;
             }
         }

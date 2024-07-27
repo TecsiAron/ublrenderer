@@ -57,6 +57,7 @@ class XMLReaderProvider
     /**
      * List of all classes that need to be mapped to the Sabre\Xml\Reader
      * Should all be implementers of UBLObjectDefinitions
+     * For internal use only
      */
     public const CLASSES = [
         PartyTaxScheme::class,

@@ -65,7 +65,7 @@ class Delivery extends UBLDeserializable
     {
         return '<cac:Delivery ' . self::NS_DEFINTIONS . '>
                     <cbc:ActualDeliveryDate>2021-01-01</cbc:ActualDeliveryDate>
-                    '.DeliveryLocation::GetTestXML().'
+                    ' . DeliveryLocation::GetTestXML() . '
                     <cac:DeliveryParty>
                         <cac:PartyName>
                             <cbc:Name>Test</cbc:Name>

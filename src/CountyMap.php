@@ -16,7 +16,11 @@
  */
 
 namespace EdituraEDU\UBLRenderer;
-
+/**
+ * Class CountyMap
+ * @package EdituraEDU\UBLRenderer
+ * Maps county codes to county names
+ */
 class CountyMap
 {
     private const MAP = [
@@ -64,6 +68,12 @@ class CountyMap
         "RO-B" => "București"
     ];
 
+    /**
+     * Returns the county name for the given county code
+     * Will return null if the code is not found
+     * @param string $code
+     * @return string|null
+     */
     public static function GetCounty(string $code): ?string
     {
         $code = strtoupper(trim($code));

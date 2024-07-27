@@ -16,6 +16,7 @@
  */
 
 use EdituraEDU\UBLRenderer\UBLObjectDefinitions\ParsedUBLInvoice;
+use EdituraEDU\UBLRenderer\UBLRenderer;
 use PHPUnit\Framework\TestCase;
 
 class ZipTest extends TestCase
@@ -23,22 +24,22 @@ class ZipTest extends TestCase
     public function testZip()
     {
         $this->CreateZip();
-        $xml = \EdituraEDU\UBLRenderer\UBLRenderer::LoadUBLFromZip("test.zip")->ubl;
+        $xml = UBLRenderer::LoadUBLFromZip("test.zip")->ubl;
         $this->assertEquals($xml, ParsedUBLInvoice::GetTestXML());
         @unlink("test.zip");
         $this->assertFileDoesNotExist("test.zip", "Failed to delete test.zip");
     }
 
-    private function CreateZip():void
+    private function CreateZip(): void
     {
         $zip = new ZipArchive();
-        if(file_exists("test.zip"))
+        if (file_exists("test.zip"))
         {
             @unlink("test.zip");
         }
         $this->assertFileDoesNotExist("test.zip", "Test zip already exists!");
         $zip->open("test.zip", ZipArchive::CREATE);
-        $number= rand(100000,900000);
+        $number = rand(100000, 900000);
         $zip->addFromString("$number.xml", ParsedUBLInvoice::GetTestXML());
         $zip->addFromString("semnatura_$number.xml", "test");
         $zip->close();

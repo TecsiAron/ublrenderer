@@ -108,13 +108,18 @@ class TaxTotal extends UBLDeserializable
         return true;
     }
 
+    /**
+     * Returns the total amount of tax followed by the currency
+     * @return string|null
+     * @throws Exception if GetCurrency fails
+     */
     public function GetAmmount(): ?string
     {
-        if(!isset($this->TaxAmount) || (empty($this->TaxAmount) && $this->TaxAmount!=="0"))
+        if (!isset($this->TaxAmount) || (empty($this->TaxAmount) && $this->TaxAmount !== "0"))
         {
             return null;
         }
-        return $this->TaxAmount. " " . $this->GetCurrency($this->TaxAmountCurrency);
+        return $this->TaxAmount . " " . $this->GetCurrency($this->TaxAmountCurrency);
     }
 
     public function CanRender(): true|array

@@ -53,18 +53,18 @@ class Party extends UBLDeserializable
     {
         $instance = new self();
         $parsedParty = $reader->parseInnerTree();
-        if(!is_array($parsedParty))
+        if (!is_array($parsedParty))
         {
             return $instance;
         }
-        for($i=0;$i<count($parsedParty);$i++)
+        for ($i = 0; $i < count($parsedParty); $i++)
         {
             $node = $parsedParty[$i];
-            if($node["value"] == null)
+            if ($node["value"] == null)
             {
                 continue;
             }
-            $localName=$instance->getLocalName($node["name"]);
+            $localName = $instance->getLocalName($node["name"]);
             switch ($localName)
             {
                 case "EndpointID":
@@ -158,52 +158,77 @@ class Party extends UBLDeserializable
         return true;
     }
 
-    public function GetCIF():?string
+    /**
+     * Checks for CIF in the following order:
+     * 1. PartyIdentificationId
+     * 2. PartyTaxScheme->CompanyId
+     * 3. LegalEntity->CompanyID
+     * @return string|null
+     */
+    public function GetCIF(): ?string
     {
-        if(isset($this->PartyIdentificationId) && $this->IsValidCIF($this->PartyIdentificationId))
+        if (isset($this->PartyIdentificationId) && $this->IsValidCIF($this->PartyIdentificationId))
         {
             return $this->PartyIdentificationId;
         }
-        if(isset($this->PartyTaxScheme->CompanyId) && $this->IsValidCIF($this->PartyTaxScheme->CompanyId))
+        if (isset($this->PartyTaxScheme->CompanyId) && $this->IsValidCIF($this->PartyTaxScheme->CompanyId))
         {
             return $this->PartyTaxScheme->CompanyId;
         }
-        if(isset($this->LegalEntity->CompanyID) && $this->IsValidCIF($this->LegalEntity->CompanyID))
+        if (isset($this->LegalEntity->CompanyID) && $this->IsValidCIF($this->LegalEntity->CompanyID))
         {
             return $this->LegalEntity->CompanyID;
         }
         return null;
     }
 
-    public function GetRegistrationNumber():?string
+    /**
+     * Checks for registration number in the following order:
+     * 1. LegalEntity->CompanyID
+     * 2. LegalEntity->CompanyLegalForm
+     * 3. ForcedRegistrationNumber
+     * @return string|null
+     * @see Party::IsValidRegNumber()
+     */
+    public function GetRegistrationNumber(): ?string
     {
-        if(isset($this->LegalEntity->CompanyID) && $this->IsValidRegNumber($this->LegalEntity->CompanyID))
+        if (isset($this->LegalEntity->CompanyID) && $this->IsValidRegNumber($this->LegalEntity->CompanyID))
         {
             return $this->LegalEntity->CompanyID;
         }
-        if(isset($this->LegalEntity->CompanyLegalForm) && $this->IsValidRegNumber($this->LegalEntity->CompanyLegalForm))
+        if (isset($this->LegalEntity->CompanyLegalForm) && $this->IsValidRegNumber($this->LegalEntity->CompanyLegalForm))
         {
             return $this->LegalEntity->CompanyLegalForm;
         }
-        if(!empty($this->ForcedRegistrationNumber) && $this->IsValidRegNumber($this->ForcedRegistrationNumber))
+        if (!empty($this->ForcedRegistrationNumber) && $this->IsValidRegNumber($this->ForcedRegistrationNumber))
         {
             return $this->ForcedRegistrationNumber;
         }
         return null;
     }
 
-    public function HasRegistrationNumber():bool
+    /**
+     * Check if the party has a valid registration number
+     * @return bool
+     */
+    public function HasRegistrationNumber(): bool
     {
-        return $this->GetRegistrationNumber()!=null;
+        return $this->GetRegistrationNumber() != null;
     }
 
-    public function GetName():?string
+    /**
+     * Try to get the name of the party in the following order:
+     * 1. Name
+     * 2. LegalEntity->RegistrationName
+     * @return string|null
+     */
+    public function GetName(): ?string
     {
-        if(isset($this->Name) && !empty($this->Name))
+        if (isset($this->Name) && !empty($this->Name))
         {
             return $this->Name;
         }
-        if(isset($this->LegalEntity->RegistrationName) && !empty($this->LegalEntity->RegistrationName))
+        if (isset($this->LegalEntity->RegistrationName) && !empty($this->LegalEntity->RegistrationName))
         {
             return $this->LegalEntity->RegistrationName;
         }
@@ -213,51 +238,64 @@ class Party extends UBLDeserializable
 
     public function CanRender(): true|array
     {
-        $toCheck=[$this->GetCIF(), $this->GetName()];
-        $addressValidation=$this->PostalAddress->CanRender();
-        if($addressValidation===true)
+        $toCheck = [$this->GetCIF(), $this->GetName()];
+        $addressValidation = $this->PostalAddress->CanRender();
+        if ($addressValidation === true)
         {
             if (!$this->ContainsNull($toCheck))
             {
                 return true;
             }
         }
-        $results=[];
-        if(is_array($addressValidation))
+        $results = [];
+        if (is_array($addressValidation))
         {
-            $results=array_merge($results, $addressValidation);
+            $results = array_merge($results, $addressValidation);
         }
-        if($this->GetCIF()==null)
+        if ($this->GetCIF() == null)
         {
-            $results[]="[Party] CIF is missing";
+            $results[] = "[Party] CIF is missing";
         }
-        if(!isset($this->Name) || empty($this->Name))
+        if (!isset($this->Name) || empty($this->Name))
         {
-            $results[]="[Party] Name is missing";
+            $results[] = "[Party] Name is missing";
         }
         return $results;
     }
 
+    /**
+     * Check if a registration number is valid
+     * A valid registration number is in the format:
+     * The letters J, C or F followed by 2 digits, a separator (/, \, - or space), a number, a separator and a number
+     * @param string|null $regNumber
+     * @return bool
+     */
     private function IsValidRegNumber(?string $regNumber): bool
     {
-        if($regNumber == null)
+        if ($regNumber == null)
         {
             return false;
         }
         /** @noinspection RegExpDuplicateCharacterInClass */
         /** @noinspection RegExpRedundantEscape */
-        $regex="/[J|C|F][0-9][0-9][\/ \\ \-\s][0-9]*[\/ \\ \-][0-9]*/i";
+        $regex = "/[J|C|F][0-9][0-9][\/ \\ \-\s][0-9]*[\/ \\ \-][0-9]*/i";
         return preg_match($regex, $regNumber) === 1;
     }
 
-    public function IsValidCIF(?string $input):bool
+    /**
+     * Check if a CIF is valid
+     * @param string|null $input
+     * @return bool
+     * @deprecated  Currently always returns true since testing invoices have invalid CIFs
+     */
+    public function IsValidCIF(?string $input): bool
     {
         return true;
-        if($input===null)
+        if ($input === null)
         {
             return false;
         }
-        $cif=trim(strtolower($input));
+        $cif = trim(strtolower($input));
         if (!is_int($cif))
         {
             $cif = strtoupper($cif);

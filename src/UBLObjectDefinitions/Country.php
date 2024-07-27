@@ -46,7 +46,7 @@ class Country extends UBLDeserializable
             {
                 case "IdentificationCode":
                     $instance->IdentificationCode = $parsed["value"];
-                    if(isset($parsed["attributes"]["listID"]))
+                    if (isset($parsed["attributes"]["listID"]))
                     {
                         $instance->ListID = $parsed["attributes"]["listID"];
                     }

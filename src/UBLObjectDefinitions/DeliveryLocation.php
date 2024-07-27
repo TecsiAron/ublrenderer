@@ -67,7 +67,7 @@ class DeliveryLocation extends UBLDeserializable
 
     public static function GetTestXML(): string
     {
-        return '<cac:DeliveryLocation '.self::NS_DEFINTIONS.'>
+        return '<cac:DeliveryLocation ' . self::NS_DEFINTIONS . '>
                         <cbc:ID>1</cbc:ID>
                         ' . Address::GetTestXML() . '
                     </cac:DeliveryLocation>';

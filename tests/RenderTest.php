@@ -18,14 +18,16 @@
 use EdituraEDU\UBLRenderer\HTMLFileWriter;
 use EdituraEDU\UBLRenderer\UBLObjectDefinitions\ParsedUBLInvoice;
 use EdituraEDU\UBLRenderer\UBLRenderer;
+use EdituraEDU\UBLRenderer\UBLRenderException;
 use PHPUnit\Framework\Attributes\CoversMethod;
 use PHPUnit\Framework\TestCase;
+
 #[CoversMethod(UBLRenderer::class, "WriteFiles")]
 class RenderTest extends TestCase
 {
     public function testRender()
     {
-        if(file_exists("test_render.html"))
+        if (file_exists("test_render.html"))
         {
             @unlink("test_render.html");
         }
@@ -33,14 +35,14 @@ class RenderTest extends TestCase
         /*$readResult = UBLRenderer::LoadUBLFromZip(dirname(__FILE__)."/../output/RMBU-1501508.zip");
         $content = $readResult->ubl;*/
         //$content=file_get_contents(dirname(__FILE__)."/../output/4352708358.xml");
-        $content= ParsedUBLInvoice::GetTestXML();
+        $content = ParsedUBLInvoice::GetTestXML();
         $renderer = new UBLRenderer($content);
-        $invoice=$renderer->ParseUBL();
-        $validation=$invoice->CanRender();
-        $validationFailReason="Validation failed:\n";
-        if(is_array($validation))
+        $invoice = $renderer->ParseUBL();
+        $validation = $invoice->CanRender();
+        $validationFailReason = "Validation failed:\n";
+        if (is_array($validation))
         {
-            $validationFailReason.=implode("\n", $validation);
+            $validationFailReason .= implode("\n", $validation);
             $this->fail($validationFailReason);
         }
         $this->assertTrue($validation, $validationFailReason);
@@ -50,17 +52,17 @@ class RenderTest extends TestCase
         }
         catch (Exception $e)
         {
-            $this->fail($e->getMessage()."\n".$e->getTraceAsString());
+            $this->fail($e->getMessage() . "\n" . $e->getTraceAsString());
         }
         $this->assertFileExists("test_render.html");
     }
 
     public function testNoRender()
     {
-        $xml = file_get_contents(dirname(__FILE__)."/efactura_sample_invoice_missing_party.xml");
+        $xml = file_get_contents(dirname(__FILE__) . "/efactura_sample_invoice_missing_party.xml");
         $renderer = new UBLRenderer($xml);
-        $invoice=$renderer->ParseUBL();
-        $this->expectException(\EdituraEDU\UBLRenderer\UBLRenderException::class);
+        $invoice = $renderer->ParseUBL();
+        $this->expectException(UBLRenderException::class);
         $this->expectExceptionMessage('Invoice cannot be rendered');
         $renderer->CreateHTML($invoice);
     }

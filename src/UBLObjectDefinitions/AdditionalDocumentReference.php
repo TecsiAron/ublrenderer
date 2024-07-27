@@ -33,18 +33,18 @@ class AdditionalDocumentReference extends UBLDeserializable
     {
         $instance = new self();
         $parsedAdditionalDocumentReference = $reader->parseInnerTree();
-        if(!is_array($parsedAdditionalDocumentReference))
+        if (!is_array($parsedAdditionalDocumentReference))
         {
             return $instance;
         }
-        for($i=0; $i<count($parsedAdditionalDocumentReference); $i++)
+        for ($i = 0; $i < count($parsedAdditionalDocumentReference); $i++)
         {
             $parsed = $parsedAdditionalDocumentReference[$i];
-            if($parsed["value"] === null)
+            if ($parsed["value"] === null)
             {
                 continue;
             }
-            $localName=$instance->getLocalName($parsed["name"]);
+            $localName = $instance->getLocalName($parsed["name"]);
             switch ($localName)
             {
                 case "ID":

@@ -18,10 +18,13 @@
 namespace EdituraEDU\UBLRenderer;
 
 
-
 use EdituraEDU\UBLRenderer\InvoiceWriter;
 use EdituraEDU\UBLRenderer\UBLObjectDefinitions\ParsedUBLInvoice;
 
+/**
+ * Default implementation of IInvoiceWriter that writes the invoice to a HTML file
+ * @see IInvoiceWriter
+ */
 class HTMLFileWriter extends InvoiceWriter
 {
 
@@ -29,16 +32,17 @@ class HTMLFileWriter extends InvoiceWriter
 
     /**
      * If path is null or is a directory InvoiceWriter::NormalizePath will be used to generate the path
-     * @see InvoiceWriter::NormalizePath
      * @param string|null $path if null dirname(__FILE__)."/../output/<invoice_id>.html will be used"
+     * @see InvoiceWriter::NormalizePath
      */
-    public function __construct(?string $path=null)
+    public function __construct(?string $path = null)
     {
         $this->Path = $path;
     }
+
     public function WriteContent(string $hmlContent, ParsedUBLInvoice $invoice): void
     {
-        $this->Path=$this->NormalizePath($this->Path, $invoice, 'html');
+        $this->Path = $this->NormalizePath($this->Path, $invoice, 'html');
         file_put_contents($this->Path, $hmlContent);
     }
 

@@ -40,14 +40,14 @@ class LegalMonetaryTotal extends UBLDeserializable
     {
         $instance = new self();
         $xmlLegalMoneteryTotal = $reader->parseInnerTree();
-        if(!is_array($xmlLegalMoneteryTotal))
+        if (!is_array($xmlLegalMoneteryTotal))
         {
             return $instance;
         }
-        for($i=0; $i<sizeof($xmlLegalMoneteryTotal); $i++)
+        for ($i = 0; $i < sizeof($xmlLegalMoneteryTotal); $i++)
         {
             $parsed = $xmlLegalMoneteryTotal[$i];
-            if($parsed["value"] == null)
+            if ($parsed["value"] == null)
             {
                 continue;
             }
@@ -193,39 +193,50 @@ class LegalMonetaryTotal extends UBLDeserializable
         return true;
     }
 
+    /**
+     * Get the value of the invoice, without taxes
+     * Will append the currency to the value
+     * @return string|null
+     * @throws Exception if GetCurrency fails
+     */
     public function GetTaxExclusiveAmount(): ?string
     {
-        if(!isset($this->TaxExclusiveAmount) || empty($this->TaxExclusiveAmount))
+        if (!isset($this->TaxExclusiveAmount) || empty($this->TaxExclusiveAmount))
         {
             return null;
         }
-        return $this->TaxExclusiveAmount. " ". $this->GetCurrency($this->TaxExclusiveCurrency);
+        return $this->TaxExclusiveAmount . " " . $this->GetCurrency($this->TaxExclusiveCurrency);
     }
 
+    /**
+     * Get the value of the invoice, with taxes
+     * @return string|null
+     * @throws Exception if GetCurrency fails
+     */
     public function GetTaxInclusiveAmount(): ?string
     {
-        if(!isset($this->TaxInclusiveAmount) || empty($this->TaxInclusiveAmount))
+        if (!isset($this->TaxInclusiveAmount) || empty($this->TaxInclusiveAmount))
         {
             return null;
         }
-        return $this->TaxInclusiveAmount. " ". $this->GetCurrency($this->TaxInclusiveCurrency);
+        return $this->TaxInclusiveAmount . " " . $this->GetCurrency($this->TaxInclusiveCurrency);
     }
 
     public function CanRender(): true|array
     {
-        $toCheck=[$this->GetTaxExclusiveAmount(), $this->GetTaxInclusiveAmount()];
-        if(!$this->ContainsNull($toCheck))
+        $toCheck = [$this->GetTaxExclusiveAmount(), $this->GetTaxInclusiveAmount()];
+        if (!$this->ContainsNull($toCheck))
         {
             return true;
         }
-        $result=[];
-        if($this->GetTaxExclusiveAmount()==null)
+        $result = [];
+        if ($this->GetTaxExclusiveAmount() == null)
         {
-            $result[]="[LegalMonetaryTotal] TaxExclusiveAmount is null";
+            $result[] = "[LegalMonetaryTotal] TaxExclusiveAmount is null";
         }
-        if($this->GetTaxInclusiveAmount()==null)
+        if ($this->GetTaxInclusiveAmount() == null)
         {
-            $result[]="[LegalMonetaryTotal] TaxInclusiveAmount is null";
+            $result[] = "[LegalMonetaryTotal] TaxInclusiveAmount is null";
         }
         return $result;
     }

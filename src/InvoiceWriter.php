@@ -36,17 +36,17 @@ abstract class  InvoiceWriter implements IInvoiceWriter
      */
     protected function NormalizePath(?string $path, ParsedUBLInvoice $invoice, string $extension): string
     {
-        if($path==null)
+        if ($path == null)
         {
-            $path = dirname(__FILE__)."/../output/";
+            $path = dirname(__FILE__) . "/../output/";
         }
-        if(is_dir($path))
+        if (is_dir($path))
         {
-            if(!str_ends_with($path, PATH_SEPARATOR))
+            if (!str_ends_with($path, PATH_SEPARATOR))
             {
-                $path.=PATH_SEPARATOR;
+                $path .= PATH_SEPARATOR;
             }
-            $path.=$invoice->ID.".".$extension;
+            $path .= $invoice->ID . "." . $extension;
         }
         return $path;
     }

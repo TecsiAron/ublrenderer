@@ -30,18 +30,18 @@ class ClassifiedTaxCategory extends TaxCategory
     {
         $instance = new self();
         $parsedTaxCategory = $reader->parseInnerTree();
-        if(!is_array($parsedTaxCategory))
+        if (!is_array($parsedTaxCategory))
         {
             return $instance;
         }
-        for($i=0;$i<count($parsedTaxCategory);$i++)
+        for ($i = 0; $i < count($parsedTaxCategory); $i++)
         {
             $node = $parsedTaxCategory[$i];
-            if($node["value"] == null)
+            if ($node["value"] == null)
             {
                 continue;
             }
-            $localName=$instance->getLocalName($node["name"]);
+            $localName = $instance->getLocalName($node["name"]);
             switch ($localName)
             {
                 case "ID":
@@ -54,7 +54,7 @@ class ClassifiedTaxCategory extends TaxCategory
                     $instance->Percent = $node["value"];
                     break;
                 case "TaxScheme":
-                    $instance->TaxScheme =  $node["value"];
+                    $instance->TaxScheme = $node["value"];
                     break;
                 case "TaxExemptionReason":
                     $instance->TaxExemptionReason = $node["value"];

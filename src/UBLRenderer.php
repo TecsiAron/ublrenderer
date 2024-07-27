@@ -24,12 +24,23 @@ use Twig\Environment;
 use Twig\Error\LoaderError;
 use Twig\Error\RuntimeError;
 use Twig\Error\SyntaxError;
+use Twig\Loader\FilesystemLoader;
+use ZipArchive;
 
 class UBLRenderer
 {
+    /**
+     * Stores the XML content of the UBL invoice for internal use
+     */
     private string $UBLContent;
+    /**
+     * Used in CreateHTML to store the current invoice for internal use
+     */
     private static ?ParsedUBLInvoice $CurrentInvoice = null;
-    private bool $useDefaultTemplate;
+    /**
+     * @see UBLRenderer::__construct
+     */
+    private bool $UseDefaultTemplate;
 
     /**
      * @param string|null $ublContent XML content of the UBL invoice
@@ -37,11 +48,11 @@ class UBLRenderer
      */
     public function __construct(?string $ublContent = null, bool $useDefaultTemplate = true)
     {
-        if(!MappingsManager::$Initialized)
+        if (!MappingsManager::$Initialized)
         {
             MappingsManager::Init();
         }
-        $this->useDefaultTemplate = $useDefaultTemplate;
+        $this->UseDefaultTemplate = $useDefaultTemplate;
         $this->UBLContent = $ublContent;
     }
 
@@ -54,28 +65,28 @@ class UBLRenderer
      * @throws RuntimeError on Twig runtime errors
      * @throws SyntaxError on Twig syntax errors
      */
-    public function CreateHTML(ParsedUBLInvoice $invoice, ?Environment $twig=null):string
+    public function CreateHTML(ParsedUBLInvoice $invoice, ?Environment $twig = null): string
     {
         /**
          * @var ParsedUBLInvoice $invoice
          * @noinspection PhpRedundantVariableDocTypeInspection
          */
-        if($twig != null && $this->useDefaultTemplate)
+        if ($twig != null && $this->UseDefaultTemplate)
         {
             throw new Exception("Cannot use custom Twig environment with default template");
         }
-        if($twig==null && !$this->useDefaultTemplate)
+        if ($twig == null && !$this->UseDefaultTemplate)
         {
             throw new Exception("Cannot use default template when UBLRenderer::useDefaultTemplate is false");
         }
         $canRender = $invoice->CanRender();
-        if($canRender!==true)
+        if ($canRender !== true)
         {
             throw new UBLRenderException("Invoice cannot be rendered", $canRender);
         }
         self::$CurrentInvoice = $invoice;
-        $loader = new \Twig\Loader\FilesystemLoader(dirname(__FILE__) . '/Template');
-        $twig = new \Twig\Environment($loader, [
+        $loader = new FilesystemLoader(dirname(__FILE__) . '/Template');
+        $twig = new Environment($loader, [
             "strict_variables" => true,
         ]);
         $twig->load("default.html.twig");
@@ -101,7 +112,7 @@ class UBLRenderer
          * @var ParsedUBLInvoice $invoice
          * @noinspection PhpRedundantVariableDocTypeInspection
          */
-        $invoice=ParsedUBLInvoice::XMLDeserialize($reader);
+        $invoice = ParsedUBLInvoice::XMLDeserialize($reader);
         return $invoice;
     }
 
@@ -114,13 +125,13 @@ class UBLRenderer
      * @return void
      * @throws Exception
      */
-    public function WriteFiles(array $writers, ?ParsedUBLInvoice $invoice=null,?string $htmlContent=null)
+    public function WriteFiles(array $writers, ?ParsedUBLInvoice $invoice = null, ?string $htmlContent = null)
     {
-        if($invoice==null)
+        if ($invoice == null)
         {
             $invoice = $this->ParseUBL();
         }
-        if($htmlContent==null)
+        if ($htmlContent == null)
         {
             $htmlContent = $this->CreateHTML($invoice);
         }
@@ -139,13 +150,13 @@ class UBLRenderer
      * @return void
      * @throws Exception
      */
-    public function WriteFile(IInvoiceWriter $writer = new HTMLFileWriter(), ?ParsedUBLInvoice $invoice=null,?string $htmlContent=null )
+    public function WriteFile(IInvoiceWriter $writer = new HTMLFileWriter(), ?ParsedUBLInvoice $invoice = null, ?string $htmlContent = null)
     {
-        if($invoice==null)
+        if ($invoice == null)
         {
             $invoice = $this->ParseUBL();
         }
-        if($htmlContent==null)
+        if ($htmlContent == null)
         {
             $htmlContent = $this->CreateHTML($invoice);
         }
@@ -160,7 +171,7 @@ class UBLRenderer
      */
     public static function GetCurrentInvoice(): ParsedUBLInvoice
     {
-        if(self::$CurrentInvoice == null)
+        if (self::$CurrentInvoice == null)
         {
             throw new Exception("Bad execution order, no invoice is currently being processed.");
         }
@@ -176,24 +187,24 @@ class UBLRenderer
      */
     public static function LoadUBLFromZip(string $zipPath): ParsedUBLZIP
     {
-        $zip = new \ZipArchive();
+        $zip = new ZipArchive();
         $zip->open($zipPath);
-        if($zip->count()!=2)
+        if ($zip->count() != 2)
         {
             throw new Exception("Invalid ZIP file format: must contain exactly 2 files!");
         }
-        for($i=0; $i<$zip->count(); $i++)
+        for ($i = 0; $i < $zip->count(); $i++)
         {
             $filename = $zip->getNameIndex($i);
-            if(str_starts_with( $filename,"semnatura_",) && str_ends_with($filename, ".xml"))
+            if (str_starts_with($filename, "semnatura_",) && str_ends_with($filename, ".xml"))
             {
-                $invoiceFileName=trim(explode("_", $filename)[1]);
-                $content=$zip->getFromName($invoiceFileName);
-                if($content===false)
+                $invoiceFileName = trim(explode("_", $filename)[1]);
+                $content = $zip->getFromName($invoiceFileName);
+                if ($content === false)
                 {
                     throw new Exception("Invalid ZIP file format: could not read invoice file!");
                 }
-                $signature=$zip->getFromName($filename);
+                $signature = $zip->getFromName($filename);
                 $zip->close();
                 return new ParsedUBLZIP($content, $signature);
             }
@@ -206,14 +217,14 @@ class UBLRenderer
     /**
      * @deprecated
      */
-    private function Dedup(array $reasons):array
+    private function Dedup(array $reasons): array
     {
-        $deduped=[];
+        $deduped = [];
         foreach ($reasons as $reason)
         {
-            if(!in_array($reason, $deduped))
+            if (!in_array($reason, $deduped))
             {
-                $deduped[]=$reason;
+                $deduped[] = $reason;
             }
         }
         return $deduped;

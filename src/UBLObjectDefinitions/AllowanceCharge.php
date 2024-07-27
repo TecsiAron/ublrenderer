@@ -39,18 +39,18 @@ class AllowanceCharge extends UBLDeserializable
     {
         $instance = new self();
         $parsedAllowanceCharge = $reader->parseInnerTree();
-        if(!is_array($parsedAllowanceCharge))
+        if (!is_array($parsedAllowanceCharge))
         {
             return $instance;
         }
-        for($i=0;$i<count($parsedAllowanceCharge);$i++)
+        for ($i = 0; $i < count($parsedAllowanceCharge); $i++)
         {
             $node = $parsedAllowanceCharge[$i];
-            if($node["value"] == null)
+            if ($node["value"] == null)
             {
                 continue;
             }
-            $localName=$instance->getLocalName($node["name"]);
+            $localName = $instance->getLocalName($node["name"]);
             switch ($localName)
             {
                 case "ChargeIndicator":
@@ -89,47 +89,51 @@ class AllowanceCharge extends UBLDeserializable
      * Will return null if MultiplierFactorNumeric, Amount and BaseAmount are not set!
      * @return string|null
      * @throws Exception
+     * @see MappingsManager::GetAllowanceChargeReasonCodeMapping()
+     * @see MappingsManager::AllowanceChargeReasonCodeHasMapping()
      */
-    public function ToString():?string
+    public function ToString(): ?string
     {
-        if(isset($this->AllowanceChargeReason))
+        if (isset($this->AllowanceChargeReason))
         {
             $name = $this->AllowanceChargeReason;
         }
-        else if(isset($this->AllowanceChargeReasonCode)
+        else if (isset($this->AllowanceChargeReasonCode)
             && MappingsManager::GetInstance()->AllowanceChargeReasonCodeHasMapping($this->AllowanceChargeReasonCode))
         {
-            $name= MappingsManager::GetInstance()->GetAllowanceChargeReasonCodeMapping($this->AllowanceChargeReasonCode);
+            $name = MappingsManager::GetInstance()->GetAllowanceChargeReasonCodeMapping($this->AllowanceChargeReasonCode);
         }
         else
         {
-            $name=MappingsManager::GetInstance()->GetAllowanceChargeReasonCodeMapping("UNKNOWN");
+            $name = MappingsManager::GetInstance()->GetAllowanceChargeReasonCodeMapping("UNKNOWN");
         }
-        $isValid=false;
-        if(isset($this->MultiplierFactorNumeric) && !empty($this->MultiplierFactorNumeric))
+        $isValid = false;
+        if (isset($this->MultiplierFactorNumeric) && !empty($this->MultiplierFactorNumeric))
         {
-            $percent = str_ends_with($this->MultiplierFactorNumeric, "%")? $this->MultiplierFactorNumeric : $this->MultiplierFactorNumeric . "%";
-            $name= $name . " (" . $percent.")";
-            $isValid=true;
+            $percent = str_ends_with($this->MultiplierFactorNumeric, "%") ? $this->MultiplierFactorNumeric : $this->MultiplierFactorNumeric . "%";
+            $name = $name . " (" . $percent . ")";
+            $isValid = true;
         }
-        $hasValue=false;
-        if(isset($this->Amount))
+        $hasValue = false;
+        if (isset($this->Amount))
         {
             $value = isset($this->Amount) ? $this->Amount : "0.00";
             $currency = $this->GetCurrency($this->AmountCurrency);
-            $hasValue=true;
-            $isValid=true;
+            $hasValue = true;
+            $isValid = true;
         }
-        else if(isset($this->BaseAmount))
+        else if (isset($this->BaseAmount))
         {
             $value = isset($this->BaseAmount) ? $this->BaseAmount : "0.00";
             $currency = $this->GetCurrency($this->BaseAmountCurrency);
-            $hasValue=true;
-            $isValid=true;
+            $hasValue = true;
+            $isValid = true;
         }
-        if(!$isValid)
+        if (!$isValid)
+        {
             return null;
-        if($hasValue)
+        }
+        if ($hasValue)
         {
             return $name . ": " . $value . " " . $currency;
         }
@@ -222,8 +226,10 @@ class AllowanceCharge extends UBLDeserializable
 
     public function CanRender(): true|array
     {
-        if($this->ToString()!=null)
+        if ($this->ToString() != null)
+        {
             return true;
+        }
         return ["[AllowanceCharge] Failed to render"];
     }
 }

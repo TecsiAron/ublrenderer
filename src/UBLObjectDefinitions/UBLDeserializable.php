@@ -36,6 +36,7 @@ abstract class UBLDeserializable
      * XML namespace definitions for both Aggregate and Basic components, helps with GetTestXML methods
      */
     protected const NS_DEFINTIONS = 'xmlns:cac="urn:oasis:names:specification:ubl:schema:xsd:CommonAggregateComponents-2" xmlns:cbc="urn:oasis:names:specification:ubl:schema:xsd:CommonBasicComponents-2"';
+
     /**
      * All implementers must define the method to implement deserialization logic
      * Implementations of this method should (almost) never be called directly
@@ -50,9 +51,9 @@ abstract class UBLDeserializable
 
     /**
      * Used be ParseTest
-     * @see \ParseTest
      * @param string $reason
      * @return bool
+     * @see \ParseTest
      */
     public static function TestParse(string &$reason): bool
     {
@@ -81,7 +82,7 @@ abstract class UBLDeserializable
      * @param array $params
      * @return bool
      */
-    protected function ContainsNull(array $params):bool
+    protected function ContainsNull(array $params): bool
     {
         foreach ($params as $param)
         {
@@ -103,7 +104,7 @@ abstract class UBLDeserializable
     {
         if ($currencyVar == null)
         {
-            if(!empty(UBLRenderer::GetCurrentInvoice()->DocumentCurrencyCode))
+            if (!empty(UBLRenderer::GetCurrentInvoice()->DocumentCurrencyCode))
             {
                 return UBLRenderer::GetCurrentInvoice()->DocumentCurrencyCode;
             }
@@ -117,7 +118,7 @@ abstract class UBLDeserializable
      * @param string $nameWithNamespace
      * @return string
      */
-    protected function getLocalName(string $nameWithNamespace):string
+    protected function getLocalName(string $nameWithNamespace): string
     {
         return explode("}", $nameWithNamespace)[1];
     }
@@ -138,8 +139,8 @@ abstract class UBLDeserializable
      * All implementers must define the method to get a test XML string
      * This is used by ParseTest
      * TODO: this should be removed from this class and implementers and should be moved to appropriate places in tests/
-     * @see \ParseTest
      * @return string
+     * @see \ParseTest
      */
     public static abstract function GetTestXML(): string;
 
@@ -147,10 +148,10 @@ abstract class UBLDeserializable
      * Implementers should define this method to test if the default values are set correctly after parsing.
      * Called from ParseTest
      * TODO: this should be removed from this class and implementers and should be moved to appropriate places in tests/
-     * @see UBLDeserializable::GetTestXML() for default values
      * @param UBLDeserializable|null $instance
      * @param string $reason reason for failure
      * @return bool
+     * @see UBLDeserializable::GetTestXML() for default values
      */
     public static abstract function TestDefaultValues(?UBLDeserializable $instance, string &$reason): bool;
 }

@@ -14,6 +14,10 @@
  *     See the License for the specific language governing permissions and
  *     limitations under the License.
  */
+
+use EdituraEDU\UBLRenderer\HTMLFileWriter;
+use EdituraEDU\UBLRenderer\UBLRenderer;
+
 include $_composer_autoload_path ?? __DIR__ . '/../vendor/autoload.php';
 $showHelp = false;
 if ($argv[1] == "help" || sizeof($argv) != 3)
@@ -36,16 +40,16 @@ else
     }
     if (substr($inputFile, -4) == ".zip")
     {
-        $xml = \EdituraEDU\UBLRenderer\UBLRenderer::LoadUBLFromZip($inputFile)->ubl;
+        $xml = UBLRenderer::LoadUBLFromZip($inputFile)->ubl;
     }
     else
     {
         $xml = file_get_contents($inputFile);
     }
-    $renderer = new \EdituraEDU\UBLRenderer\UBLRenderer($xml);
+    $renderer = new UBLRenderer($xml);
     try
     {
-        $renderer->WriteFiles([new \EdituraEDU\UBLRenderer\HTMLFileWriter($outputFile)]);
+        $renderer->WriteFiles([new HTMLFileWriter($outputFile)]);
         echo "Written to $outputFile".PHP_EOL;
     }
     catch (Exception $e)

@@ -107,7 +107,7 @@ class InvoiceLine extends UBLDeserializable
                     break;
             }
         }
-        $instance->DeserializeComplete();;
+        $instance->DeserializeComplete();
         return $instance;
     }
 
@@ -122,7 +122,7 @@ class InvoiceLine extends UBLDeserializable
                     <cbc:ID>1</cbc:ID>
                     <cbc:InvoicedQuantity unitCode="C62" unitCodeListID="UN/ECE rec 20" unitCodeListAgencyID="6">1</cbc:InvoicedQuantity>
                     <cbc:LineExtensionAmount currencyID="RON">100</cbc:LineExtensionAmount>
-                    '. AllowanceCharge::GetTestXML() . AllowanceCharge::GetTestXML() . '
+                    ' . AllowanceCharge::GetTestXML() . AllowanceCharge::GetTestXML() . '
                     <cbc:Note>Test note</cbc:Note>
                     ' . InvoiceItem::GetTestXML() . ItemPrice::GetTestXML() . InvoicePeriod::GetTestXML() . '                    
                     <cbc:AccountingCostCode>123</cbc:AccountingCostCode>
@@ -187,154 +187,208 @@ class InvoiceLine extends UBLDeserializable
             $reason = "AccountingCost is not 100";
             return false;
         }
-        if(!AllowanceCharge::TestDefaultValues($instance->AllowanceCharge[0], $reason))
+        if (!AllowanceCharge::TestDefaultValues($instance->AllowanceCharge[0], $reason))
         {
             return false;
         }
-        if(!ItemPrice::TestDefaultValues($instance->Price, $reason))
+        if (!ItemPrice::TestDefaultValues($instance->Price, $reason))
         {
             return false;
         }
-        if(!InvoiceItem::TestDefaultValues($instance->Item, $reason))
+        if (!InvoiceItem::TestDefaultValues($instance->Item, $reason))
         {
             return false;
         }
-        if(!InvoicePeriod::TestDefaultValues($instance->InvoicePeriod, $reason))
+        if (!InvoicePeriod::TestDefaultValues($instance->InvoicePeriod, $reason))
         {
             return false;
         }
         return true;
     }
 
-    public function HasShortMappedUnitCode():bool
+    /**
+     * Checks if the UnitCode has a short mapped version (max 4 characters)
+     * @return bool
+     * @throws Exception
+     */
+    public function HasShortMappedUnitCode(): bool
     {
-        if(empty($this->UnitCode))
+        if (empty($this->UnitCode))
         {
             return true;// this will cause "BUC" to be used
         }
-        if(!MappingsManager::GetInstance()->UnitCodeHasMapping($this->UnitCode))
+        if (!MappingsManager::GetInstance()->UnitCodeHasMapping($this->UnitCode))
         {
-            return  false;
+            return false;
         }
         return MappingsManager::GetInstance()->UnitCodeHasShortMapping($this->UnitCode);
     }
 
+    /**
+     * For empty unit codes will "BUC" as a default
+     * @return string
+     * @throws Exception
+     */
     public function GetShortMappedUnitCode(): string
     {
-        if(empty($this->UnitCode))
+        if (empty($this->UnitCode))
         {
             return "BUC";
         }
         return MappingsManager::GetInstance()->GetUnitCodeMapping($this->UnitCode);
     }
 
-    public function HasMappedUnitCode():bool
+    /**
+     * Checks if unit code has ANY mapping
+     * @return bool
+     * @throws Exception
+     */
+    public function HasMappedUnitCode(): bool
     {
-        if(empty($this->UnitCode))
+        if (empty($this->UnitCode))
         {
             return false;
         }
         return MappingsManager::GetInstance()->UnitCodeHasMapping($this->UnitCode);
     }
+
+    /**
+     * Gets the unit code, if it has a short mapping it will return the mapped value
+     * @return string
+     * @throws Exception
+     */
     public function GetUnitCode(): string
     {
-        if($this->HasShortMappedUnitCode())
+        if ($this->HasShortMappedUnitCode())
         {
             return $this->GetShortMappedUnitCode();
         }
         return $this->UnitCode;
     }
 
-    public function GetItemIDs(string $lineBreak=","):string
+    /**
+     * Gets Seller and Customer Item IDs (Format is "Vânz: SellerID<separator>Cump: BuyerID")
+     * @param string $separator
+     * @return string
+     */
+    public function GetItemIDs(string $separator = ","): string
     {
-        $ids=[];
-        if(!empty($this->Item->SellersItemIdentification))
+        $ids = [];
+        if (!empty($this->Item->SellersItemIdentification))
         {
-            $ids[]="Vânz: ".$this->Item->SellersItemIdentification;
+            $ids[] = "Vânz: " . $this->Item->SellersItemIdentification;
         }
-        if(!empty($this->Item->BuyersItemIdentification))
+        if (!empty($this->Item->BuyersItemIdentification))
         {
-            $ids[]="Cump: ".$this->Item->BuyersItemIdentification;
+            $ids[] = "Cump: " . $this->Item->BuyersItemIdentification;
         }
-        return implode($lineBreak, $ids);
+        return implode($separator, $ids);
     }
 
-    public function GetVATRate(bool $includePercent=true):string
+    /**
+     * Gets the VAT rate
+     * @param bool $includePercent if set to true will append the percent sign
+     * @return string
+     */
+    public function GetVATRate(bool $includePercent = true): string
     {
-        if(!isset($this->Item->ClassifiedTaxCategory->Percent))
+        if (!isset($this->Item->ClassifiedTaxCategory->Percent))
         {
-            return "0".($includePercent?"%":"");
+            return "0" . ($includePercent ? "%" : "");
         }
-        if(empty($this->Item->ClassifiedTaxCategory->Percent))
+        if (empty($this->Item->ClassifiedTaxCategory->Percent))
         {
-            return "0".($includePercent?"%":"");
+            return "0" . ($includePercent ? "%" : "");
         }
-        return $this->Item->ClassifiedTaxCategory->Percent.($includePercent?"%":"");
+        return $this->Item->ClassifiedTaxCategory->Percent . ($includePercent ? "%" : "");
     }
 
-    public function GetNoVATValue():?string
+    /**
+     * Gets the no vat value of the line (LineExtensionAmount) followed by the currency
+     * @return string|null
+     * @throws Exception if GetCurrency fails
+     */
+    public function GetNoVATValue(): ?string
     {
-        if(empty($this->LineExtensionAmount))
+        if (empty($this->LineExtensionAmount))
         {
             return null;
         }
-        return $this->LineExtensionAmount." ". $this->GetCurrency($this->LineExtensionAmountCurrencyID);
+        return $this->LineExtensionAmount . " " . $this->GetCurrency($this->LineExtensionAmountCurrencyID);
     }
 
-    public function GetNoVATUnitValue():?string
+    /**
+     * Gets the no vat unit value of the line (PriceAmount) followed by the currency
+     * @return string|null
+     * @throws Exception if GetCurrency fails
+     */
+    public function GetNoVATUnitValue(): ?string
     {
-        if(!isset($this->Price->PriceAmount) || empty($this->Price->PriceAmount))
+        if (!isset($this->Price->PriceAmount) || empty($this->Price->PriceAmount))
         {
             return null;
         }
         return $this->Price->PriceAmount . " " . $this->GetCurrency($this->Price->PriceCurrencyID);
     }
 
-    public function HasAllowanceCharges():bool
+    /**
+     * Checks if the line has any allowance charges
+     * @return bool
+     */
+    public function HasAllowanceCharges(): bool
     {
-        return sizeof($this->AllAllowanceCharges)!=0;
+        return sizeof($this->AllAllowanceCharges) != 0;
     }
 
-    public function GetVATValue():?string
+    /**
+     * IMPORTANT: This is the only value that is calculated, all other values are taken from the XML
+     * Gets the VAT value of the line (LineExtensionAmount * VATRate)
+     * Uses BCMath for precision (scale =2)
+     * If the VAT rate is 0, it will return "0"
+     * Will append the currency
+     * @return string|null
+     * @throws Exception if GetCurrency fails
+     */
+    public function GetVATValue(): ?string
     {
-        $vatRate=$this->GetVATRate(false);
-        if($vatRate==0)
+        $vatRate = $this->GetVATRate(false);
+        if ($vatRate == 0)
         {
             return "0";
         }
-        if(!isset($this->LineExtensionAmount) || empty($this->LineExtensionAmount))
+        if (!isset($this->LineExtensionAmount) || empty($this->LineExtensionAmount))
         {
             return null;
         }
-        $vatMultiplier=bcdiv($vatRate,100,2);
-        $vatValue=bcmul($this->LineExtensionAmount,$vatMultiplier,2);
-        return $vatValue." ".$this->GetCurrency($this->LineExtensionAmountCurrencyID);
+        $vatMultiplier = bcdiv($vatRate, 100, 2);
+        $vatValue = bcmul($this->LineExtensionAmount, $vatMultiplier, 2);
+        return $vatValue . " " . $this->GetCurrency($this->LineExtensionAmountCurrencyID);
     }
 
-    public function CanRender():true|array
+    public function CanRender(): true|array
     {
-        $result=[];
-        $allowanceChargeCount=count($this->AllAllowanceCharges);
-        $subComponentsOk=true;
-        if($allowanceChargeCount!=0)
+        $result = [];
+        $allowanceChargeCount = count($this->AllAllowanceCharges);
+        $subComponentsOk = true;
+        if ($allowanceChargeCount != 0)
         {
-            for($i=0; $i<$allowanceChargeCount; $i++)
+            for ($i = 0; $i < $allowanceChargeCount; $i++)
             {
-                $validation=$this->AllAllowanceCharges[$i]->CanRender();
-                if($validation!==true)
+                $validation = $this->AllAllowanceCharges[$i]->CanRender();
+                if ($validation !== true)
                 {
-                    $result=array_merge($result,$validation);
-                    $subComponentsOk=false;
+                    $result = array_merge($result, $validation);
+                    $subComponentsOk = false;
                 }
             }
 
         }
-        if($this->Item== null)
+        if ($this->Item == null)
         {
-            $result[]="[InvoiceLine] No Item";
-            $subComponentsOk=false;
+            $result[] = "[InvoiceLine] No Item";
+            $subComponentsOk = false;
         }
-        if($subComponentsOk===true)
+        if ($subComponentsOk === true)
         {
             if (!$this->ContainsNull([
                 $this->GetNoVATValue(),
@@ -349,37 +403,38 @@ class InvoiceLine extends UBLDeserializable
                 return true;
             }
         }
-        if($this->GetNoVATValue())
+        if ($this->GetNoVATValue())
         {
-            $result[]="[InvoiceLine] No VAT Value";
+            $result[] = "[InvoiceLine] No VAT Value";
         }
-        if($this->GetNoVATUnitValue())
+        if ($this->GetNoVATUnitValue())
         {
-            $result[]="[InvoiceLine] No VAT Unit Value";
+            $result[] = "[InvoiceLine] No VAT Unit Value";
         }
-        if($this->GetUnitCode())
+        if ($this->GetUnitCode())
         {
-            $result[]="[InvoiceLine] No Unit Code";
+            $result[] = "[InvoiceLine] No Unit Code";
         }
-        if($this->Item!=null && $this->Item->Name == null)
+        if ($this->Item != null && $this->Item->Name == null)
         {
-            $result[]="[InvoiceLine] No Item Name";
+            $result[] = "[InvoiceLine] No Item Name";
         }
-        if($this->GetVATRate())
+        if ($this->GetVATRate())
         {
-            $result[]="[InvoiceLine] No VAT Rate";
+            $result[] = "[InvoiceLine] No VAT Rate";
         }
-        if($this->InvoicedQuantity == null)
+        if ($this->InvoicedQuantity == null)
         {
-            $result[]="[InvoiceLine] No Invoiced Quantity";
+            $result[] = "[InvoiceLine] No Invoiced Quantity";
         }
-        if($this->GetVATValue())
+        if ($this->GetVATValue())
         {
-            $result[]="[InvoiceLine] No VAT Value";
+            $result[] = "[InvoiceLine] No VAT Value";
         }
 
         return $result;
     }
+
     protected function DeserializeComplete(): void
     {
         $nestedAllowanceCharges = $this->Price->AllowanceCharge ?? [];

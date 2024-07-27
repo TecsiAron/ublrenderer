@@ -901,8 +901,8 @@ class ParsedUBLInvoice extends UBLDeserializable
      * ID
      * IssueDate
      * InvoiceLines
-     * @see UBLDeserializable::CanRender()
      * @return true|array
+     * @see UBLDeserializable::CanRender()
      */
     public function CanRender(): true|array
     {

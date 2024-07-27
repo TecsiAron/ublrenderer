@@ -37,7 +37,7 @@ class MappingsManager
      * @param string|null $json if null the defaultMappings.json file will be used
      * @return void
      */
-    public static function Init(?string $json=null): void
+    public static function Init(?string $json = null): void
     {
         self::$Instance = new MappingsManager($json);
         self::$Initialized = true;
@@ -55,18 +55,19 @@ class MappingsManager
         }
         return self::$Instance;
     }
+
     /**
      * @var string[] $UnitCodes maps unit codes to their names
      */
-    private array $UnitCodes=[];
+    private array $UnitCodes = [];
     /**
      * @var string[] $AllowanceChargeReasonCodes maps allowance charge reason codes to their names
      */
-    private array $AllowanceChargeReasonCodes=[];
+    private array $AllowanceChargeReasonCodes = [];
     /**
      * @var string[] $PaymentMeansCodes maps payment means codes to their names
      */
-    private array $PaymentMeansCodes=[];
+    private array $PaymentMeansCodes = [];
 
     /**
      * Reads and populates the mappings from the json file
@@ -75,24 +76,25 @@ class MappingsManager
      */
     private function __construct(?string $json)
     {
-        if($json==null)
+        if ($json == null)
         {
             $json = file_get_contents(dirname(__FILE__) . "/../defaultMappings.json");
         }
         $mappings = json_decode($json, true);
-        if(isset($mappings["UnitCodes"]))
+        if (isset($mappings["UnitCodes"]))
         {
             $this->UnitCodes = $mappings["UnitCodes"];
         }
-        if(isset($mappings["AllowanceChargeReasonCodes"]))
+        if (isset($mappings["AllowanceChargeReasonCodes"]))
         {
             $this->AllowanceChargeReasonCodes = $mappings["AllowanceChargeReasonCodes"];
         }
-        if(isset($mappings["PaymentMeansCodes"]))
+        if (isset($mappings["PaymentMeansCodes"]))
         {
             $this->PaymentMeansCodes = $mappings["PaymentMeansCodes"];
         }
     }
+
     /**
      * Checks if a reason code has a mapping
      * @param string $reasonCode
@@ -110,7 +112,7 @@ class MappingsManager
      */
     public function GetAllowanceChargeReasonCodeMapping(string $reasonCode): string
     {
-        if(!$this->AllowanceChargeReasonCodeHasMapping($reasonCode))
+        if (!$this->AllowanceChargeReasonCodeHasMapping($reasonCode))
         {
             throw new Exception("Reason code $reasonCode has no mapping");
         }
@@ -134,9 +136,9 @@ class MappingsManager
      * @return bool
      * @throws Exception if the unit code has no mapping
      */
-    public function UnitCodeHasShortMapping(string $unitCode, int $maxLen=4): bool
+    public function UnitCodeHasShortMapping(string $unitCode, int $maxLen = 4): bool
     {
-        if(!$this->UnitCodeHasMapping($unitCode))
+        if (!$this->UnitCodeHasMapping($unitCode))
         {
             throw new Exception("Unit code $unitCode has no mapping");
         }
@@ -159,7 +161,7 @@ class MappingsManager
      */
     public function GetPaymentMeansCodeMapping(string $paymentMeansCode): string
     {
-        if(!$this->PaymentMeansCodeHasMapping($paymentMeansCode))
+        if (!$this->PaymentMeansCodeHasMapping($paymentMeansCode))
         {
             throw new Exception("Payment means code $paymentMeansCode has no mapping");
         }
@@ -173,7 +175,7 @@ class MappingsManager
      */
     public function GetUnitCodeMapping(string $unitCode): string
     {
-        if(!$this->UnitCodeHasMapping($unitCode))
+        if (!$this->UnitCodeHasMapping($unitCode))
         {
             throw new Exception("Unit code $unitCode has no mapping");
         }
