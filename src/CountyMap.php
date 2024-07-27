@@ -66,7 +66,7 @@ class CountyMap
 
     public static function GetCounty(string $code): ?string
     {
-        $code=trim($code);
+        $code = strtoupper(trim($code));
         if (isset(self::MAP[$code]))
         {
             return self::MAP[$code];
