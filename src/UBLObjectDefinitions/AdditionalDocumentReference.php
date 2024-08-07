@@ -27,7 +27,7 @@ class AdditionalDocumentReference extends UBLDeserializable
     public ?string $DocumentType = null;
     public ?string $DocumentTypeCode = null;
     public ?string $DocumentDescription = null;
-    public ?AttachedFile $Attachment = null;
+    public AttachedFile|array|null $Attachment = null;
 
     public static function XMLDeserialize(Reader $reader): self
     {
